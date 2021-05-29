@@ -7,7 +7,7 @@ metadata:
     app: first-m8-web
 spec:
   containers:
-    - name: first-m8-web-container
-      image: # waiting for Alex to send docker hub path
-      ports:
-        - containerPort: 3000
+  - name: first-m8-web-container
+    image: # waiting for Alex to send docker hub path
+    ports:
+    - containerPort: 3000

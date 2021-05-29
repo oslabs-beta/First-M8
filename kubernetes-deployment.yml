@@ -11,13 +11,14 @@ spec:
       app: first-m8-web
   template:
     metadata:
+      name: first-m8-web-pod
       labels:
         app: first-m8-web
     spec:
       terminationGracePeriodSeconds: 1
       containers:
       - name: first-m8-web-container
-      image: # waiting for Alex to send docker hub path
-      imagePullPolicy: Always
-      ports:
+        image: # waiting for Alex to send docker hub path
+        imagePullPolicy: Always
+        ports:
         - containerPort: 3000
