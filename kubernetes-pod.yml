@@ -1,3 +1,4 @@
+# might not need this whole file since pod configs are defined in kubernetes-deployment.yml
 apiVersion: v1
 kind: Pod
 metadata:
