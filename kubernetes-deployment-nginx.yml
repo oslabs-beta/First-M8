@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: first-m8-web-deploymnet
+  name: first-m8-web-deployment-nginx
   labels:
     app: first-m8-web
 spec:
@@ -11,21 +11,15 @@ spec:
       app: first-m8-web
   template:
     metadata:
-      name: first-m8-web-pod
+      name: first-m8-web-pod-nginx
       labels:
         app: first-m8-web
     spec:
       terminationGracePeriodSeconds: 1
       containers:
-      - name: first-m8-frontend-container
+      - name: first-m8-web-container-nginx
         image: # waiting for Alex to send docker hub path
+        imagePullPolicy: Always
         ports:
-        - containerPort: 3000
-      - name: first-m8-backend-container
-        image:
-        ports:
-        - containerPort: 3000
-      - name: first-m8-nginx-container
-        image:
-        ports:
-        - containerPort: 3000
+        - containerPort: 80
+      
