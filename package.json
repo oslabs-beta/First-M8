@@ -1,0 +1,21 @@
+{
+  "name": "First M8 Launch Page",
+  "version": "1.1.0",
+  "description": "",
+  "main": "/client/src/index.js",
+
+  "scripts": {
+    "start": "",
+    "build": "",
+    "dev": ""
+  },
+
+  "author": "First M8-E Squad",
+  "license": "",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+      
+  }
+}
