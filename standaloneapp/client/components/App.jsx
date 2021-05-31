@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import DashboardContainer from "./dashboard/DashboardContainer";
 import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
+import DashboardRoutes from "./dashboard/DashboardRoutes";
 
 const App = () => {
   return (
@@ -14,11 +15,12 @@ const App = () => {
           <Link to="/history">History</Link>
         </nav>
         <Switch>
-          <Route exact to="/" component={DashboardContainer}></Route>
-          <Route exact to="/settings" component={SettingsContainer}></Route>
-          <Route exact to="/history" component={HistoryContainer}></Route>
+          <Route exact path="/" component={DashboardContainer}></Route>
+          <Route exact path="/settings" component={SettingsContainer}></Route>
+          <Route exact path="/history" component={HistoryContainer}></Route>
         </Switch>
       </Router>
+      <DashboardRoutes />
     </div>
   );
 };
