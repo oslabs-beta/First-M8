@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: first-m8-web-deployment-nginx
+  labels:
+    app: first-m8-web
+spec:
+  replicas: 3 # placeholder amount, can change if need be
+  selector:
+    matchLabels:
+      app: first-m8-web
+  template:
+    metadata:
+      name: first-m8-web-pod-nginx
+      labels:
+        app: first-m8-web
+    spec:
+      terminationGracePeriodSeconds: 1
+      containers:
+      - name: first-m8-web-container-nginx
+        image: # waiting for Alex to send docker hub path
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      
