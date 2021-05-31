@@ -1,10 +1,14 @@
-import React from 'react';
-
+import React, { useState, useEffect } from "react";
+import SettingsCard from "./SettingsCard";
 
 const DashboardContainer = () => {
-  return(
-    <div>SettingsContainer</div>
-  )
-}
+  const [clusterArray, setClusterArray] = useState(() => []);
+
+  return (
+    <div className="dashboard-container">
+      <div>Settings Container</div>
+    </div>
+  );
+};
 
 export default DashboardContainer;
