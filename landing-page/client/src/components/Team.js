@@ -1,5 +1,6 @@
 import React from 'react'
 
+
 //main about the team item. gives a description of team members
 //and what they did(?)
 const Team = () => {
@@ -15,3 +16,4 @@ const Team = () => {
 }
 
 export default Team;
+
