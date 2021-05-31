@@ -1,9 +1,12 @@
-import React from 'react';
+import React from "react";
+import history from "./dashboardHistory";
 
 
 const DashboardContainer = () => {
   return(
-    <div>Dashboard Container</div>
+    <div>
+      <button id="new-dashboard-element" onClick={() => history.push("/newdashboardelement")}>New Dashboard Element</button>
+    </div>
   )
 }
 

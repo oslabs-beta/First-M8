@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import DashboardContainer from "./dashboard/DashboardContainer";
 import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
+import DashboardRoutes from "./dashboard/DashboardRoutes";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route exact path="/history" component={HistoryContainer}></Route>
         </Switch>
       </Router>
+      <DashboardRoutes />
     </div>
   );
 };
