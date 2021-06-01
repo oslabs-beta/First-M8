@@ -5,7 +5,13 @@ const PORT = 8080;
 const webRouter = require('./routes/webRouter');
 
 app.use(express.json());
+
+//finish setting up routes
 app.use('/web', webRouter);
+
+//next to work on
+app.use('/prometheus')
+app.use('/database')
 app.use(express.static(path.resolve(__dirname, "../client")))
 
 //EDIT THESE BOIS
