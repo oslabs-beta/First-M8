@@ -1,0 +1,14 @@
+.settings-container {
+  display: grid;
+  grid-gap: 30px 50px;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.settings-card {
+  border: 1px black solid;
+  border-radius: 5px;
+}
+
+.settings-card:hover {
+  background-color: beige;
+}
