@@ -15,7 +15,7 @@ const App = () => {
         </nav>
         <Switch>
           <Route exact path="/" component={DashboardContainer}></Route>
-          <Route exact path="/settings" component={SettingsContainer}></Route>
+          <Route path="/settings" component={SettingsContainer}></Route>
           <Route exact path="/history" component={HistoryContainer}></Route>
         </Switch>
       </Router>
