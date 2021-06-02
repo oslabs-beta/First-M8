@@ -3,7 +3,7 @@ const webController = require("../controllers/webController");
 const { Data } = require('../models/webModel');
 const router = express.Router();
 
-router.post('/add', async (req, res) => {
+router.post('/add', (req, res) => {
     //can add more in .create to add in more data as needed
     //dummy test post request
     console.log(req.body)
@@ -21,7 +21,6 @@ router.get('/', webController.getAll, (req, res) => {
     //insert query to database
     //all "cluster" information
     res.status(200).send(res.locals.data)},
-    console.log(res.locals.data)
 );
 
 router.post('/new', webController.createCluster, (req, res) => {

@@ -13,7 +13,7 @@ app.use(express.json());
 //instead of web, make one settings, dashboard, history
 app.use('/settings', webRouter);
 app.use('/dashboard', dashboardRouter);
-app.use('/history', historyRouter);
+//app.use('/history', historyRouter);
 
 //next to work on
 // app.use('/prometheus')
@@ -34,9 +34,11 @@ app.get('/', (req, res) => {
 // app.get('*',  (req, res) => {
 //     res.status(404).send()
 // })
-app.use((err, req, res) => {
-    res.status(500).send("There was an error: " + err.message)
-})
+
+//fix
+// app.use((err, req, res) => {
+//     res.status(500).send("There was an error: " + err.message)
+// })
 //make a global error handler, console.log
 //the getall error
 
