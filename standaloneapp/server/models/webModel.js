@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
+// const Data =  require('../schemas/data-schema')
 
-const MONGO_URI = 'mongodb+srv://lime:thisIsAnewPa44wordF0rMonG0@cluster0.eikq3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+//make secure soon
+//port 27017
+const MONGO_URI = 'mongodb://localhost/First-M8';
 const db = mongoose.connect(MONGO_URI, {
   // options for the connect method to parse the URI
   useNewUrlParser: true,
@@ -10,38 +13,72 @@ const db = mongoose.connect(MONGO_URI, {
 })
   .then(() => console.log('Connected to Mongo DB.'))
   .catch(err => console.log(err));
+  mongoose.set('useFindAndModify', false);
 
 const Schema = mongoose.Schema;
+
+const reqString = {
+  type: String,
+  required: true
+}
+
+const reqNum = {
+  type: Number,
+  required: true
+}
+
+const reqArray = {
+  type: Array,
+  required: true
+}
 
 const inputSchema = new Schema({
 
 });
 
-
-
+//basic data schema
 const dataSchema = new Schema({
-  name: {
-      type: String,
-      required: true
-  },
+  name: reqString,
 
-  ipAddress: {
-      type: Number,
-      required: true,
-  },
+  ipAddress: reqString,
 
-  port: {
-      type: Number,
-      required: true
-  },  
+  port: reqNum,  
 });
 
+const chartSchema = new Schema({
+  name: reqString,
+
+  columns: {
+    aggregationOptions: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
+    },
+    aggregationSelected: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
+    },
+    metricsOptions: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
+    },
+    metricsSelected: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
+    }
+  }
+})
 
 const Input = mongoose.model('input', inputSchema);
 const Data = mongoose.model('data', dataSchema);
+const Chart = mongoose.model('chart', chartSchema);
 
 module.exports = {
     db,
     Input,
-    Data
+    Data,
+    Chart
 }
