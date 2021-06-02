@@ -1,13 +1,28 @@
-import React from "react";
-import history from "./dashboardHistory";
-import DashboardRoutes from "./DashboardRoutes";
-
+import React, { useState } from "react";
+import ChartSetup from "./ChartSetup";
+import ChartsContainer from "./ChartsContainer";
 
 const DashboardContainer = () => {
-  return(
+  const [allCharts, setAllCharts] = useState(() => []);
+  const [chartSetupComponent, setChartSetupComponent] = useState(() => []);
+
+  const startChartSetup = () => {
+    setChartSetupComponent([<ChartSetup 
+      chartSetupComponent={chartSetupComponent}
+      setChartSetupComponent={setChartSetupComponent}
+      allCharts={allCharts}
+      setAllCharts={setAllCharts}
+    />]);
+  }
+
+  return (
     <div>
-      <button id="new-dashboard-element" onClick={() => history.push("/newdashboardelement")}>New Dashboard Element</button>
-      <DashboardRoutes />
+      <button id="new-dashboard-element" onClick={startChartSetup}>New Dashboard Chart</button>
+      {chartSetupComponent}
+      <ChartsContainer 
+        allCharts={allCharts}
+        setAllCharts={setAllCharts}
+      />
     </div>
   )
 }
