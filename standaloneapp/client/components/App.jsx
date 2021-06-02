@@ -14,9 +14,9 @@ const App = () => {
           <Link to="/history">History</Link>
         </nav>
         <Switch>
-          <Route exact to="/" component={DashboardContainer}></Route>
-          <Route exact to="/settings" component={SettingsContainer}></Route>
-          <Route exact to="/history" component={HistoryContainer}></Route>
+          <Route exact path="/" component={DashboardContainer}></Route>
+          <Route path="/settings" component={SettingsContainer}></Route>
+          <Route exact path="/history" component={HistoryContainer}></Route>
         </Switch>
       </Router>
     </div>

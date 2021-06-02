@@ -1,15 +1,14 @@
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  entry: "./client/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "bundle.js",
-    publicPath: "../build/",
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -17,9 +16,9 @@ module.exports = {
         test: /\.jsx?/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },
@@ -27,26 +26,26 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Compiles Sass to CSS
-          "sass-loader",
+          'sass-loader',
         ],
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        type: "asset",
+        type: 'asset',
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "/client/index.html",
+      template: './index.html',
     }),
     new MiniCssExtractPlugin(),
     new ImageMinimizerPlugin({
@@ -54,11 +53,11 @@ module.exports = {
         // Lossless optimization with custom option
         // Feel free to experiment with options for better result for you
         plugins: [
-          ["gifsicle", { interlaced: true }],
-          ["jpegtran", { progressive: true }],
-          ["optipng", { optimizationLevel: 5 }],
+          ['gifsicle', { interlaced: true }],
+          ['jpegtran', { progressive: true }],
+          ['optipng', { optimizationLevel: 5 }],
           [
-            "svgo",
+            'svgo',
             {
               plugins: [
                 {
@@ -71,16 +70,21 @@ module.exports = {
       },
     }),
   ],
-  // devtool: 'eval-source-map',
+  devtool: 'eval-source-map',
   devServer: {
     // contentBase: path.join(__dirname, '/client'),
     // compress: true,
     // port: 8080,
-    publicPath: "/build",
-    // proxy: {},
+    publicPath: '/build',
+    proxy: {
+      '/api/**': 'http:/localhost:3000',
+      '/': 'http://localhost:3000',
+    },
+    port: 8080,
     hot: true,
+    historyApiFallback: true,
   },
   resolve: {
-    extensions: ["", ".js", ".jsx"],
+    extensions: ['', '.js', '.jsx'],
   },
 };
