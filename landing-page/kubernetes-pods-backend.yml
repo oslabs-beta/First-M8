@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend-pod
+  labels:
+    app: web
+spec:
+  containers:
+  - name: first-m8-web-container-backend
+    image: alexlee27/fm8-server
+    ports:
+      - containerPort: 3000
