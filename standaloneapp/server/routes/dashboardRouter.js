@@ -10,7 +10,7 @@ router.get('/', dashboardController.getAllDisplay, (req, res) => {
     res.status(200).send(res.locals.data)},
 );
 
-router.post('/newChartSetting/:name', dashboardController.createChart, (req, res) => {
+router.post('/newChart/:name', dashboardController.createCluster, (req, res) => {
     res.status(200).send({'success': true})
 });
 

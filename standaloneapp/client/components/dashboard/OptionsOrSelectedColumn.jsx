@@ -4,11 +4,11 @@ import OperatorOrMetric from "./OperatorOrMetric";
 
 const OptionsOrSelectedColumn = ({ columnName, columnTitle, listOfOperatorsOrMetrics }) => {
   return (
-    <div>
+    <div className="chart-setup-individual-column">
       {columnTitle}
       <Droppable droppableId={columnName}>
       {(provided) => (
-        <div {...provided.droppableProps} ref={provided.innerRef}>
+        <div {...provided.droppableProps} ref={provided.innerRef} id="droppable-area">
           {listOfOperatorsOrMetrics.map((operatorOrMetric, index) => (
             <OperatorOrMetric text={operatorOrMetric} key={`operatorOrMetric${index}`} index={index} />
           ))}

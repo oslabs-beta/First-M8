@@ -13,7 +13,9 @@ const DashboardContainer = () => {
       <Router history={history}>
         <Switch>
           <Route exact path="/">
-            <ChartsContainer />
+            <ChartsContainer 
+              allCharts={allCharts}
+            />
           </Route>
           <Route path="/dashboard/new-chart">
             <ChartSetup 
