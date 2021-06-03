@@ -1,0 +1,31 @@
+@import "_nav";
+
+body {
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../FirstM8Logo.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: lightseagreen;
+}
+
+.App {
+  margin-top: auto;
+  text-align: center;
+}
+
+.downloaddiv {
+  margin: 5%;
+  height: 45vh;
+}
+
+.logodiv {
+  size: 20%;
+}
+
+.aboutdiv {
+  margin: 5%;
+  height: 45vh;
+}
