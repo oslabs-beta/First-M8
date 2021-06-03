@@ -1,3 +1,4 @@
+
 // const histogram = new client.Histogram({
 //   name: "my_app_seconds",
 //   help: "Duration of HTTP requests in seconds",
@@ -8,6 +9,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const PORT = 3000;
+
 
 const promClient = require('prom-client');
 const promBundle = require('express-prom-bundle');
@@ -22,18 +24,23 @@ app.use(promMetrics);
 app.use(express.json());
 // app.use('/web', webRouter);
 app.use(express.static(path.resolve(__dirname, "../client")));
+app.use(metricsMiddleware);
 
-app.use('/build', express.static(path.join(__dirname, '../build')));
+
+// app.use('/build', express.static(path.join(__dirname, '../build')));
 
 app.get('/', (req, res) => {
     // res.sendFile('../index.html')
-    res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
+
+    res.status(200).sendFile(path.resolve(__dirname, "./index.html"))
+})
 
 app.get('/team', (req, res) => {
     // res.sendFile('../index.html')
-    res.status(200).sendFile(path.resolve(__dirname, "../client/index.html"));
-});
+    res.status(200).sendFile(path.resolve(__dirname, "./index.html"))
+
+})
+
 
 app.use('/api/greeting', (request, response) => {
   const end = histogram.startTimer();
