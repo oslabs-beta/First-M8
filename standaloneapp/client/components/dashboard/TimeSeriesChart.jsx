@@ -2,7 +2,7 @@ import React from "react";
 import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from "recharts";
 import moment from "moment";
 
-// placeholder for prometheus data
+
 const chartData = [
   { value: 14, time: 1503617297689 },
   { value: 15, time: 1503616962277 },
@@ -13,6 +13,7 @@ const chartData = [
 
 
 const TimeSeriesChart = () => {
+  // placeholder for logic to send PromQL query to DB
   return (
     <ResponsiveContainer width="95%" height={500}>
       <ScatterChart>

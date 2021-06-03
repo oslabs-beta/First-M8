@@ -8,11 +8,10 @@ import history from "./dashboardHistory";
 
 
 const ChartSetup = ({
-  chartSetupComponent,
-  setChartSetupComponent,
   allCharts,
   setAllCharts
 }) => {
+  // placeholder for logic to get all metric options from Prometheus
   const initialColumns = {
     aggregationOptions: {
       name: "aggregationOptions",
@@ -87,23 +86,39 @@ const ChartSetup = ({
     setChartName(event.target.value);
   }
   
-  const saveChartSetup = () => {
-    console.log(columns); // placeholder for logic to send current state of columns to DB
-    console.log(chartName); // placeholder for logic to send current state of columns to DB
+  const saveChartSetup = async () => {
+    console.log(columns);
+    console.log(chartName);
+    // placeholder for logic to send current state of columns to DB
+    await fetch(`/dashboard/newChart/${chartName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ columns: columns })
+    })
+      .then(response => response.json())
+      .then(data => console.log(data, "adding new chart successful"))
+      .catch(error => console.log(error, "adding new chart failed"))
+    // placeholder for logic to construct PromQL queries
     const newChart = [<TimeSeriesChart />]
     setChart(newChart);
     const updatedAllCharts = allCharts.slice();
     updatedAllCharts.push(newChart);
     setAllCharts(updatedAllCharts);
-    // post request to update all charts in DB
-  }
-
-  const closeChartSetup = () => {
-    setChartSetupComponent([]);
-    history.push("/");
+    // placeholder for logic to update all charts in DB
+    await fetch("/dashboard/allCharts", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ display: updatedAllCharts })
+    })
+      .then(response => response.json())
+      .then(data => console.log(data, "update all charts successful"))
+      .catch(error => console.log(error, "updating all charts failed"))
   }
   
-
   return (
       <div className="dashboard-setup">
         Chart Name: <input type="text" onChange={changeChartName}></input>
@@ -117,7 +132,7 @@ const ChartSetup = ({
               />
             ))}
         </DragDropContext>
-        <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={closeChartSetup}>Close</button>
+        <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}
       </div>
   )
