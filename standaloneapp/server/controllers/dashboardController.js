@@ -20,7 +20,7 @@ dashboardController.createCluster = (req, res, next) => {
     //{'success': true || false}
     console.log(req.body)
     Chart.create({
-        name: req.body.name,
+        name: req.params.name,
         columns: req.body.columns,
     }, (err, result) => {
         if(err) {
