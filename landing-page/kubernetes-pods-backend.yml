@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
   - name: first-m8-web-container-backend
-    image: alexlee27/fm8-server
+    image: alexlee27/fm8-server:latest
     ports:
       - containerPort: 3000

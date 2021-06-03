@@ -17,13 +17,13 @@ spec:
     spec:
       terminationGracePeriodSeconds: 1
       containers:
-      - name: first-m8-web-container-frontend
-        image: # waiting for Alex to send docker hub path
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
+      # - name: first-m8-web-container-frontend
+      #   image: # waiting for Alex to send docker hub path
+      #   imagePullPolicy: Always
+      #   ports:
+      #   - containerPort: 3000
       - name: first-m8-web-container-backend
-        image: # waiting for Alex to send docker hub path
+        image: alexlee27/fm8-server:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000

@@ -6,7 +6,7 @@ spec:
   type: NodePort # will most likely eventually change to LoadBalancer to make it available via the cloud
   ports:
   - port: 80
-    targetport: 3000
+    targetPort: 3000
     nodePort: 31000
     protocol: TCP
   selector:
