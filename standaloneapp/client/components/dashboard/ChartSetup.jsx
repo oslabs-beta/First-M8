@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import OptionsOrSelectedColumn from "./OptionsOrSelectedColumn";
 import TimeSeriesChart from "./TimeSeriesChart";
 import history from "./dashboardHistory";
-
-
-
+import QueryAlgorithms from './QueryAlgorithms';
 
 const ChartSetup = ({
-  chartSetupComponent,
-  setChartSetupComponent,
   allCharts,
   setAllCharts
 }) => {
-  const initialColumns = {
+  const initialColumns = (metricsList) => ({
     aggregationOptions: {
       name: "aggregationOptions",
       title: "Aggregation Options",
-      list: ["sum", "average", "multiply", "divide", "minimum", "maximum"] // placeholder for prometheus data
+      list: ["sum", "average", "multiply", "divide", "minimum", "maximum"]
     },
     aggregationSelected: {
       name: "aggregationSelected",
@@ -27,19 +23,33 @@ const ChartSetup = ({
     metricsOptions: {
       name: "metricsOptions",
       title: "Metrics Options",
-      list: ["database", "server"] // placeholder for prometheus data
+      list: metricsList
     },
     metricsSelected: {
       name: "metricsSelected",
       title: "Metrics Selected",
       list: []
     }
-  };
-
-  const [columns, setColumns] = useState(() => initialColumns);
+  });
+  
+  const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => "");
   const [chart, setChart] = useState(() => []);
 
+  const getAllPromMetrics = async () => {
+    let metrics;
+    await fetch("http://localhost:9090/api/v1/metadata")
+    .then(response => response.json())
+    .then(data => {
+      const detailedMetrics = data.data;
+      metrics = Object.keys(detailedMetrics).filter(metric => metric.includes("prometheus"));
+      setColumns(initialColumns(metrics))
+    });
+  }
+
+  useEffect(() => {
+    getAllPromMetrics();
+  }, []);
   const onDragEnd = ({ source, destination }) => {
     if (destination === undefined || destination === null) return;
 
@@ -88,26 +98,44 @@ const ChartSetup = ({
   }
   
   const saveChartSetup = () => {
-    console.log(columns); // placeholder for logic to send current state of columns to DB
-    console.log(chartName); // placeholder for logic to send current state of columns to DB
-    const newChart = [<TimeSeriesChart />]
+    console.log(columns);
+    console.log(chartName);
+    // placeholder for logic to send current state of columns to DB
+    // await fetch(`/dashboard/newChart/${chartName}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({ columns: columns })
+    // })
+    //   .then(response => response.json())
+    //   .then(data => console.log(data, "adding new chart successful"))
+    //   .catch(error => console.log(error, "adding new chart failed"))
+    // placeholder for logic to construct PromQL queries
+    const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+    const newChart = [<TimeSeriesChart query={query}/>]
     setChart(newChart);
     const updatedAllCharts = allCharts.slice();
     updatedAllCharts.push(newChart);
     setAllCharts(updatedAllCharts);
-    // post request to update all charts in DB
-  }
-
-  const closeChartSetup = () => {
-    setChartSetupComponent([]);
-    history.push("/");
+    // placeholder for logic to update all charts in DB
+    // await fetch("/dashboard/allCharts", {
+    //   method: "PATCH",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({ display: updatedAllCharts })
+    // })
+    //   .then(response => response.json())
+    //   .then(data => console.log(data, "update all charts successful"))
+    //   .catch(error => console.log(error, "updating all charts failed"))
   }
   
-
   return (
-      <div className="dashboard-setup">
+      <div className="chart-setup">
         Chart Name: <input type="text" onChange={changeChartName}></input>
         <DragDropContext onDragEnd={onDragEnd}>
+          <div className="chart-setup-columns">
             {Object.values(columns).map((column, index) => (
               <OptionsOrSelectedColumn
                 key={`column${index}`}
@@ -116,8 +144,9 @@ const ChartSetup = ({
                 listOfOperatorsOrMetrics={column.list} 
               />
             ))}
+          </div>
         </DragDropContext>
-        <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={closeChartSetup}>Close</button>
+        <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}
       </div>
   )
