@@ -34,15 +34,13 @@ webController.createCluster = (req, res, next) => {
 webController.updateCluster = (req, res, next) => {
     //put request
     //PUT is for checking if resource is exists then update , else create new resource
-    const newData = req.body
+    const newData = req.body;
     console.log('This is in update ' + req.params.name)
     Data.findOneAndUpdate({name: req.params.name}, newData, (err, result) => {
         if(err || !result){
-            console.log('There was an error: ' + err)
             res.status(500).send({'success': false})
             return;
         }
-        console.log(result);
         return next()
 })
 }

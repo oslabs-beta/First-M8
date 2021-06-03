@@ -45,7 +45,12 @@ const dataSchema = new Schema({
   port: reqNum,  
 });
 
-const chartSchema = new Schema({
+//ChartSetting schema
+//rename
+//holding state of ChartSettings setup
+  //if added in functionality to edit, pull this data
+  //users can see what's currently selected
+const ChartSettingSchema = new Schema({
   name: reqString,
 
   columns: {
@@ -72,13 +77,22 @@ const chartSchema = new Schema({
   }
 })
 
+//second ChartSetting schema
+//store all table and ChartSettings the user has created
+  //on primary dashboard page, display all ChartSettings
+const displaySchema = new Schema({
+  display: reqArray,
+})
+
 const Input = mongoose.model('input', inputSchema);
 const Data = mongoose.model('data', dataSchema);
-const Chart = mongoose.model('chart', chartSchema);
+const ChartSetting = mongoose.model('chartSetting', ChartSettingSchema);
+const Display = mongoose.model('display', displaySchema);
 
 module.exports = {
     db,
     Input,
     Data,
-    Chart
+    ChartSetting,
+    Display
 }
