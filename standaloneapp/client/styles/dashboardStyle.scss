@@ -1,0 +1,21 @@
+.chart-setup-columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1pt solid black;
+  padding: 5px;
+}
+
+.chart-setup-individual-column {
+  border: 1pt solid black;
+  padding: 5px;
+  min-width: 300px;
+  
+}
+
+#droppable-area {
+  width: 300px;
+  height: 300px;
+  border: 1pt solid black;
+  overflow: auto;
+}
