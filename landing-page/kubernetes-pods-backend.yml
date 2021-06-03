@@ -8,6 +8,5 @@ spec:
   containers:
   - name: first-m8-web-container-backend
     image: alexlee27/fm8-server
-    imagePullPolicy: Always
     ports:
-    - containerPort: 3000
+      - containerPort: 3000
