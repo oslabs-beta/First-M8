@@ -9,24 +9,24 @@ const DashboardContainer = () => {
 
   return (
     <div>
-      <button id="new-dashboard-chart" onClick={() => history.push("/dashboard/new-chart")}>New Dashboard Chart</button>
+      <button
+        id="new-dashboard-chart"
+        onClick={() => history.push("/dashboard/new-chart")}
+      >
+        New Dashboard Chart
+      </button>
       <Router history={history}>
         <Switch>
           <Route exact path="/">
-            <ChartsContainer 
-              allCharts={allCharts}
-            />
+            <ChartsContainer allCharts={allCharts} />
           </Route>
           <Route path="/dashboard/new-chart">
-            <ChartSetup 
-              allCharts={allCharts}
-              setAllCharts={setAllCharts}
-            />
+            <ChartSetup allCharts={allCharts} setAllCharts={setAllCharts} />
           </Route>
         </Switch>
       </Router>
     </div>
-  )
-}
+  );
+};
 
 export default DashboardContainer;
