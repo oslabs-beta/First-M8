@@ -15,7 +15,7 @@ const IndividualChartContainer = ({
   setChart
 }) => {
   const editChart = async () => {
-    await fetch(`/dashboard/editChart/${chart[0].props.id}`)
+    await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
       .then(data => {
         console.log(data)

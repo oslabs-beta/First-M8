@@ -25,7 +25,7 @@ const TimeSeriesChart = ({
         && dataPoint.metric.instance === "localhost:9090"
         && dataPoint.metric.job === "prometheus"
       ));
-      // console.log('datafiltered', dataFiltered)
+      // console.log('datafiltered', dataFiltered[0])
       newChartData = dataFiltered[0].values.map((dataPoint) => {
         return ({
           value: parseInt(dataPoint[1]),
