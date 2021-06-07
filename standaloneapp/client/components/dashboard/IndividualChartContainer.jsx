@@ -15,6 +15,8 @@ const IndividualChartContainer = ({
   setChart
 }) => {
   const editChart = async () => {
+    console.log(chartName);
+    console.log('clicked edit')
     await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
       .then(data => {
@@ -22,11 +24,20 @@ const IndividualChartContainer = ({
         setColumns(data.columns)
         setChartName(data.name);
       });
-    // setChart(chart);
+    const chartToEdit = [<TimeSeriesChart id={chartName} query={chart[0].props.query}/>]
+    setChart(chartToEdit);
     history.push("/dashboard/edit-chart");
   }
 
-
+  const deleteChart = async () => {
+    console.log("clicked delete")
+    await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
+      .then(response => response.json())
+      .then(data => {
+        console.log("individual container", data);
+        setAllCharts(data);
+      });
+  }
 
   return (
     <div className="individual-chart-container">
@@ -35,7 +46,7 @@ const IndividualChartContainer = ({
         id={chartName}
         query={chart[0].props.query}
       />
-      <button id="edit-chart" onClick={editChart}>Edit</button> <button id="delete-chart">Delete</button>
+      <button id="edit-chart" onClick={editChart}>Edit</button> <button id="delete-chart" onClick={deleteChart}>Delete</button>
     </div>
   )
 }

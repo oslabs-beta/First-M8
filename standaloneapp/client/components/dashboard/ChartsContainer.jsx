@@ -12,19 +12,6 @@ const ChartsContainer = ({
   chart,
   setChart
 }) => {
-  // placeholder for logic to get all charts from DB to display
-  const getAllCharts = async () => {
-    await fetch("/dashboard")
-    .then(response => response.json())
-    .then(data => {
-      setAllCharts(data[0].display)
-    });
-  }
-
-  useEffect(() => {
-    getAllCharts();
-  }, []);
-
   const chartsToDisplay = [];
   allCharts.forEach(individualChart => {
     chartsToDisplay.push(

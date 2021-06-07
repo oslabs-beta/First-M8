@@ -61,6 +61,7 @@ const ChartSetup = ({
 
   const changeChartName = (event) => {
     setChartName(event.target.value);
+    setNotification("");
   }
   
   const saveChartSetup = async () => {

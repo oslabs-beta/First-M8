@@ -7,18 +7,20 @@ import HistoryContainer from "./history/HistoryContainer";
 const MainRoutes = () => {
   const [allCharts, setAllCharts] = useState(() => []);
 
-  // const getAllCharts = async () => {
-  //   await fetch("/dashboard")
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log("display data", data[0].display)
-  //       setAllCharts(data[0].display);
-  //     });
-  // }
+  const getAllCharts = async () => {
+    await fetch("/dashboard")
+      .then(response => response.json())
+      .then(data => {
+        if (data[0] !== undefined) {
+          console.log("display data", data[0].display)
+          setAllCharts(data[0].display);
+        }
+      });
+  }
 
-  // useEffect(() => {
-  //   getAllCharts();
-  // }, []);
+  useEffect(() => {
+    getAllCharts();
+  }, []);
 
   return (
     <Switch>
