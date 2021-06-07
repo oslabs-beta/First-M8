@@ -15,12 +15,9 @@ const IndividualChartContainer = ({
   setChart
 }) => {
   const editChart = async () => {
-    console.log(chartName);
-    console.log('clicked edit')
     await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         setColumns(data.columns)
         setChartName(data.name);
       });
@@ -30,7 +27,6 @@ const IndividualChartContainer = ({
   }
 
   const deleteChart = async () => {
-    console.log("clicked delete")
     await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
       .then(response => response.json())
       .then(data => {

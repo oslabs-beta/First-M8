@@ -74,6 +74,7 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
           </Route>
           <Route path="/dashboard/new-chart">
             <ChartSetup
+              id="new-chart"
               allCharts={allCharts}
               setAllCharts={setAllCharts}
               columns={columns}
@@ -86,6 +87,7 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
           </Route>
           <Route path="/dashboard/edit-chart">
             <ChartSetup
+              id="edit-chart"
               allCharts={allCharts}
               setAllCharts={setAllCharts}
               columns={columns}
