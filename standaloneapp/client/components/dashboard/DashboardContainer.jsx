@@ -50,7 +50,6 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
   const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => "");
   const [chart, setChart] = useState(() => []);
-  const [prometheusLabels, setPrometheusLabels] = useState(() => []);
   const [filters, setFilters] = useState(() => {});
 
   /*
@@ -91,7 +90,6 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
       .then(response => {
         labels = response.data;
         labels.forEach(label => initialFilters[label] = true)
-        // setPrometheusLabels(labels);
         setFilters(initialFilters);
       });
   }
@@ -120,8 +118,6 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
-              prometheusLabels={prometheusLabels}
-              setPrometheusLabels={setPrometheusLabels}
               filters={filters}
               setFilters={setFilters}
             />
@@ -137,8 +133,6 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
-              prometheusLabels={prometheusLabels}
-              setPrometheusLabels={setPrometheusLabels}
               filters={filters}
               setFilters={setFilters}
             />
@@ -154,8 +148,6 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
-              prometheusLabels={prometheusLabels}
-              setPrometheusLabels={setPrometheusLabels}
               filters={filters}
               setFilters={setFilters}
             />

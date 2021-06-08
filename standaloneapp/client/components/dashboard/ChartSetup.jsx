@@ -16,8 +16,6 @@ const ChartSetup = ({
   setChartName,
   chart,
   setChart,
-  prometheusLabels,
-  setPrometheusLabels,
   filters,
   setFilters
 }) => {
