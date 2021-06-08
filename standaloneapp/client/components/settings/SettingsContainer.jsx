@@ -30,7 +30,7 @@ const SettingsContainer = () => {
   return (
     <div className="settings">
       <Switch>
-        <Route path="/settings/:name">
+        <Route path={`${path}/:name`}>
           <AddEditCard
             clusterArray={clusterArray}
             setClusterArray={setClusterArray}
