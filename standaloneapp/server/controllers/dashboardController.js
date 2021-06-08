@@ -3,9 +3,9 @@ const { Display } = require("../models/webModel")
 
 const dashboardController = {}
 
-dashboardController.getAllSetting = (req, res, next) => {
-    //possibly come back to
-    ChartSetting.find({}, (err, data) => { 
+dashboardController.getChartSetting = (req, res, next) => {
+    //find document in chartsettings for passed-in name and return columns property
+    ChartSetting.findOne({name: req.params.name}, (err, data) => { 
         if (err) {
             //status: 500, log, message
             return next({status:500, log:'There was an error', message: err.message});
@@ -13,6 +13,15 @@ dashboardController.getAllSetting = (req, res, next) => {
         res.locals.data = data;
         return next();
     })
+}
+
+dashboardController.findAndComfirm = (req, res, next) => {
+    //check if document with passed-in name exists in chartsettings, send back 
+    if(res.locals.data === null){
+         res.locals.chartExists = {'found': false};
+    } 
+    else res.locals.chartExists = {'found': true};
+    return next();
 }
 
 dashboardController.getAllDisplay = (req, res, next) => {
@@ -26,6 +35,7 @@ dashboardController.getAllDisplay = (req, res, next) => {
         return next();
     })
 }
+
 
 dashboardController.updateChart = async (req, res, next) => {
     //PUT request to update all charts
