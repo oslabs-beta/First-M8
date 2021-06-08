@@ -31,6 +31,11 @@ const reqArray = {
   required: true
 }
 
+const reqObject = {
+  type: Object,
+  require: true
+}
+
 const inputSchema = new Schema({
 
 });
@@ -51,39 +56,8 @@ const dataSchema = new Schema({
   //users can see what's currently selected
 const ChartSettingSchema = new Schema({
   name: reqString,
-
-  columns: {
-    aggregationOptions: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    },
-    aggregationSelected: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    },
-    metricsOptions: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    },
-    metricsSelected: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    },
-    timeRange: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    },
-    timeRangeSelected: {
-      name: reqString,
-      title: reqString,
-      list: reqArray
-    }
-  }
+  columns: reqObject,
+  filters: reqObject
 });
 
 //second ChartSetting schema

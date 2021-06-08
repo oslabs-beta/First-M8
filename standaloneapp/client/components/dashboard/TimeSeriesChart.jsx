@@ -16,11 +16,11 @@ const TimeSeriesChart = ({
     
     let newChartData;
     await fetch(`http://localhost:9090/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
-    .then((res) => res.json())
-    .then((result) => {
+    .then((response) => response.json())
+    .then(response => {
       // console.log('result', result);
 
-      const dataFiltered = result.data.result.filter((dataPoint) => (dataPoint.metric.code === '200'
+      const dataFiltered = response.data.result.filter((dataPoint) => (dataPoint.metric.code === '200'
         && dataPoint.metric.handler === "/api/v1/metadata"
         && dataPoint.metric.instance === "localhost:9090"
         && dataPoint.metric.job === "prometheus"

@@ -68,6 +68,7 @@ dashboardController.createChartSetting = (req, res, next) => {
     ChartSetting.create({
         name: req.params.name,
         columns: req.body.columns,
+        filters: req.body.filters
     }, (err, result) => {
         if(err) {
             console.log('There was an error: ' + err)
@@ -117,7 +118,7 @@ dashboardController.deleteSingleDisplay = (req, res, next) => {
 }
 
 dashboardController.updateChartSetting = (req, res, next) => {
-    ChartSetting.findOneAndUpdate({name: req.params.name}, {columns: req.body.columns, name: req.body.name}, (err, result) => {
+    ChartSetting.findOneAndUpdate({name: req.params.name}, {columns: req.body.columns, name: req.body.name, filters: req.body.filters}, (err, result) => {
         if (err) {
             return next({status:500, log:'There was an error', message: err.message});
         }

@@ -10,7 +10,11 @@ const ChartsContainer = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  prometheusLabels,
+  setPrometheusLabels,
+  filters,
+  setFilters
 }) => {
 
   const chartsToDisplay = [];
@@ -25,6 +29,10 @@ const ChartsContainer = ({
         setChartName={setChartName}
         chart={individualChart}
         setChart={setChart}
+        prometheusLabels={prometheusLabels}
+        setPrometheusLabels={setPrometheusLabels}
+        filters={filters}
+        setFilters={setFilters}
       />);
   });
 

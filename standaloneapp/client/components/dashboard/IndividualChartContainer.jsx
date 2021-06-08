@@ -12,7 +12,9 @@ const IndividualChartContainer = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  filters,
+  setFilters
 }) => {
 
   /*
@@ -23,9 +25,10 @@ const IndividualChartContainer = ({
   const editChart = async () => {
     await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
-      .then(data => {
-        setColumns(data.columns)
-        setChartName(data.name);
+      .then(response => {
+        setColumns(response.columns)
+        setChartName(response.name);
+        setFilters(response.filters);
       });
     const chartToEdit = [<TimeSeriesChart id={chartName} query={chart[0].props.query}/>]
     setChart(chartToEdit);
@@ -40,9 +43,9 @@ const IndividualChartContainer = ({
   const deleteChart = async () => {
     await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
       .then(response => response.json())
-      .then(data => {
-        console.log("individual container", data);
-        setAllCharts(data);
+      .then(response => {
+        console.log("individual container", response);
+        setAllCharts(response);
       });
   }
 
