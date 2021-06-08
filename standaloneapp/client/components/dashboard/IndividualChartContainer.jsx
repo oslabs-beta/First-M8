@@ -14,6 +14,12 @@ const IndividualChartContainer = ({
   chart,
   setChart
 }) => {
+
+  /*
+  handles click on edit button:
+  retrieves chart name and data selector columns for particular chart from database
+  to display on chart set up page
+  */
   const editChart = async () => {
     await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
@@ -26,6 +32,11 @@ const IndividualChartContainer = ({
     history.push("/dashboard/edit-chart");
   }
 
+  /*
+  handles click on delete button:
+  deletes all information for particular chart from database, updates all charts
+  accordingly to display on main dashboard page
+  */
   const deleteChart = async () => {
     await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
       .then(response => response.json())
@@ -45,6 +56,7 @@ const IndividualChartContainer = ({
       <button id="edit-chart" onClick={editChart}>Edit</button> <button id="delete-chart" onClick={deleteChart}>Delete</button>
     </div>
   )
+
 }
 
 export default IndividualChartContainer;

@@ -5,11 +5,16 @@ import ChartsContainer from "./ChartsContainer";
 import history from "./dashboardHistory";
 
 const DashboardContainer = ({ allCharts, setAllCharts }) => {
+
+  /* 
+  helper function to initialize state of data selector
+  columns for chart setup page
+  */
   const initialColumns = (metricsList) => ({
     aggregationOptions: {
       name: "aggregationOptions",
       title: "Aggregation Options",
-      list: ["sum", "average", "multiply", "divide", "minimum", "maximum"]
+      list: ["Sum", "Average", "Multiply", "Divide", "Minimum", "Maximum"]
     },
     aggregationSelected: {
       name: "aggregationSelected",
@@ -25,24 +30,49 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
       name: "metricsSelected",
       title: "Metrics Selected",
       list: []
+    },
+    timeRange: {
+      name: "timeRange",
+      title: "Time Range",
+      list: ["Last 12 Hours", "Last 3 Hours", "Last 1 Hour", "Last 30 Minutes", "Last 15 Minutes", "Last 5 Minutes", "Last 1 Minute", "Last 10 Seconds", "Last 1 Second"]
+    },
+    timeRangeSelected: {
+      name: "timeRangeSelected",
+      title: "Time Range Selected",
+      list: ["Last 6 Hours"]
     }
   });
 
+  /* 
+  initializes state of data selector columns, chart name,
+  and chart display for chart setup page
+  */
   const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => "");
   const [chart, setChart] = useState(() => []);
 
+  /*
+  retrieves all metrics being tracked by Prometheus that are of gauge
+  or counter data types to list on chart setup page
+  */
   const getAllPromMetrics = async () => {
     let metrics;
     await fetch("http://localhost:9090/api/v1/metadata")
     .then(response => response.json())
     .then(data => {
       const detailedMetrics = data.data;
-      metrics = Object.keys(detailedMetrics).filter(metric => metric.includes("prometheus"));
+      metrics = Object.keys(detailedMetrics).filter(metric => {
+        return detailedMetrics[metric][0].type === "gauge" || detailedMetrics[metric][0].type === "counter"
+      });
       setColumns(initialColumns(metrics))
     });
   }
 
+  /* 
+  handles click on new dashboard chart button:
+  retrieves metrics from Prometheus, resets chart name, and resets
+  chart display for chart set up page
+  */
   const newDashboardChart = () => {
     getAllPromMetrics();
     setChartName("");
@@ -102,6 +132,7 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
       </Router>
     </div>
   );
+
 };
 
 export default DashboardContainer;
