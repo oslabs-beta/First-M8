@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
+import IndividualChartContainer from "./IndividualChartContainer";
 
-const ChartsContainer = ({ allCharts }) => {
-  // placeholder for logic to get all charts from DB to display
-  // const chartsToDisplay = [];
-  // await fetch("/dashboard")
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     data[0].display.forEach(chart => chartsToDisplay.push(chart));
-  //   })
+
+const ChartsContainer = ({
+  allCharts,
+  setAllCharts,
+  columns,
+  setColumns,
+  chartName,
+  setChartName,
+  chart,
+  setChart
+}) => {
+  const chartsToDisplay = [];
+  allCharts.forEach(individualChart => {
+    chartsToDisplay.push(
+      <IndividualChartContainer
+        allCharts={allCharts}
+        setAllCharts={setAllCharts}
+        columns={columns}
+        setColumns={setColumns}
+        chartName={individualChart[0].props.id}
+        setChartName={setChartName}
+        chart={individualChart}
+        setChart={setChart}
+      />);
+  });
 
   return (
     <div className="charts-container">
-      {/* {chartsToDisplay} */}
-      {allCharts}
+      {chartsToDisplay}
     </div>
   )
 }

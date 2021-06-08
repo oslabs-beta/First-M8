@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import MainRoutes from "./MainRoutes";
 import DashboardContainer from "./dashboard/DashboardContainer";
 import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
@@ -13,11 +14,12 @@ const App = () => {
           <Link to="/settings">Settings</Link>
           <Link to="/history">History</Link>
         </nav>
-        <Switch>
+        <MainRoutes />
+        {/* <Switch>
           <Route exact path="/" component={DashboardContainer}></Route>
           <Route path="/settings" component={SettingsContainer}></Route>
           <Route exact path="/history" component={HistoryContainer}></Route>
-        </Switch>
+        </Switch> */}
       </Router>
     </div>
   );
