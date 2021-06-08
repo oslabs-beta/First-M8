@@ -4,11 +4,7 @@ const { Display } = require("../models/webModel")
 const dashboardController = {}
 
 dashboardController.getChartSetting = (req, res, next) => {
-<<<<<<< Updated upstream
-    //find document in chartsettings for passed-in name and return columns property
-=======
     //possibly come back to
->>>>>>> Stashed changes
     ChartSetting.findOne({name: req.params.name}, (err, data) => { 
         if (err) {
             //status: 500, log, message
