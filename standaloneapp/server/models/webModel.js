@@ -72,6 +72,16 @@ const ChartSettingSchema = new Schema({
       name: reqString,
       title: reqString,
       list: reqArray
+    },
+    timeRange: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
+    },
+    timeRangeSelected: {
+      name: reqString,
+      title: reqString,
+      list: reqArray
     }
   }
 });

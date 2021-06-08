@@ -10,29 +10,36 @@ router.get("/",
   res.status(200).send(res.locals.data);
 });
 
-router.get("/dashboard/editChart/:name", 
-  dashboardController.getChartSetting, (req, res) => {
-  res.status(200).send(res.locals.columns);
+router.post("/newChart/:name", dashboardController.createChartSetting, (req, res) => {
+  res.status(200).send({ success: true });
 });
 
-router.get("/dashboard/chart/:name", 
-  dashboardController.getChartSetting, 
-  dashboardController.findAndComfirm, (req, res) => {
+router.patch("/allCharts", dashboardController.updateAllDisplay, (req, res) => {
+  res.status(200).send({ success: true });
+});
+
+router.get("/editChart/:name", dashboardController.getChartSetting, (req, res) => {
+  res.status(200).send(res.locals.chartSetting);
+});
+
+router.get("/chart/:name", dashboardController.getChartSetting, dashboardController.checkIfChartExists, (req, res) => {
   res.status(200).send(res.locals.chartExists);
-});
+})
 
-router.post("/newChart/:name", 
-  dashboardController.createChart, (req, res) => {
-  res.status(200).send({ success: true });
-});
+router.delete("/deleteChart/:name",
+  dashboardController.deleteChartSetting,
+  dashboardController.getAllDisplay,
+  dashboardController.deleteSingleDisplay,
+  (req, res) => {
+    res.status(200).send(res.locals.data);
+  }
+);
 
-router.patch("/allCharts", 
-  dashboardController.updateChart, (req, res) => {
-  res.status(200).send({ success: true });
-});
-
-//add route for custom query
-//save it inside database called history
-router.post()
-
+router.patch("/editChart/:name",
+  dashboardController.updateChartSetting,
+  dashboardController.updateSingleDisplay,
+  (req, res) => {
+    res.status(200).send({ success: true })
+  }
+)
 module.exports = router;

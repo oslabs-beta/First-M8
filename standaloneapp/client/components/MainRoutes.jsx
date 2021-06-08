@@ -5,8 +5,16 @@ import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
 
 const MainRoutes = () => {
+
+  /* 
+  initializes state of all charts to display on main dashboard page
+  */
   const [allCharts, setAllCharts] = useState(() => []);
 
+  /*
+  retrieves all existing charts from database to display on
+  main dashboard page
+  */
   const getAllCharts = async () => {
     await fetch("/dashboard")
       .then(response => response.json())
@@ -34,6 +42,7 @@ const MainRoutes = () => {
       <Route exact path="/history" component={HistoryContainer}></Route>
     </Switch>
   )
+
 }
 
 export default MainRoutes;

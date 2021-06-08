@@ -16,7 +16,18 @@ const ChartSetup = ({
   chart,
   setChart
 }) => {
+
+  /*
+  initializes state of notification for if a chart name already exists and old chart name
+  */
   const [alreadyExistsNotification, setNotification] = useState(() => "");
+  const [oldChartName, setOldChartName] = useState(() => chartName);
+  
+  /*
+  handles after an item has been dragged and dropped:
+  updates data selector columns in order to display correctly reflecting where
+  items have been dragged and dropped
+  */
   const onDragEnd = ({ source, destination }) => {
     if (destination === undefined || destination === null) return;
 
@@ -60,14 +71,25 @@ const ChartSetup = ({
     }
   }
 
+  /*
+  handles changes to chart name input:
+  updates chart name and resets notification for if a chart name already exists
+  */
   const changeChartName = (event) => {
     setChartName(event.target.value);
     setNotification("");
   }
   
+  /*
+  handles click on save chart setup button:
+  if new chart, checks if chart name already exists in database and notifies if so
+  and if not, adds chart name and data selector columns to database, adds new chart
+  to display on chart setup page and main dashboard page
+  if edit chart, update chart name and data selector columns in database, updates chart
+  to display on chart setup page and main dashboard page
+  */
   const saveChartSetup = async () => {
-    console.log(columns);
-    console.log(chartName);
+
     if (id === "new-chart") {
       if (columns.metricsSelected.list.length !== 0) {
         let chartAlreadyExists;
@@ -76,6 +98,7 @@ const ChartSetup = ({
           .then(data => {
             chartAlreadyExists = data.found;
           });
+
         if (!chartAlreadyExists) {
           await fetch(`/dashboard/newChart/${chartName}`, {
             method: "POST",
@@ -87,14 +110,16 @@ const ChartSetup = ({
             .then(response => response.json())
             .then(data => console.log(data, "adding new chart successful"))
             .catch(error => console.log(error, "adding new chart failed"));
+
           // placeholder for logic to construct PromQL queries
           const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-          const newChart = [<TimeSeriesChart id={chartName} query={query}/>]
-          setChart(newChart);
+          const newChart = [<TimeSeriesChart id={chartName} query={query}/>];
           const updatedAllCharts = allCharts.slice();
           updatedAllCharts.push(newChart);
-          console.log(updatedAllCharts);
+          
+          setChart(newChart);
           setAllCharts(updatedAllCharts);
+
           await fetch("/dashboard/allCharts", {
             method: "PATCH",
             headers: {
@@ -113,20 +138,22 @@ const ChartSetup = ({
       // placeholder for logic to construct PromQL queries
       const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
       const updatedChart = [<TimeSeriesChart id={chartName} query={query}/>]
+
       for (let index = 0; index < allCharts.length; index++) {
         const currentChart = allCharts[index];
-        if (currentChart[0].props.id === chartName) {
+        if (currentChart[0].props.id === oldChartName) {
           allCharts.splice(index, 1, updatedChart);
           setAllCharts(allCharts);
           break;
         }
       }
-      await fetch(`/dashboard/editChart/${chartName}`, {
+
+      await fetch(`/dashboard/editChart/${oldChartName}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ columns: columns, updatedChart: updatedChart })
+        body: JSON.stringify({ name: chartName, columns: columns, updatedChart: updatedChart })
       })
         .then(response => response.json())
         .then(data => console.log(data, "editing chart successful"))
@@ -154,6 +181,7 @@ const ChartSetup = ({
         {chart}
       </div>
   )
+
 }
 
 export default ChartSetup;
