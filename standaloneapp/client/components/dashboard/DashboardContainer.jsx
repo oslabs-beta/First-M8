@@ -4,7 +4,12 @@ import ChartSetup from "./ChartSetup";
 import ChartsContainer from "./ChartsContainer";
 import history from "./dashboardHistory";
 
-const DashboardContainer = ({ allCharts, setAllCharts }) => {
+const DashboardContainer = ({
+  allCharts,
+  setAllCharts,
+  prometheusInstance,
+  setPrometheusInstance
+}) => {
 
   /* 
   helper function to initialize state of data selector
@@ -44,21 +49,26 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
   });
 
   /* 
+  helper function to initialize state of filters for chart setup page
+  */
+  const initialFilters = (object) => object;
+
+  /* 
   initializes state of data selector columns, chart name,
-  chart display, Prometheus labels, and filters for chart setup page
+  chart display, filters, and Prometheus instance for chart setup page
   */
   const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => "");
   const [chart, setChart] = useState(() => []);
-  const [filters, setFilters] = useState(() => {});
-
+  const [filters, setFilters] = useState(() => initialFilters({}));
+  
   /*
   retrieves all metrics being tracked by Prometheus that are of gauge
   or counter data types to list on chart setup page
   */
   const getAllPromMetrics = async () => {
     let metrics;
-    await fetch("http://localhost:9090/api/v1/metadata")
+    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/metadata`)
     .then(response => response.json())
     .then(response => {
       const detailedMetrics = response.data;
@@ -67,6 +77,19 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
       });
       setColumns(initialColumns(metrics))
     });
+  }
+
+  /*
+  retrieves all labels from Prometheus to list on chart setup page
+  */
+  const getPrometheusLabels = async () => {
+    const labels = {};
+    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/labels`)
+      .then(response => response.json())
+      .then(response => {
+        response.data.forEach(label => labels[label] = true)
+        setFilters(initialFilters(labels));
+      }); 
   }
 
   /* 
@@ -82,22 +105,10 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
     history.push("/dashboard/new-chart");
   }
 
-  const getPrometheusLabels = async () => {
-    let labels;
-    const initialFilters = {};
-    await fetch("http://localhost:9090/api/v1/labels")
-      .then(response => response.json())
-      .then(response => {
-        labels = response.data;
-        labels.forEach(label => initialFilters[label] = true)
-        setFilters(initialFilters);
-      });
-  }
-
   useEffect(() => {
     getPrometheusLabels();
   }, []);
-
+  
   return (
     <div>
       <button
@@ -120,6 +131,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChart={setChart}
               filters={filters}
               setFilters={setFilters}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
             />
           </Route>
           <Route path="/dashboard/new-chart">
@@ -135,6 +148,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChart={setChart}
               filters={filters}
               setFilters={setFilters}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
             />
           </Route>
           <Route path="/dashboard/edit-chart">
@@ -150,6 +165,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChart={setChart}
               filters={filters}
               setFilters={setFilters}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
             />
           </Route>
         </Switch>

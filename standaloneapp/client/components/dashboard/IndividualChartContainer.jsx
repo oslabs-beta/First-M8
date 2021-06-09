@@ -14,7 +14,9 @@ const IndividualChartContainer = ({
   chart,
   setChart,
   filters,
-  setFilters
+  setFilters,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
 
   /*
@@ -30,7 +32,14 @@ const IndividualChartContainer = ({
         setChartName(response.name);
         setFilters(response.filters);
       });
-    const chartToEdit = [<TimeSeriesChart id={chartName} query={chart[0].props.query}/>]
+    const chartToEdit = [
+      <TimeSeriesChart
+        id={chartName}
+        query={chart[0].props.query}
+        prometheusInstance={prometheusInstance}
+        setPrometheusInstance={setPrometheusInstance}
+      />
+    ]
     setChart(chartToEdit);
     history.push("/dashboard/edit-chart");
   }
@@ -55,6 +64,8 @@ const IndividualChartContainer = ({
       <TimeSeriesChart
         id={chartName}
         query={chart[0].props.query}
+        prometheusInstance={prometheusInstance}
+        setPrometheusInstance={setPrometheusInstance}
       />
       <button id="edit-chart" onClick={editChart}>Edit</button> <button id="delete-chart" onClick={deleteChart}>Delete</button>
     </div>

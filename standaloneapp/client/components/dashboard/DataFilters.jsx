@@ -4,7 +4,9 @@ import IndividualDropDown from "./IndividualDropDown";
 const DataFilters = ({
   filters,
   setFilters,
-  onChange
+  onChange,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
   const labels = [];
   Object.keys(filters).forEach(label => {
@@ -15,6 +17,8 @@ const DataFilters = ({
           setFilters={setFilters}
           label={label}
           onChange={onChange}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
         /> 
       );
     }

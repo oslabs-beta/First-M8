@@ -4,7 +4,10 @@ import DashboardContainer from "./dashboard/DashboardContainer";
 import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
 
-const MainRoutes = () => {
+const MainRoutes = ({
+  prometheusInstance,
+  setPrometheusInstance
+}) => {
 
   /* 
   initializes state of all charts to display on main dashboard page
@@ -20,7 +23,6 @@ const MainRoutes = () => {
       .then(response => response.json())
       .then(data => {
         if (data[0] !== undefined) {
-          console.log("display data", data[0].display)
           setAllCharts(data[0].display);
         }
       });
@@ -36,6 +38,8 @@ const MainRoutes = () => {
         <DashboardContainer
           allCharts={allCharts}
           setAllCharts={setAllCharts}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
         />
       </Route>
       <Route path="/settings" component={SettingsContainer}></Route>

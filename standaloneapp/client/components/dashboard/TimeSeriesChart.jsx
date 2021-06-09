@@ -5,7 +5,9 @@ import moment from "moment";
 
 const TimeSeriesChart = ({
   id,
-  query
+  query,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
   // placeholder for logic to send PromQL query to DB
   const [chartData, setChartData] = useState(() => [])
@@ -15,7 +17,7 @@ const TimeSeriesChart = ({
     const timeRange = (Date.now() - 300000) / 1000;
     
     let newChartData;
-    await fetch(`http://localhost:9090/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
+    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
     .then((response) => response.json())
     .then(response => {
       // console.log('result', result);

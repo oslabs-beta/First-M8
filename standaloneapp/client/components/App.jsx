@@ -1,25 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import MainRoutes from "./MainRoutes";
-import DashboardContainer from "./dashboard/DashboardContainer";
-import SettingsContainer from "./settings/SettingsContainer.jsx";
-import HistoryContainer from "./history/HistoryContainer";
 
 const App = () => {
+  const [prometheusConnections, setPrometheusConnections] = useState(() => []);
+  const [prometheusInstance, setPrometheusInstance] = useState(() => {});
+
+  const getAllPrometheusInstances = async () => {
+    const connectionNames = [<option value=""></option>];
+    await fetch("/dashboard/connect/all")
+      .then(response => response.json())
+      .then(response => {
+        response.forEach(connection => {
+          connectionNames.push(
+            <option value={connection.name}>{connection.name}</option>
+          );
+        });
+        setPrometheusConnections(connectionNames);
+      });  
+  }
+
+
+  const selectPrometheusInstance = async (event) => {
+    await fetch(`/dashboard/connect/${event.target.value}`)
+      .then(response => response.json())
+      .then(response => {
+        setPrometheusInstance(response);
+      });
+  }
+  
+  useEffect(() => {
+    getAllPrometheusInstances();
+  }, []);
+
+  
+
   return (
     <div className="app">
+      <label>Prometheus Instance: </label>
+      <select onChange={selectPrometheusInstance}>
+        {prometheusConnections}
+      </select>
       <Router>
         <nav>
           <Link to="/">Dashboard</Link>
           <Link to="/settings">Settings</Link>
           <Link to="/history">History</Link>
         </nav>
-        <MainRoutes />
-        {/* <Switch>
-          <Route exact path="/" component={DashboardContainer}></Route>
-          <Route path="/settings" component={SettingsContainer}></Route>
-          <Route exact path="/history" component={HistoryContainer}></Route>
-        </Switch> */}
+        <MainRoutes
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />
       </Router>
     </div>
   );

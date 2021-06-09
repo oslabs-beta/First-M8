@@ -17,7 +17,9 @@ const ChartSetup = ({
   chart,
   setChart,
   filters,
-  setFilters
+  setFilters,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
 
   /*
@@ -121,7 +123,14 @@ const ChartSetup = ({
 
           // placeholder for logic to construct PromQL queries
           const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-          const newChart = [<TimeSeriesChart id={chartName} query={query}/>];
+          const newChart = [
+            <TimeSeriesChart
+              id={chartName}
+              query={query}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
+            />
+          ];
           const updatedAllCharts = allCharts.slice();
           updatedAllCharts.push(newChart);
           
@@ -145,7 +154,14 @@ const ChartSetup = ({
     } else if (id === "edit-chart") {
       // placeholder for logic to construct PromQL queries
       const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-      const updatedChart = [<TimeSeriesChart id={chartName} query={query}/>]
+      const updatedChart = [
+        <TimeSeriesChart
+          id={chartName}
+          query={query}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />
+      ]
 
       for (let index = 0; index < allCharts.length; index++) {
         const currentChart = allCharts[index];
@@ -172,9 +188,7 @@ const ChartSetup = ({
         .then(response => console.log(response, "editing chart successful"))
         .catch(error => console.log(error, "editing chart failed"))
     }  
-  }
-
-  
+  }  
   
   return (
       <div className="chart-setup">
@@ -196,6 +210,8 @@ const ChartSetup = ({
           filters={filters}
           setFilters={setFilters}
           onChange={changeFilter}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
         />
         <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}

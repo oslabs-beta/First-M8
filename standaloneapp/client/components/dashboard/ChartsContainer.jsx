@@ -12,7 +12,9 @@ const ChartsContainer = ({
   chart,
   setChart,
   filters,
-  setFilters
+  setFilters,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
 
   const chartsToDisplay = [];
@@ -29,6 +31,8 @@ const ChartsContainer = ({
         setChart={setChart}
         filters={filters}
         setFilters={setFilters}
+        prometheusInstance={prometheusInstance}
+        setPrometheusInstance={setPrometheusInstance}
       />);
   });
 

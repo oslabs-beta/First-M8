@@ -4,12 +4,14 @@ const IndividualDropDown = ({
   filters,
   setFilters,
   label,
-  onChange
+  onChange,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
   const [options, setOptions] = useState(() => [])
   const getOptions = async () => {
     const optionTags = [<option value=""></option>];
-    await fetch(`http://localhost:9090/api/v1/label/${label}/values`)
+    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/label/${label}/values`)
       .then(response => response.json())
       .then(response => {
         response.data.forEach(option => {
