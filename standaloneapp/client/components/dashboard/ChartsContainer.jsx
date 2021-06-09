@@ -10,7 +10,9 @@ const ChartsContainer = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  filters,
+  setFilters
 }) => {
 
   const chartsToDisplay = [];
@@ -25,6 +27,8 @@ const ChartsContainer = ({
         setChartName={setChartName}
         chart={individualChart}
         setChart={setChart}
+        filters={filters}
+        setFilters={setFilters}
       />);
   });
 

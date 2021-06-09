@@ -19,3 +19,17 @@
   border: 1pt solid black;
   overflow: auto;
 }
+
+.data-filters {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.individual-drop-down {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+}

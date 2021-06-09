@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import OptionsOrSelectedColumn from "./OptionsOrSelectedColumn";
 import TimeSeriesChart from "./TimeSeriesChart";
+import DataFilters from "./DataFilters";
 import history from "./dashboardHistory";
-import QueryAlgorithms from './QueryAlgorithms';
+import queryAlgorithms from './queryAlgorithms';
 
 const ChartSetup = ({
   id,
@@ -14,7 +15,9 @@ const ChartSetup = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  filters,
+  setFilters
 }) => {
 
   /*
@@ -79,6 +82,11 @@ const ChartSetup = ({
     setChartName(event.target.value);
     setNotification("");
   }
+
+  const updatedFilters = {...filters};
+  const changeFilter = (event) => {
+    updatedFilters[event.target.id] = event.target.value;
+  }
   
   /*
   handles click on save chart setup button:
@@ -95,8 +103,8 @@ const ChartSetup = ({
         let chartAlreadyExists;
         await fetch(`/dashboard/chart/${chartName}`)
           .then(response => response.json())
-          .then(data => {
-            chartAlreadyExists = data.found;
+          .then(response => {
+            chartAlreadyExists = response.found;
           });
 
         if (!chartAlreadyExists) {
@@ -105,14 +113,14 @@ const ChartSetup = ({
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({ columns: columns })
+            body: JSON.stringify({ columns: columns, filters: updatedFilters })
           })
             .then(response => response.json())
-            .then(data => console.log(data, "adding new chart successful"))
+            .then(response => console.log(response, "adding new chart successful"))
             .catch(error => console.log(error, "adding new chart failed"));
 
           // placeholder for logic to construct PromQL queries
-          const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+          const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
           const newChart = [<TimeSeriesChart id={chartName} query={query}/>];
           const updatedAllCharts = allCharts.slice();
           updatedAllCharts.push(newChart);
@@ -128,7 +136,7 @@ const ChartSetup = ({
             body: JSON.stringify({ display: updatedAllCharts })
           })
             .then(response => response.json())
-            .then(data => console.log(data, "update all charts successful"))
+            .then(response => console.log(response, "update all charts successful"))
             .catch(error => console.log(error, "updating all charts failed"))
         } else {
           setNotification("Chart already exists. Please enter another name.");
@@ -136,7 +144,7 @@ const ChartSetup = ({
       }
     } else if (id === "edit-chart") {
       // placeholder for logic to construct PromQL queries
-      const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+      const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
       const updatedChart = [<TimeSeriesChart id={chartName} query={query}/>]
 
       for (let index = 0; index < allCharts.length; index++) {
@@ -153,13 +161,20 @@ const ChartSetup = ({
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ name: chartName, columns: columns, updatedChart: updatedChart })
+        body: JSON.stringify({
+          name: chartName,
+          columns: columns,
+          updatedChart: updatedChart,
+          filters: updatedFilters
+         })
       })
         .then(response => response.json())
-        .then(data => console.log(data, "editing chart successful"))
+        .then(response => console.log(response, "editing chart successful"))
         .catch(error => console.log(error, "editing chart failed"))
     }  
   }
+
+  
   
   return (
       <div className="chart-setup">
@@ -177,6 +192,11 @@ const ChartSetup = ({
             ))}
           </div>
         </DragDropContext>
+        <DataFilters 
+          filters={filters}
+          setFilters={setFilters}
+          onChange={changeFilter}
+        />
         <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}
       </div>

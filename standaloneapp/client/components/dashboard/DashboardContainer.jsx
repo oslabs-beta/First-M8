@@ -45,11 +45,12 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
 
   /* 
   initializes state of data selector columns, chart name,
-  and chart display for chart setup page
+  chart display, Prometheus labels, and filters for chart setup page
   */
   const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => "");
   const [chart, setChart] = useState(() => []);
+  const [filters, setFilters] = useState(() => {});
 
   /*
   retrieves all metrics being tracked by Prometheus that are of gauge
@@ -59,8 +60,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
     let metrics;
     await fetch("http://localhost:9090/api/v1/metadata")
     .then(response => response.json())
-    .then(data => {
-      const detailedMetrics = data.data;
+    .then(response => {
+      const detailedMetrics = response.data;
       metrics = Object.keys(detailedMetrics).filter(metric => {
         return detailedMetrics[metric][0].type === "gauge" || detailedMetrics[metric][0].type === "counter"
       });
@@ -75,10 +76,27 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
   */
   const newDashboardChart = () => {
     getAllPromMetrics();
+    getPrometheusLabels();
     setChartName("");
     setChart([]);
     history.push("/dashboard/new-chart");
   }
+
+  const getPrometheusLabels = async () => {
+    let labels;
+    const initialFilters = {};
+    await fetch("http://localhost:9090/api/v1/labels")
+      .then(response => response.json())
+      .then(response => {
+        labels = response.data;
+        labels.forEach(label => initialFilters[label] = true)
+        setFilters(initialFilters);
+      });
+  }
+
+  useEffect(() => {
+    getPrometheusLabels();
+  }, []);
 
   return (
     <div>
@@ -100,6 +118,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
+              filters={filters}
+              setFilters={setFilters}
             />
           </Route>
           <Route path="/dashboard/new-chart">
@@ -113,6 +133,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
+              filters={filters}
+              setFilters={setFilters}
             />
           </Route>
           <Route path="/dashboard/edit-chart">
@@ -126,6 +148,8 @@ const DashboardContainer = ({ allCharts, setAllCharts }) => {
               setChartName={setChartName}
               chart={chart}
               setChart={setChart}
+              filters={filters}
+              setFilters={setFilters}
             />
           </Route>
         </Switch>
