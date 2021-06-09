@@ -10,8 +10,11 @@ const ChartsContainer = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  filters,
+  setFilters
 }) => {
+
   const chartsToDisplay = [];
   allCharts.forEach(individualChart => {
     chartsToDisplay.push(
@@ -24,6 +27,8 @@ const ChartsContainer = ({
         setChartName={setChartName}
         chart={individualChart}
         setChart={setChart}
+        filters={filters}
+        setFilters={setFilters}
       />);
   });
 
@@ -32,6 +37,7 @@ const ChartsContainer = ({
       {chartsToDisplay}
     </div>
   )
+  
 }
 
 export default ChartsContainer;
