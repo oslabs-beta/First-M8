@@ -20,7 +20,7 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
-            plugins: ["@babel/transform-runtime"]
+            plugins: ["@babel/transform-runtime"],
           },
         },
       },
@@ -72,14 +72,17 @@ module.exports = {
       },
     }),
   ],
-  // devtool: 'eval-source-map',
+  devtool: "eval-source-map",
   devServer: {
-    // contentBase: path.join(__dirname, '/client'),
+    // contentBase: path.join(__dirname, "/client"),
     // compress: true,
-    // port: 8080,
+    // port: 3000,
     publicPath: "/build",
-    // proxy: {},
+    proxy: {
+      "/**": "http://localhost:3000",
+    },
     hot: true,
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ["", ".js", ".jsx"],

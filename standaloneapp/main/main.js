@@ -1,4 +1,5 @@
 const { app, BrowserWindow } = require("electron");
+process.env.NODE_ENV === 'development' ? null : require("../server/server");
 const path = require("path");
 
 function createWindow() {
@@ -7,7 +8,7 @@ function createWindow() {
     height: 600,
   });
 
-  win.loadURL("file://" + path.join(__dirname, "../client/index.html"));
+  win.loadURL("http://localhost:3001");
 }
 
 app.whenReady().then(() => {
@@ -21,4 +22,3 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
-

@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 
 const AddEditCard = ({ clusterArray, setClusterArray }) => {
-  console.log("addeditcard");
   let { name } = useParams();
-  const { history } = useHistory();
+  let history = useHistory();
   const [thisCluster, setThisCluster] = useState(() => {
     if (name !== "new") {
-      for (const el in clusterArray) {
+      for (const el of clusterArray) {
         if (el.name === name) return el;
       }
     }

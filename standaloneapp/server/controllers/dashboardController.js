@@ -3,16 +3,25 @@ const { Display } = require("../models/webModel")
 
 const dashboardController = {}
 
-dashboardController.getAllSetting = (req, res, next) => {
+dashboardController.getChartSetting = (req, res, next) => {
     //possibly come back to
-    ChartSetting.find({}, (err, data) => { 
+    ChartSetting.findOne({name: req.params.name}, (err, data) => { 
         if (err) {
             //status: 500, log, message
             return next({status:500, log:'There was an error', message: err.message});
         }
-        res.locals.data = data;
+        res.locals.chartSetting = data;
         return next();
     })
+}
+
+dashboardController.findAndComfirm = (req, res, next) => {
+    //check if document with passed-in name exists in chartsettings, send back 
+    if(res.locals.data === null){
+         res.locals.chartExists = {'found': false};
+    } 
+    else res.locals.chartExists = {'found': true};
+    return next();
 }
 
 dashboardController.getAllDisplay = (req, res, next) => {
@@ -27,7 +36,7 @@ dashboardController.getAllDisplay = (req, res, next) => {
     })
 }
 
-dashboardController.updateChart = async (req, res, next) => {
+dashboardController.updateAllDisplay = async (req, res, next) => {
     //PUT request to update all charts
     if(req.body.display && Array.isArray(req.body.display)){
     const newDisplay = req.body;
@@ -51,7 +60,7 @@ dashboardController.updateChart = async (req, res, next) => {
     }
 }
 
-dashboardController.createChart = (req, res, next) => {
+dashboardController.createChartSetting = (req, res, next) => {
     //insert DB stuff
     //send back a confirmation object similar to what alex mentioned
     //{'success': true || false}
@@ -59,6 +68,7 @@ dashboardController.createChart = (req, res, next) => {
     ChartSetting.create({
         name: req.params.name,
         columns: req.body.columns,
+        filters: req.body.filters
     }, (err, result) => {
         if(err) {
             console.log('There was an error: ' + err)
@@ -67,6 +77,77 @@ dashboardController.createChart = (req, res, next) => {
         }
         console.log('Created: ' + result)
         return next()
+    })
+}
+
+dashboardController.checkIfChartExists = (req, res, next) => {
+    if (res.locals.chartSetting !== null) {
+        res.locals.chartExists = {found: true};
+    } else {
+        res.locals.chartExists = {found: false};
+    }
+    return next();
+}
+
+dashboardController.deleteChartSetting = (req, res, next) => {
+    ChartSetting.findOneAndDelete({name: req.params.name}, (err, data) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message});
+        }
+        return next()
+    });
+}
+
+dashboardController.deleteSingleDisplay = (req, res, next) => {
+    const allDisplay = res.locals.data[0].display;
+    const updatedDisplays = allDisplay.slice();
+    for (let index = 0; index < allDisplay.length; index++) {
+        const currentDisplay = allDisplay[index];
+        if (currentDisplay[0].props.id === req.params.name) {
+            updatedDisplays.splice(index, 1);
+            break;
+        }
+    }
+    res.locals.data = updatedDisplays;
+    Display.findOneAndUpdate({}, {display: updatedDisplays}, (err, result) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message});
+        }
+        return next();
+    })
+}
+
+dashboardController.updateChartSetting = (req, res, next) => {
+    ChartSetting.findOneAndUpdate({name: req.params.name}, {columns: req.body.columns, name: req.body.name, filters: req.body.filters}, (err, result) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message});
+        }
+        return next();
+    });
+}
+
+dashboardController.updateSingleDisplay = (req, res, next) => {
+    const updatedDisplays = [];
+    Display.find({}, (err, result) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message})
+        }
+        result[0].display.forEach(chart => {
+            updatedDisplays.push(chart);
+        })
+        for (let index = 0; index < updatedDisplays.length; index++) {
+            const currentDisplay = updatedDisplays[index];
+            if (currentDisplay[0].props.id === req.params.name) {
+                updatedDisplays.splice(index, 1, req.body.updatedChart);
+                break;
+            }
+        }
+        Display.findOneAndUpdate({}, {display: updatedDisplays}, (err, result) => {
+            if (err) {
+                return next({status:500, log:'There was an error', message: err.message});
+            }
+            return next();
+        })
     })
 }
 

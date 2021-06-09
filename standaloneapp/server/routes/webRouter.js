@@ -17,7 +17,7 @@ router.post('/add', (req, res) => {
     res.status(200).send({'success': true});
 })});
 
-router.get('/', webController.getAll, (req, res) => { 
+router.get('/all', webController.getAll, (req, res) => { 
     //insert query to database
     //all "cluster" information
     res.status(200).send(res.locals.data)},

@@ -1,55 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import OptionsOrSelectedColumn from "./OptionsOrSelectedColumn";
 import TimeSeriesChart from "./TimeSeriesChart";
+import DataFilters from "./DataFilters";
 import history from "./dashboardHistory";
-import QueryAlgorithms from './QueryAlgorithms';
+import queryAlgorithms from './queryAlgorithms';
 
 const ChartSetup = ({
+  id,
   allCharts,
-  setAllCharts
+  setAllCharts,
+  columns,
+  setColumns,
+  chartName,
+  setChartName,
+  chart,
+  setChart,
+  filters,
+  setFilters
 }) => {
-  const initialColumns = (metricsList) => ({
-    aggregationOptions: {
-      name: "aggregationOptions",
-      title: "Aggregation Options",
-      list: ["sum", "average", "multiply", "divide", "minimum", "maximum"]
-    },
-    aggregationSelected: {
-      name: "aggregationSelected",
-      title: "Aggregation Selected",
-      list: []
-    },
-    metricsOptions: {
-      name: "metricsOptions",
-      title: "Metrics Options",
-      list: metricsList
-    },
-    metricsSelected: {
-      name: "metricsSelected",
-      title: "Metrics Selected",
-      list: []
-    }
-  });
+
+  /*
+  initializes state of notification for if a chart name already exists and old chart name
+  */
+  const [alreadyExistsNotification, setNotification] = useState(() => "");
+  const [oldChartName, setOldChartName] = useState(() => chartName);
   
-  const [columns, setColumns] = useState(() => initialColumns([]));
-  const [chartName, setChartName] = useState(() => "");
-  const [chart, setChart] = useState(() => []);
-
-  const getAllPromMetrics = async () => {
-    let metrics;
-    await fetch("http://localhost:9090/api/v1/metadata")
-    .then(response => response.json())
-    .then(data => {
-      const detailedMetrics = data.data;
-      metrics = Object.keys(detailedMetrics).filter(metric => metric.includes("prometheus"));
-      setColumns(initialColumns(metrics))
-    });
-  }
-
-  useEffect(() => {
-    getAllPromMetrics();
-  }, []);
+  /*
+  handles after an item has been dragged and dropped:
+  updates data selector columns in order to display correctly reflecting where
+  items have been dragged and dropped
+  */
   const onDragEnd = ({ source, destination }) => {
     if (destination === undefined || destination === null) return;
 
@@ -93,47 +74,112 @@ const ChartSetup = ({
     }
   }
 
+  /*
+  handles changes to chart name input:
+  updates chart name and resets notification for if a chart name already exists
+  */
   const changeChartName = (event) => {
     setChartName(event.target.value);
+    setNotification("");
+  }
+
+  const updatedFilters = {...filters};
+  const changeFilter = (event) => {
+    updatedFilters[event.target.id] = event.target.value;
   }
   
-  const saveChartSetup = () => {
-    console.log(columns);
-    console.log(chartName);
-    // placeholder for logic to send current state of columns to DB
-    // await fetch(`/dashboard/newChart/${chartName}`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({ columns: columns })
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data, "adding new chart successful"))
-    //   .catch(error => console.log(error, "adding new chart failed"))
-    // placeholder for logic to construct PromQL queries
-    const query = QueryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-    const newChart = [<TimeSeriesChart query={query}/>]
-    setChart(newChart);
-    const updatedAllCharts = allCharts.slice();
-    updatedAllCharts.push(newChart);
-    setAllCharts(updatedAllCharts);
-    // placeholder for logic to update all charts in DB
-    // await fetch("/dashboard/allCharts", {
-    //   method: "PATCH",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({ display: updatedAllCharts })
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data, "update all charts successful"))
-    //   .catch(error => console.log(error, "updating all charts failed"))
+  /*
+  handles click on save chart setup button:
+  if new chart, checks if chart name already exists in database and notifies if so
+  and if not, adds chart name and data selector columns to database, adds new chart
+  to display on chart setup page and main dashboard page
+  if edit chart, update chart name and data selector columns in database, updates chart
+  to display on chart setup page and main dashboard page
+  */
+  const saveChartSetup = async () => {
+
+    if (id === "new-chart") {
+      if (columns.metricsSelected.list.length !== 0) {
+        let chartAlreadyExists;
+        await fetch(`/dashboard/chart/${chartName}`)
+          .then(response => response.json())
+          .then(response => {
+            chartAlreadyExists = response.found;
+          });
+
+        if (!chartAlreadyExists) {
+          await fetch(`/dashboard/newChart/${chartName}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ columns: columns, filters: updatedFilters })
+          })
+            .then(response => response.json())
+            .then(response => console.log(response, "adding new chart successful"))
+            .catch(error => console.log(error, "adding new chart failed"));
+
+          // placeholder for logic to construct PromQL queries
+          const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+          const newChart = [<TimeSeriesChart id={chartName} query={query}/>];
+          const updatedAllCharts = allCharts.slice();
+          updatedAllCharts.push(newChart);
+          
+          setChart(newChart);
+          setAllCharts(updatedAllCharts);
+
+          await fetch("/dashboard/allCharts", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ display: updatedAllCharts })
+          })
+            .then(response => response.json())
+            .then(response => console.log(response, "update all charts successful"))
+            .catch(error => console.log(error, "updating all charts failed"))
+        } else {
+          setNotification("Chart already exists. Please enter another name.");
+        }     
+      }
+    } else if (id === "edit-chart") {
+      // placeholder for logic to construct PromQL queries
+      const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+      const updatedChart = [<TimeSeriesChart id={chartName} query={query}/>]
+
+      for (let index = 0; index < allCharts.length; index++) {
+        const currentChart = allCharts[index];
+        if (currentChart[0].props.id === oldChartName) {
+          allCharts.splice(index, 1, updatedChart);
+          setAllCharts(allCharts);
+          break;
+        }
+      }
+
+      await fetch(`/dashboard/editChart/${oldChartName}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: chartName,
+          columns: columns,
+          updatedChart: updatedChart,
+          filters: updatedFilters
+         })
+      })
+        .then(response => response.json())
+        .then(response => console.log(response, "editing chart successful"))
+        .catch(error => console.log(error, "editing chart failed"))
+    }  
   }
+
+  
   
   return (
       <div className="chart-setup">
-        Chart Name: <input type="text" onChange={changeChartName}></input>
+        <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName}></input>
+        <div>{alreadyExistsNotification}</div>
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="chart-setup-columns">
             {Object.values(columns).map((column, index) => (
@@ -146,10 +192,16 @@ const ChartSetup = ({
             ))}
           </div>
         </DragDropContext>
+        <DataFilters 
+          filters={filters}
+          setFilters={setFilters}
+          onChange={changeFilter}
+        />
         <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}
       </div>
   )
+
 }
 
 export default ChartSetup;

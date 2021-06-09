@@ -5,9 +5,9 @@
   "main": "./main/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env electron .",
+    "start": "cross-env NODE_ENV=production electron .",
     "build": "NODE_ENV=production webpack",
-    "dev": "cross-env NODE_ENV=development concurrently \"electron .\" \"NODE_ENV=development webpack serve\""
+    "dev": "cross-env NODE_ENV=development concurrently \"NODE_ENV=development webpack serve --open\" \"NODE_ENV=development nodemon ./server/server.js\""
   },
   "author": "",
   "license": "ISC",
@@ -24,10 +24,10 @@
     "html-webpack-plugin": "^5.3.1",
     "image-minimizer-webpack-plugin": "^2.2.0",
     "mini-css-extract-plugin": "^1.6.0",
+    "moment": "^2.29.1",
     "mongodb": "^3.6.8",
     "mongoose": "^5.12.12",
     "nodemon": "^2.0.7",
-    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2",
