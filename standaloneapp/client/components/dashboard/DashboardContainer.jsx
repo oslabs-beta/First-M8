@@ -68,15 +68,17 @@ const DashboardContainer = ({
   */
   const getAllPromMetrics = async () => {
     let metrics;
-    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/metadata`)
-    .then(response => response.json())
-    .then(response => {
-      const detailedMetrics = response.data;
-      metrics = Object.keys(detailedMetrics).filter(metric => {
-        return detailedMetrics[metric][0].type === "gauge" || detailedMetrics[metric][0].type === "counter"
+    if (prometheusInstance !== undefined) {
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/metadata`)
+      .then(response => response.json())
+      .then(response => {
+        const detailedMetrics = response.data;
+        metrics = Object.keys(detailedMetrics).filter(metric => {
+          return detailedMetrics[metric][0].type === "gauge" || detailedMetrics[metric][0].type === "counter"
+        });
+        setColumns(initialColumns(metrics))
       });
-      setColumns(initialColumns(metrics))
-    });
+    }
   }
 
   /*
@@ -84,12 +86,15 @@ const DashboardContainer = ({
   */
   const getPrometheusLabels = async () => {
     const labels = {};
-    await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/labels`)
-      .then(response => response.json())
-      .then(response => {
-        response.data.forEach(label => labels[label] = null)
-        setFilters(initialFilters(labels));
-      }); 
+    if (prometheusInstance !== undefined) {
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/labels`)
+        .then(response => response.json())
+        .then(response => {
+          response.data.forEach(label => labels[label] = null)
+          setFilters(initialFilters(labels));
+      });
+    }
+     
   }
 
   /* 

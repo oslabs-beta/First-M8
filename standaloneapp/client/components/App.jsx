@@ -7,11 +7,11 @@ const App = () => {
   const [prometheusInstance, setPrometheusInstance] = useState(() => {});
 
   const getAllPrometheusInstances = async () => {
-    const connectionNames = [<option value=""></option>];
+    const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
     await fetch("/dashboard/connect/all")
       .then(response => response.json())
       .then(response => {
-        response.forEach(connection => {
+        response.forEach((connection, index) => {
           connectionNames.push(
             <option value={connection.name}>{connection.name}</option>
           );
