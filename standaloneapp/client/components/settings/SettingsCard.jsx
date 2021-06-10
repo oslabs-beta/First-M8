@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SettingsCard = ({ cluster }) => {
+const SettingsCard = ({ setting }) => {
 
   return (
-    <div id={cluster.name} className="settings-card">
-      <Link to={`/settings/${cluster.name}`}>
-        <p id="cardname">Name: {cluster.name}</p>
-        <p id="ipaddress">IP Address: {cluster.ipAddress}</p>
-        <p id="port">Port: {cluster.port}</p>
+    <div id={setting.name} className="settings-card">
+      <Link to={`/settings/${setting.name}`}>
+        <p id="cardname">Name: {setting.name}</p>
+        <p id="ipaddress">IP Address: {setting.ipAddress}</p>
+        <p id="port">Port: {setting.port}</p>
       </Link>
     </div>
   );

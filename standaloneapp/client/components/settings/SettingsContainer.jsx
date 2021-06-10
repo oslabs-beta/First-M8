@@ -3,26 +3,14 @@ import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
 import SettingsCard from "./SettingsCard";
 import AddEditCard from "./AddEditCard";
 
-const SettingsContainer = () => {
-  const [clusterArray, setClusterArray] = useState(() => [
-    {
-      name: "cluster-1",
-      ipAddress: "162.168.02.01",
-      port: 3000,
-    },
-    {
-      name: "cluster-2",
-      ipAddress: "161.165.3.01",
-      port: 5000,
-    },
-  ]);
+const SettingsContainer = ({ settingsArr, setSettingsArr }) => {
   const { path, url } = useRouteMatch();
 
-  const cardArray = clusterArray.map((cluster) => {
+  const cardArray = settingsArr.map((setting) => {
     return (
       <SettingsCard
-        key={`cluster settings ${cluster.name}`}
-        cluster={cluster}
+        key={`settings card ${setting.name}`}
+        setting={setting}
       />
     );
   });
@@ -32,8 +20,8 @@ const SettingsContainer = () => {
       <Switch>
         <Route path={`${path}/:name`}>
           <AddEditCard
-            clusterArray={clusterArray}
-            setClusterArray={setClusterArray}
+            settingsArr={settingsArr}
+            setSettingsArr={setSettingsArr}
           />
         </Route>
         <Route exact path={`${path}/`}>

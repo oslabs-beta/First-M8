@@ -10,6 +10,7 @@ const MainRoutes = () => {
   initializes state of all charts to display on main dashboard page
   */
   const [allCharts, setAllCharts] = useState(() => []);
+  const [settingsArr, setSettingsArr] = useState(() => []);
 
   /*
   retrieves all existing charts from database to display on
@@ -17,32 +18,44 @@ const MainRoutes = () => {
   */
   const getAllCharts = async () => {
     await fetch("/dashboard")
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data[0] !== undefined) {
-          console.log("display data", data[0].display)
+          console.log("display data", data[0].display);
           setAllCharts(data[0].display);
         }
       });
-  }
+  };
+
+  //initial fetch of settings in the database
+  const getSettings = async () => {
+    await fetch("/settings/all")
+      .then((resp) => resp.json())
+      .then((result) => {
+        setSettingsArr(result.settings);
+      }).catch(e => console.log(e));
+  };
 
   useEffect(() => {
     getAllCharts();
+    getSettings();
   }, []);
 
   return (
     <Switch>
       <Route exact path="/">
-        <DashboardContainer
-          allCharts={allCharts}
-          setAllCharts={setAllCharts}
+        <DashboardContainer allCharts={allCharts} setAllCharts={setAllCharts} />
+      </Route>
+      <Route path="/settings">
+        <SettingsContainer
+          settingsArr={settingsArr}
+          setSettingsArr={setSettingsArr}
         />
       </Route>
-      <Route path="/settings" component={SettingsContainer}></Route>
       <Route exact path="/history" component={HistoryContainer}></Route>
     </Switch>
-  )
+  );
+};
 
-}
 
 export default MainRoutes;
