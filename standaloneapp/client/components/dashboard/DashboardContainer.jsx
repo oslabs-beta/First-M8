@@ -39,12 +39,12 @@ const DashboardContainer = ({
     timeRange: {
       name: "timeRange",
       title: "Time Range",
-      list: ["Last 12 Hours", "Last 3 Hours", "Last 1 Hour", "Last 30 Minutes", "Last 15 Minutes", "Last 5 Minutes", "Last 1 Minute", "Last 10 Seconds", "Last 1 Second"]
+      list: ["12 Hours", "3 Hours", "1 Hour", "30 Minutes", "15 Minutes", "5 Minutes", "1 Minute", "10 Seconds", "1 Second"]
     },
     timeRangeSelected: {
       name: "timeRangeSelected",
       title: "Time Range Selected",
-      list: ["Last 6 Hours"]
+      list: ["6 Hours"]
     }
   });
 
@@ -87,7 +87,7 @@ const DashboardContainer = ({
     await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/labels`)
       .then(response => response.json())
       .then(response => {
-        response.data.forEach(label => labels[label] = true)
+        response.data.forEach(label => labels[label] = null)
         setFilters(initialFilters(labels));
       }); 
   }
