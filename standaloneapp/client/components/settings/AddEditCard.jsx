@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { nameHelper, ipHelper, portHelper } from "./settingsHelper";
 
-const AddEditCard = ({ clusterArray, setClusterArray }) => {
+const AddEditCard = ({ settingsArr, setSettingsArr }) => {
   let { name } = useParams();
   let history = useHistory();
-  const [thisCluster, setThisCluster] = useState(() => {
+  const [thisSetting, setThisSetting] = useState(() => {
     if (name !== "new") {
-      for (const el of clusterArray) {
+      for (const el of settingsArr) {
         if (el.name === name) return el;
       }
     }
@@ -16,43 +17,56 @@ const AddEditCard = ({ clusterArray, setClusterArray }) => {
       port: 3000,
     };
   });
+  const [errMsgNew, setErrMsgNew] = useState(() => false);
+  const [errMsgIP, setErrMsgIP] = useState(() => false);
+  const [errMsgPort, setErrMsgPort] = useState(() => false);
 
   async function handleSumbit(e) {
     e.preventDefault();
-    if (name === "new") {
-      await fetch("/settings/new", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(thisCluster),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          setClusterArray([...clusterArray, thisCluster]);
-        })
-        .catch((e) => console.log(e));
+    const nameErr = nameHelper(thisSetting.name);
+    const ipErr = ipHelper(thisSetting.ipAddress);
+    const portErr = portHelper(thisSetting.port);
+    if (nameErr || ipErr || portErr) {
+      if (nameErr) setErrMsgNew(true);
+      if (ipErr) setErrMsgIP(true);
+      if (portErr) setErrMsgPort(true);
+      return;
     } else {
-      await fetch(`/settings/${name}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(thisCluster),
-      })
-        .then((res) => res.json())
-        .then((result) => {
-          const newArray = clusterArray.filter((el) => el.name !== name);
-          setClusterArray([...newArray, thisCluster]);
+      if (name === "new") {
+        await fetch("/settings/new", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(thisSetting),
         })
-        .catch((e) => console.log(e));
+          .then((res) => res.json())
+          .then((result) => {
+            setSettingsArr(result.settings);
+          })
+          .catch((e) => console.log(e));
+      } else {
+        await fetch(`/settings/${name}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(thisSetting),
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            // const newArray = settingsArr.filter((el) => el.name !== name);
+            setSettingsArr(result.settings);
+          })
+          .catch((e) => console.log(e));
+      }
+      history.push("/settings");
+      return;
     }
-    history.push("/settings");
-    return;
   }
 
   function handleChange(e) {
-    let updatedCluster = { ...thisCluster };
+    let updatedCluster = { ...thisSetting };
     if (e.target.id === "name") {
       updatedCluster = { ...updatedCluster, name: e.target.value };
     } else if (e.target.id === "ipaddress") {
@@ -60,27 +74,22 @@ const AddEditCard = ({ clusterArray, setClusterArray }) => {
     } else if (e.target.id === "port") {
       updatedCluster = { ...updatedCluster, port: e.target.value };
     }
-    setThisCluster(updatedCluster);
+    setThisSetting(updatedCluster);
     return;
   }
 
-  async function handleDelete(e) {
-    await fetch("/settings/:name", {
+  function handleDelete(e) {
+    fetch(`/settings/${name}/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(thisCluster),
+      body: JSON.stringify(thisSetting),
     })
       .then((res) => res.json())
       .then((result) => {
-        if (result.success) {
-          const newClusterArray = clusterArray.filter((el) => el.name !== name);
-          setClusterArray(newClusterArray);
-          history.push("/settings");
-        } else {
-          console.log("error when deleting data!");
-        }
+        setSettingsArr(result.settings);
+        history.push("/settings");
       })
       .catch((e) => console.log(e));
   }
@@ -93,7 +102,8 @@ const AddEditCard = ({ clusterArray, setClusterArray }) => {
           type="text"
           id="name"
           placeholder="K8s Cluster 1"
-          value={thisCluster.name}
+          required
+          value={thisSetting.name}
           onChange={(e) => handleChange(e)}
         ></input>
         <label htmlFor="ipaddress">IP Address </label>
@@ -101,7 +111,8 @@ const AddEditCard = ({ clusterArray, setClusterArray }) => {
           type="text"
           id="ipaddress"
           placeholder="192.168.0.1"
-          value={thisCluster.ipAddress}
+          required
+          value={thisSetting.ipAddress}
           onChange={(e) => handleChange(e)}
         ></input>
         <label htmlFor="port">Port </label>
@@ -109,12 +120,20 @@ const AddEditCard = ({ clusterArray, setClusterArray }) => {
           type="text"
           id="port"
           placeholder="3000"
-          value={thisCluster.port}
+          required
+          value={thisSetting.port}
           onChange={(e) => handleChange(e)}
         ></input>
         <button type="submit">Submit</button>
-        <button onClick={(e) => handleDelete(e)}>Delete</button>
       </form>
+      <button onClick={(e) => handleDelete(e)}>Delete</button>
+      {errMsgNew ? (
+        <p>Please make sure the name for the server is not 'new'</p>
+      ) : null}
+      {errMsgIP ? (
+        <p>Please make sure your IP is in the correct format</p>
+      ) : null}
+      {errMsgPort ? <p>Please make sure the port is valid</p> : null}
     </div>
   );
 };

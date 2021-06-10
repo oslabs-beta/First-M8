@@ -9,7 +9,8 @@ webController.getAll = (req, res, next) => {
             //status: 500, log, message
             return next({status:500, log:'There was an error', message: err.message});
         }
-        res.locals.data = data;
+        res.locals.settings = data;
+        if(!data) res.locals.settings = [];
         return next();
     })
 }
@@ -47,7 +48,6 @@ webController.updateCluster = (req, res, next) => {
 
 
 webController.deleteCluster = (req, res, next) => {
-    console.log(req.body)
     Data.findOneAndDelete({name: req.params.name}, (err, result) => {
         if(err || !result){
             console.log(err)

@@ -13,6 +13,7 @@ const MainRoutes = ({
   initializes state of all charts to display on main dashboard page
   */
   const [allCharts, setAllCharts] = useState(() => []);
+  const [settingsArr, setSettingsArr] = useState(() => []);
 
   /*
   retrieves all existing charts from database to display on
@@ -20,16 +21,26 @@ const MainRoutes = ({
   */
   const getAllCharts = async () => {
     await fetch("/dashboard")
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         if (data[0] !== undefined) {
           setAllCharts(data[0].display);
         }
       });
-  }
+  };
+
+  //initial fetch of settings in the database
+  const getSettings = async () => {
+    await fetch("/settings/all")
+      .then((resp) => resp.json())
+      .then((result) => {
+        setSettingsArr(result.settings);
+      }).catch(e => console.log(e));
+  };
 
   useEffect(() => {
     getAllCharts();
+    getSettings();
   }, []);
 
   return (
@@ -42,11 +53,16 @@ const MainRoutes = ({
           setPrometheusInstance={setPrometheusInstance}
         />
       </Route>
-      <Route path="/settings" component={SettingsContainer}></Route>
+      <Route path="/settings">
+        <SettingsContainer
+          settingsArr={settingsArr}
+          setSettingsArr={setSettingsArr}
+        />
+      </Route>
       <Route exact path="/history" component={HistoryContainer}></Route>
     </Switch>
-  )
+  );
+};
 
-}
 
 export default MainRoutes;

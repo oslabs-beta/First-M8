@@ -3,12 +3,12 @@ const dashboardController = require("../controllers/dashboardController");
 const { ChartSetting } = require("../models/webModel");
 const router = express.Router();
 
-router.get("/", 
-  dashboardController.getAllDisplay, (req, res) => {
+router.get("/", dashboardController.getAllDisplay, (req, res) => {
   //insert query to database
   //all "cluster" information
   res.status(200).send(res.locals.data);
 });
+
 
 router.post("/newChart/:name", dashboardController.createChartSetting, (req, res) => {
   res.status(200).send({ success: true });
