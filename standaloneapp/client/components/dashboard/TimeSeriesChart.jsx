@@ -21,9 +21,7 @@ const TimeSeriesChart = ({
     if (prometheusInstance !== undefined) {
       await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
       .then((response) => response.json())
-      .then(response => {
-        console.log(response);
-    
+      .then(response => {    
         response.data.result.forEach(metric => {
           const series = metric.values.map((dataPoint) => {
             return ({

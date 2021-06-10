@@ -5,31 +5,21 @@ import SettingsContainer from "./settings/SettingsContainer.jsx";
 import HistoryContainer from "./history/HistoryContainer";
 
 const MainRoutes = ({
+  allCharts,
+  setAllCharts,
   prometheusInstance,
   setPrometheusInstance
 }) => {
 
   /* 
-  initializes state of all charts to display on main dashboard page
+  initializes state of all settings to display on settings page
   */
-  const [allCharts, setAllCharts] = useState(() => []);
   const [settingsArr, setSettingsArr] = useState(() => []);
 
-  /*
-  retrieves all existing charts from database to display on
-  main dashboard page
+  /* 
+  retrieves all existing settings from database to display on
+  settings page
   */
-  const getAllCharts = async () => {
-    await fetch("/dashboard")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data[0] !== undefined) {
-          setAllCharts(data[0].display);
-        }
-      });
-  };
-
-  //initial fetch of settings in the database
   const getSettings = async () => {
     await fetch("/settings/all")
       .then((resp) => resp.json())
@@ -39,7 +29,6 @@ const MainRoutes = ({
   };
 
   useEffect(() => {
-    getAllCharts();
     getSettings();
   }, []);
 

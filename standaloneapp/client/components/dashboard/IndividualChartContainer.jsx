@@ -21,8 +21,8 @@ const IndividualChartContainer = ({
 
   /*
   handles click on edit button:
-  retrieves chart name and data selector columns for particular chart from database
-  to display on chart set up page
+  retrieves chart name, data selector columns, and filters for
+  particular chart from database to display on chart set up page
   */
   const editChart = async () => {
     await fetch(`/dashboard/editChart/${chartName}`)
@@ -46,8 +46,8 @@ const IndividualChartContainer = ({
 
   /*
   handles click on delete button:
-  deletes all information for particular chart from database, updates all charts
-  accordingly to display on main dashboard page
+  deletes all information for particular chart from database,
+  updates all charts accordingly to display on main dashboard page
   */
   const deleteChart = async () => {
     await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })

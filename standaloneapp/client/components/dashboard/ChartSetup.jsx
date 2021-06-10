@@ -85,7 +85,15 @@ const ChartSetup = ({
     setNotification("");
   }
 
+   /* 
+  copy of current state of filters to alter
+  */
   const updatedFilters = {...filters};
+  /* 
+  handles change on filter drop downs:
+  updated particular property in updated filters object with
+  new selection
+  */
   const changeFilter = (event) => {
     updatedFilters[event.target.id] = event.target.value;
   }
@@ -93,9 +101,9 @@ const ChartSetup = ({
   /*
   handles click on save chart setup button:
   if new chart, checks if chart name already exists in database and notifies if so
-  and if not, adds chart name and data selector columns to database, adds new chart
+  and if not, adds chart name, data selector columns, and filters to database, adds new chart
   to display on chart setup page and main dashboard page
-  if edit chart, update chart name and data selector columns in database, updates chart
+  if edit chart, update chart name, data selector columns, and filters in database, updates chart
   to display on chart setup page and main dashboard page
   */
   const saveChartSetup = async () => {
