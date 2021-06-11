@@ -17,7 +17,9 @@ const ChartSetup = ({
   chart,
   setChart,
   filters,
-  setFilters
+  setFilters,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
 
   /*
@@ -83,7 +85,15 @@ const ChartSetup = ({
     setNotification("");
   }
 
+   /* 
+  copy of current state of filters to alter
+  */
   const updatedFilters = {...filters};
+  /* 
+  handles change on filter drop downs:
+  updated particular property in updated filters object with
+  new selection
+  */
   const changeFilter = (event) => {
     updatedFilters[event.target.id] = event.target.value;
   }
@@ -91,9 +101,9 @@ const ChartSetup = ({
   /*
   handles click on save chart setup button:
   if new chart, checks if chart name already exists in database and notifies if so
-  and if not, adds chart name and data selector columns to database, adds new chart
+  and if not, adds chart name, data selector columns, and filters to database, adds new chart
   to display on chart setup page and main dashboard page
-  if edit chart, update chart name and data selector columns in database, updates chart
+  if edit chart, update chart name, data selector columns, and filters in database, updates chart
   to display on chart setup page and main dashboard page
   */
   const saveChartSetup = async () => {
@@ -119,9 +129,15 @@ const ChartSetup = ({
             .then(response => console.log(response, "adding new chart successful"))
             .catch(error => console.log(error, "adding new chart failed"));
 
-          // placeholder for logic to construct PromQL queries
-          const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-          const newChart = [<TimeSeriesChart id={chartName} query={query}/>];
+          const newChart = [
+            <TimeSeriesChart
+              type={id}
+              id={chartName}
+              columns={columns}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
+            />
+          ];
           const updatedAllCharts = allCharts.slice();
           updatedAllCharts.push(newChart);
           
@@ -144,13 +160,22 @@ const ChartSetup = ({
       }
     } else if (id === "edit-chart") {
       // placeholder for logic to construct PromQL queries
-      const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-      const updatedChart = [<TimeSeriesChart id={chartName} query={query}/>]
+      // const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+      // console.log("before set", chart);
+      const updatedChart = <TimeSeriesChart
+          type={id}
+          id={chartName}
+          columns={columns}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />;
+      
+      setChart(updatedChart);
 
       for (let index = 0; index < allCharts.length; index++) {
         const currentChart = allCharts[index];
         if (currentChart[0].props.id === oldChartName) {
-          allCharts.splice(index, 1, updatedChart);
+          allCharts.splice(index, 1, [updatedChart]);
           setAllCharts(allCharts);
           break;
         }
@@ -164,7 +189,7 @@ const ChartSetup = ({
         body: JSON.stringify({
           name: chartName,
           columns: columns,
-          updatedChart: updatedChart,
+          updatedChart: [updatedChart],
           filters: updatedFilters
          })
       })
@@ -173,8 +198,6 @@ const ChartSetup = ({
         .catch(error => console.log(error, "editing chart failed"))
     }  
   }
-
-  
   
   return (
       <div className="chart-setup">
@@ -196,6 +219,8 @@ const ChartSetup = ({
           filters={filters}
           setFilters={setFilters}
           onChange={changeFilter}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
         />
         <button id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button id="close-chart-setup" onClick={() => history.push("/")}>Close</button>
         {chart}

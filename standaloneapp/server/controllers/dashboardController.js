@@ -1,4 +1,4 @@
-const { ChartSetting } = require("../models/webModel")
+const { ChartSetting, Data } = require("../models/webModel")
 const { Display } = require("../models/webModel")
 
 const dashboardController = {}
@@ -148,6 +148,27 @@ dashboardController.updateSingleDisplay = (req, res, next) => {
             }
             return next();
         })
+    })
+}
+
+dashboardController.getAllPrometheusInstances = (req, res, next) => {
+    Data.find({}, (err, result) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message});
+        }
+        res.locals.allPrometheusInstances = result;
+        return next();
+    })
+}
+
+dashboardController.getPrometheusInstance = (req, res, next) => {
+    Data.findOne({name: req.params.name}, (err, result) => {
+        if (err) {
+            return next({status:500, log:'There was an error', message: err.message});
+        }
+        console.log("main app prom instance", result);
+        res.locals.prometheusInstance = result;
+        return next();
     })
 }
 

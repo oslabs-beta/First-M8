@@ -41,5 +41,19 @@ router.patch("/editChart/:name",
   (req, res) => {
     res.status(200).send({ success: true })
   }
+);
+
+router.get("/connect/all",
+  dashboardController.getAllPrometheusInstances,
+  (req, res) => {
+    res.status(200).send(res.locals.allPrometheusInstances);
+  }
+)
+
+router.get("/connect/:name",
+  dashboardController.getPrometheusInstance,
+  (req, res) => {
+    res.status(200).send(res.locals.prometheusInstance);
+  }
 )
 module.exports = router;
