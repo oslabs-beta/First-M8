@@ -46,9 +46,17 @@ to start to refinem we use the "by" operator, tells "only aggregate by these ope
   time: 5m,
 }
 */
-const queryAlgo = {};
+const queryAlgorithms = {};
 
-queryAlgo.simpleAlgo = function (...args){
+queryAlgorithms.minuteToMilliseconds = function () {
+  return 1000 * 60;
+}
+
+queryAlgorithms.hourToMilliseconds = function () {
+  return queryAlgorithms.minuteToMilliseconds() * 60;
+}
+
+queryAlgorithms.simpleAlgo = function (...args){
   let output = 'query=';
   for(const arg of args){
     if(output !== 'query='){
@@ -58,10 +66,55 @@ queryAlgo.simpleAlgo = function (...args){
   }
   return output; // ?query=http_seconds&time=34s
 }
-// dashboard---------
-// const  query= queryAlgo.simpleAlgo({http_request})
-// fetch(`localhost:9090/api/v1/query?${query}`).then(updatecolumns)
+
+queryAlgorithms.rangeQuery = function (metric, time) {
+  let query = 'query_range?query='
+  const timeNow = Date.now() / 1000;
+  let timeStart;
+  const hourInMilliseconds = queryAlgorithms.hourToMilliseconds();
+  const minuteInMilliseconds = queryAlgorithms.minuteToMilliseconds();
+  if (time[0] === "12 Hours") {
+    timeStart = (Date.now() - (12 * hourInMilliseconds)) / 1000;
+  } else if (time[0] === "6 Hours") {
+    timeStart = (Date.now() - (6 * hourInMilliseconds)) / 1000;
+  } else if (time[0] === "3 Hours") {
+    timeStart = (Date.now() - (3 * hourInMilliseconds)) / 1000;
+  } else if (time[0] === "1 Hour") {
+    timeStart = (Date.now() - (1 * hourInMilliseconds)) / 1000;
+  } else if (time[0] === "30 Minutes") {
+    timeStart = (Date.now() - (30 * minuteInMilliseconds)) / 1000;
+  } else if (time[0] === "15 Minutes") {
+    timeStart = (Date.now() - (15 * minuteInMilliseconds)) / 1000;
+  } else if (time[0] === "5 Minutes") {
+    timeStart = (Date.now() - (5 * minuteInMilliseconds)) / 1000;
+  } else if (time[0] === "1 Minute") {
+    timeStart = (Date.now() - (1 * minuteInMilliseconds)) / 1000;
+  } else if (time[0] === "10 Seconds") {
+    timeStart = (Date.now() - (10 * 1000)) / 1000;
+  } else if (time[0] === "1 Second") {
+    timeStart = (Date.now() - 1000) / 1000;
+  }
+  query += `${metric[0]}&start=${timeStart}&end=${timeNow}&step=1`;
+  return query;
+}
+
+queryAlgorithms.instantQuery = function (metric) {
+  return `query?query=${metric[0]}`;
+}
+
+queryAlgorithms.instantQueryWithAggregation = function (metric, aggregation) {
+  let output = 'query?query=';
+  if (aggregation[0] === "Sum") {
+    output += `sum(${metric[0]})`;
+  } else if (aggregation[0] === "Average") {
+    output += `avg(${metric[0]})`;
+  } 
+  return output;
+}
 
 
-console.log(queryAlgo.simpleAlgo("http_seconds"));
-export default queryAlgo;
+
+
+
+// console.log(queryAlgo.simpleAlgo("http_seconds"));
+export default queryAlgorithms;

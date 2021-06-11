@@ -28,19 +28,20 @@ const IndividualChartContainer = ({
     await fetch(`/dashboard/editChart/${chartName}`)
       .then(response => response.json())
       .then(response => {
+        console.log("inside fetch", response.columns);
         setColumns(response.columns)
         setChartName(response.name);
         setFilters(response.filters);
+        const chartToEdit = [
+          <TimeSeriesChart
+            id={response.name}
+            columns={response.columns}
+            prometheusInstance={prometheusInstance}
+            setPrometheusInstance={setPrometheusInstance}
+          />
+        ]
+        setChart(chartToEdit);
       });
-    const chartToEdit = [
-      <TimeSeriesChart
-        id={chartName}
-        query={chart[0].props.query}
-        prometheusInstance={prometheusInstance}
-        setPrometheusInstance={setPrometheusInstance}
-      />
-    ]
-    setChart(chartToEdit);
     history.push("/dashboard/edit-chart");
   }
 
@@ -63,7 +64,7 @@ const IndividualChartContainer = ({
       <div>{chartName}</div>
       <TimeSeriesChart
         id={chartName}
-        query={chart[0].props.query}
+        columns={chart[0].props.columns}
         prometheusInstance={prometheusInstance}
         setPrometheusInstance={setPrometheusInstance}
       />

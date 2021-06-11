@@ -129,12 +129,10 @@ const ChartSetup = ({
             .then(response => console.log(response, "adding new chart successful"))
             .catch(error => console.log(error, "adding new chart failed"));
 
-          // placeholder for logic to construct PromQL queries
-          const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
           const newChart = [
             <TimeSeriesChart
               id={chartName}
-              query={query}
+              columns={columns}
               prometheusInstance={prometheusInstance}
               setPrometheusInstance={setPrometheusInstance}
             />
@@ -161,15 +159,18 @@ const ChartSetup = ({
       }
     } else if (id === "edit-chart") {
       // placeholder for logic to construct PromQL queries
-      const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+      // const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
+      // console.log("before set", chart);
       const updatedChart = [
         <TimeSeriesChart
           id={chartName}
-          query={query}
+          columns={columns}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
         />
-      ]
+      ];
+      
+      // setChart(updatedChart);
 
       for (let index = 0; index < allCharts.length; index++) {
         const currentChart = allCharts[index];
@@ -196,8 +197,10 @@ const ChartSetup = ({
         .then(response => console.log(response, "editing chart successful"))
         .catch(error => console.log(error, "editing chart failed"))
     }  
-  }  
+  }
   
+  // console.log("after set", chart);
+
   return (
       <div className="chart-setup">
         <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName}></input>

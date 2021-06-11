@@ -1,25 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
 import moment from "moment";
+import queryAlgorithms from "./queryAlgorithms";
 
 
 const TimeSeriesChart = ({
   id,
-  query,
+  columns,
   prometheusInstance,
   setPrometheusInstance
 }) => {
   // placeholder for logic to send PromQL query to DB
   const [chartSeries, setChartSeries] = useState(() => [])
   
-  const getData = async (query) => {
-    const timeNow = Date.now() / 1000;
-    const timeRange = (Date.now() - 300000) / 1000;
+  const getData = async () => {
+    // const timeNow = Date.now() / 1000;
+    // const timeRange = (Date.now() - 300000) / 1000;
+    let query;
+    const aggregation = columns.aggregationSelected.list;
+    const metric = columns.metricsSelected.list;
+    const time = columns.timeRangeSelected.list;
+
+    if (aggregation.length === 0 && time.length !== 0) {
+      // placeholder for logic to construct PromQL queries
+      query = queryAlgorithms.rangeQuery(metric, time);
+    } else if (aggregation.length === 0 && time.length === 0) {
+      // placeholder for logic to construct PromQL queries
+      query = queryAlgorithms.instantQuery(metric);
+    } else if (aggregation.length > 0 && time.length === 0) {
+      // placeholder for logic to construct PromQL queries
+      query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
+    }
+
     
     const chartLines = [];
     const dataSeries = [];
     if (prometheusInstance !== undefined) {
-      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
       .then((response) => response.json())
       .then(response => {    
         response.data.result.forEach(metric => {
@@ -42,10 +59,10 @@ const TimeSeriesChart = ({
   }
 
   useEffect(() => {
-    getData(query);
+    getData();
     const interval = setInterval(() => {
       console.log('refetching');
-      getData(query)
+      getData()
     }, 60000);
     return () => clearInterval(interval);
   }, []);
