@@ -26,7 +26,7 @@ dashboardController.findAndComfirm = (req, res, next) => {
 
 dashboardController.getAllDisplay = (req, res, next) => {
     //possibly come back to
-    Display.find({}, (err, data) => { 
+    Display.find({instance: req.params.instance}, (err, data) => { 
         if (err) {
             //status: 500, log, message
             return next({status:500, log:'There was an error', message: err.message});
@@ -39,10 +39,9 @@ dashboardController.getAllDisplay = (req, res, next) => {
 dashboardController.updateAllDisplay = async (req, res, next) => {
     //PUT request to update all charts
     if(req.body.display && Array.isArray(req.body.display)){
-    const newDisplay = req.body;
-    await Display.findOneAndUpdate({}, newDisplay, (err, display) => {
+    await Display.findOneAndUpdate({instance: req.params.instance}, {display: req.body.display}, (err, display) => {
         if(!display) {
-            Display.create(newDisplay, (err, result) => {
+            Display.create({instance: req.params.instance, display: req.body.display}, (err, result) => {
                 if(err){
                     return res.status(500).send({'success': false});
                     
@@ -109,7 +108,7 @@ dashboardController.deleteSingleDisplay = (req, res, next) => {
         }
     }
     res.locals.data = updatedDisplays;
-    Display.findOneAndUpdate({}, {display: updatedDisplays}, (err, result) => {
+    Display.findOneAndUpdate({instance: req.params.instance}, {display: updatedDisplays}, (err, result) => {
         if (err) {
             return next({status:500, log:'There was an error', message: err.message});
         }
@@ -128,7 +127,7 @@ dashboardController.updateChartSetting = (req, res, next) => {
 
 dashboardController.updateSingleDisplay = (req, res, next) => {
     const updatedDisplays = [];
-    Display.find({}, (err, result) => {
+    Display.find({instance: req.body.instance}, (err, result) => {
         if (err) {
             return next({status:500, log:'There was an error', message: err.message})
         }
@@ -142,7 +141,7 @@ dashboardController.updateSingleDisplay = (req, res, next) => {
                 break;
             }
         }
-        Display.findOneAndUpdate({}, {display: updatedDisplays}, (err, result) => {
+        Display.findOneAndUpdate({instance: req.body.instance}, {display: updatedDisplays}, (err, result) => {
             if (err) {
                 return next({status:500, log:'There was an error', message: err.message});
             }

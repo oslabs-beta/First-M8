@@ -144,7 +144,7 @@ const ChartSetup = ({
           setChart(newChart);
           setAllCharts(updatedAllCharts);
 
-          await fetch("/dashboard/allCharts", {
+          await fetch(`/dashboard/allCharts/${prometheusInstance.name}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json"
@@ -190,7 +190,8 @@ const ChartSetup = ({
           name: chartName,
           columns: columns,
           updatedChart: [updatedChart],
-          filters: updatedFilters
+          filters: updatedFilters,
+          instance: prometheusInstance.name
          })
       })
         .then(response => response.json())

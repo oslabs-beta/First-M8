@@ -53,7 +53,7 @@ const IndividualChartContainer = ({
   updates all charts accordingly to display on main dashboard page
   */
   const deleteChart = async () => {
-    await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
+    await fetch(`/dashboard/deleteChart/${prometheusInstance.name}/${chartName}`, { method: "DELETE" })
       .then(response => response.json())
       .then(response => {
         console.log("individual container", response);
