@@ -3,6 +3,7 @@ import IndividualChartContainer from "./IndividualChartContainer";
 
 
 const ChartsContainer = ({
+  id,
   allCharts,
   setAllCharts,
   columns,
@@ -21,6 +22,7 @@ const ChartsContainer = ({
   allCharts.forEach(individualChart => {
     chartsToDisplay.push(
       <IndividualChartContainer
+        id={id}
         allCharts={allCharts}
         setAllCharts={setAllCharts}
         columns={columns}

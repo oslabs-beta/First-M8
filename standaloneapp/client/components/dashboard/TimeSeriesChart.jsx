@@ -5,6 +5,7 @@ import queryAlgorithms from "./queryAlgorithms";
 
 
 const TimeSeriesChart = ({
+  type,
   id,
   columns,
   prometheusInstance,
@@ -12,10 +13,11 @@ const TimeSeriesChart = ({
 }) => {
   // placeholder for logic to send PromQL query to DB
   const [chartSeries, setChartSeries] = useState(() => [])
+
+  console.log("time series", columns);
   
   const getData = async () => {
-    // const timeNow = Date.now() / 1000;
-    // const timeRange = (Date.now() - 300000) / 1000;
+    console.log("chart type", type)
     let query;
     const aggregation = columns.aggregationSelected.list;
     const metric = columns.metricsSelected.list;
@@ -32,6 +34,7 @@ const TimeSeriesChart = ({
       query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
     }
 
+    console.log(query);
     
     const chartLines = [];
     const dataSeries = [];
@@ -58,13 +61,18 @@ const TimeSeriesChart = ({
     }
   }
 
+  
+
   useEffect(() => {
     getData();
-    const interval = setInterval(() => {
-      console.log('refetching');
-      getData()
-    }, 60000);
-    return () => clearInterval(interval);
+    if (type === "saved-chart") {
+      const interval = setInterval(() => {
+        console.log('refetching');
+        getData()
+      }, 60000);
+      return () => clearInterval(interval);
+    }
+    
   }, []);
 
   return (

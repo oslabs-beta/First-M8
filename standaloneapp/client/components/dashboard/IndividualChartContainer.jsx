@@ -5,6 +5,7 @@ import TimeSeriesChart from "./TimeSeriesChart";
 import history from "./dashboardHistory";
 
 const IndividualChartContainer = ({
+  id,
   allCharts,
   setAllCharts,
   columns,
@@ -34,6 +35,7 @@ const IndividualChartContainer = ({
         setFilters(response.filters);
         const chartToEdit = [
           <TimeSeriesChart
+            type="edit-chart"
             id={response.name}
             columns={response.columns}
             prometheusInstance={prometheusInstance}
@@ -63,6 +65,7 @@ const IndividualChartContainer = ({
     <div className="individual-chart-container">
       <div>{chartName}</div>
       <TimeSeriesChart
+        type={id}
         id={chartName}
         columns={chart[0].props.columns}
         prometheusInstance={prometheusInstance}

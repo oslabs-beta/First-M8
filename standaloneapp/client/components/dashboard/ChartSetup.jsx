@@ -131,6 +131,7 @@ const ChartSetup = ({
 
           const newChart = [
             <TimeSeriesChart
+              type={id}
               id={chartName}
               columns={columns}
               prometheusInstance={prometheusInstance}
@@ -161,21 +162,20 @@ const ChartSetup = ({
       // placeholder for logic to construct PromQL queries
       // const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
       // console.log("before set", chart);
-      const updatedChart = [
-        <TimeSeriesChart
+      const updatedChart = <TimeSeriesChart
+          type={id}
           id={chartName}
           columns={columns}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
-        />
-      ];
+        />;
       
-      // setChart(updatedChart);
+      setChart(updatedChart);
 
       for (let index = 0; index < allCharts.length; index++) {
         const currentChart = allCharts[index];
         if (currentChart[0].props.id === oldChartName) {
-          allCharts.splice(index, 1, updatedChart);
+          allCharts.splice(index, 1, [updatedChart]);
           setAllCharts(allCharts);
           break;
         }
@@ -189,7 +189,7 @@ const ChartSetup = ({
         body: JSON.stringify({
           name: chartName,
           columns: columns,
-          updatedChart: updatedChart,
+          updatedChart: [updatedChart],
           filters: updatedFilters
          })
       })
@@ -199,8 +199,6 @@ const ChartSetup = ({
     }  
   }
   
-  // console.log("after set", chart);
-
   return (
       <div className="chart-setup">
         <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName}></input>

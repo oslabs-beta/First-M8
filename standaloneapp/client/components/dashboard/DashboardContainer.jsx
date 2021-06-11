@@ -126,6 +126,7 @@ const DashboardContainer = ({
         <Switch>
           <Route exact path="/">
             <ChartsContainer
+              id="saved-chart"
               allCharts={allCharts}
               setAllCharts={setAllCharts}
               columns={columns}
