@@ -2,6 +2,7 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import ChartSetup from "./ChartSetup";
 import TimeSeriesChart from "./TimeSeriesChart";
+import DonutChart from "./DonutChart";
 import history from "./dashboardHistory";
 
 const IndividualChartContainer = ({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
+import { CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
 import moment from "moment";
 import queryAlgorithms from "./queryAlgorithms";
 
@@ -12,12 +12,9 @@ const TimeSeriesChart = ({
   setPrometheusInstance
 }) => {
   // placeholder for logic to send PromQL query to DB
-  const [chartSeries, setChartSeries] = useState(() => [])
+  const [chartSeries, setChartSeries] = useState(() => []);
 
-  console.log("time series", columns);
-  
   const getData = async () => {
-    console.log("chart type", type)
     let query;
     const aggregation = columns.aggregationSelected.list;
     const metric = columns.metricsSelected.list;
@@ -33,8 +30,6 @@ const TimeSeriesChart = ({
       // placeholder for logic to construct PromQL queries
       query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
     }
-
-    console.log(query);
     
     const chartLines = [];
     const dataSeries = [];

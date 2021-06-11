@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import OptionsOrSelectedColumn from "./OptionsOrSelectedColumn";
 import TimeSeriesChart from "./TimeSeriesChart";
+import DonutChart from "./DonutChart";
 import DataFilters from "./DataFilters";
 import history from "./dashboardHistory";
 import queryAlgorithms from './queryAlgorithms';
@@ -128,16 +129,29 @@ const ChartSetup = ({
             .then(response => response.json())
             .then(response => console.log(response, "adding new chart successful"))
             .catch(error => console.log(error, "adding new chart failed"));
-
-          const newChart = [
-            <TimeSeriesChart
-              type={id}
-              id={chartName}
-              columns={columns}
-              prometheusInstance={prometheusInstance}
-              setPrometheusInstance={setPrometheusInstance}
-            />
-          ];
+          
+          let newChart;
+          if (columns.timeRangeSelected.list.length !== 0) {
+            newChart = [
+              <TimeSeriesChart
+                type={id}
+                id={chartName}
+                columns={columns}
+                prometheusInstance={prometheusInstance}
+                setPrometheusInstance={setPrometheusInstance}
+              />
+            ];
+          } else if (columns.aggregationSelected.list[0] === "Divide") {
+            newChart = [
+              <DonutChart 
+                type={id}
+                id={chartName}
+                columns={columns}
+                prometheusInstance={prometheusInstance}
+                setPrometheusInstance={setPrometheusInstance}
+              />
+            ]
+          }
           const updatedAllCharts = allCharts.slice();
           updatedAllCharts.push(newChart);
           
@@ -200,6 +214,8 @@ const ChartSetup = ({
     }  
   }
   
+  console.log("chart setup", chart);
+
   return (
       <div className="chart-setup">
         <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName}></input>

@@ -108,7 +108,17 @@ queryAlgorithms.instantQueryWithAggregation = function (metric, aggregation) {
     output += `sum(${metric[0]})`;
   } else if (aggregation[0] === "Average") {
     output += `avg(${metric[0]})`;
-  } 
+  } else if (aggregation[0] === "Multiply") {
+    metric.forEach((individualMetric, index) => {
+      if (index === metric.length - 1) {
+        output += `${individualMetric}`
+      } else {
+        output += `${individualMetric}*`
+      }
+    });
+  } else if (aggregation[0] === "Divide") {
+    output += `${metric[0]}/${metric[1]}`
+  }
   return output;
 }
 
