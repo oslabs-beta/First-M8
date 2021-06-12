@@ -2,9 +2,11 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import ChartSetup from "./ChartSetup";
 import TimeSeriesChart from "./TimeSeriesChart";
+import DonutChart from "./DonutChart";
 import history from "./dashboardHistory";
 
 const IndividualChartContainer = ({
+  format,
   id,
   allCharts,
   setAllCharts,
@@ -33,15 +35,28 @@ const IndividualChartContainer = ({
         setColumns(response.columns)
         setChartName(response.name);
         setFilters(response.filters);
-        const chartToEdit = [
-          <TimeSeriesChart
-            type="edit-chart"
-            id={response.name}
+        const chartToEdit = [];
+        if (format === "time-series") {
+          chartToEdit.push(<TimeSeriesChart
+            format={format}
+            type={id}
+            id={chartName}
             columns={response.columns}
+            filters={response.filters}
             prometheusInstance={prometheusInstance}
             setPrometheusInstance={setPrometheusInstance}
-          />
-        ]
+          />)
+        } else if (format === "donut") {
+          chartToEdit.push(<DonutChart
+            format={format}
+            type={id}
+            id={chartName}
+            columns={response.columns}
+            filters={response.filters}
+            prometheusInstance={prometheusInstance}
+            setPrometheusInstance={setPrometheusInstance}
+          />)
+        }
         setChart(chartToEdit);
       });
     history.push("/dashboard/edit-chart");
@@ -53,7 +68,7 @@ const IndividualChartContainer = ({
   updates all charts accordingly to display on main dashboard page
   */
   const deleteChart = async () => {
-    await fetch(`/dashboard/deleteChart/${chartName}`, { method: "DELETE" })
+    await fetch(`/dashboard/deleteChart/${prometheusInstance.name}/${chartName}`, { method: "DELETE" })
       .then(response => response.json())
       .then(response => {
         console.log("individual container", response);
@@ -61,16 +76,33 @@ const IndividualChartContainer = ({
       });
   }
 
+  const chartToDisplay = [];
+  if (format === "time-series") {
+    chartToDisplay.push(<TimeSeriesChart
+      format={format}
+      type={id}
+      id={chartName}
+      columns={chart[0].props.columns}
+      filters={chart[0].props.filters}
+      prometheusInstance={prometheusInstance}
+      setPrometheusInstance={setPrometheusInstance}
+    />)
+  } else if (format === "donut") {
+    chartToDisplay.push(<DonutChart
+      format={format}
+      type={id}
+      id={chartName}
+      columns={chart[0].props.columns}
+      filters={chart[0].props.filters}
+      prometheusInstance={prometheusInstance}
+      setPrometheusInstance={setPrometheusInstance}
+    />)
+  }
+
   return (
     <div className="individual-chart-container">
       <div>{chartName}</div>
-      <TimeSeriesChart
-        type={id}
-        id={chartName}
-        columns={chart[0].props.columns}
-        prometheusInstance={prometheusInstance}
-        setPrometheusInstance={setPrometheusInstance}
-      />
+      {chartToDisplay}
       <button id="edit-chart" onClick={editChart}>Edit</button> <button id="delete-chart" onClick={deleteChart}>Delete</button>
     </div>
   )

@@ -3,7 +3,7 @@ const dashboardController = require("../controllers/dashboardController");
 const { ChartSetting } = require("../models/webModel");
 const router = express.Router();
 
-router.get("/", dashboardController.getAllDisplay, (req, res) => {
+router.get("/:instance", dashboardController.getAllDisplay, (req, res) => {
   //insert query to database
   //all "cluster" information
   res.status(200).send(res.locals.data);
@@ -14,7 +14,7 @@ router.post("/newChart/:name", dashboardController.createChartSetting, (req, res
   res.status(200).send({ success: true });
 });
 
-router.patch("/allCharts", dashboardController.updateAllDisplay, (req, res) => {
+router.patch("/allCharts/:instance", dashboardController.updateAllDisplay, (req, res) => {
   res.status(200).send({ success: true });
 });
 
@@ -26,7 +26,7 @@ router.get("/chart/:name", dashboardController.getChartSetting, dashboardControl
   res.status(200).send(res.locals.chartExists);
 })
 
-router.delete("/deleteChart/:name",
+router.delete("/deleteChart/:instance/:name",
   dashboardController.deleteChartSetting,
   dashboardController.getAllDisplay,
   dashboardController.deleteSingleDisplay,

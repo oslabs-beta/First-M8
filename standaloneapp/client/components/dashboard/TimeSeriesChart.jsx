@@ -1,47 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
+import { CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
 import moment from "moment";
-import queryAlgorithms from "./queryAlgorithms";
+import queryAlgo from "./queryAlgorithms";
 
 
 const TimeSeriesChart = ({
+  format,
   type,
   id,
   columns,
+  filters,
   prometheusInstance,
   setPrometheusInstance
 }) => {
-  // placeholder for logic to send PromQL query to DB
-  const [chartSeries, setChartSeries] = useState(() => [])
-
-  console.log("time series", columns);
   
+  const [chartSeries, setChartSeries] = useState(() => []);
+
   const getData = async () => {
-    console.log("chart type", type)
     let query;
     const aggregation = columns.aggregationSelected.list;
     const metric = columns.metricsSelected.list;
     const time = columns.timeRangeSelected.list;
 
-    if (aggregation.length === 0 && time.length !== 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.rangeQuery(metric, time);
-    } else if (aggregation.length === 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQuery(metric);
-    } else if (aggregation.length > 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
-    }
-
-    console.log(query);
+    query = queryAlgo(metric, time, aggregation, filters);
     
     const chartLines = [];
     const dataSeries = [];
     if (prometheusInstance !== undefined) {
-      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}`)
       .then((response) => response.json())
-      .then(response => {    
+      .then(response => {   
         response.data.result.forEach(metric => {
           const series = metric.values.map((dataPoint) => {
             return ({

@@ -90,11 +90,10 @@ const DashboardContainer = ({
       await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/labels`)
         .then(response => response.json())
         .then(response => {
-          response.data.forEach(label => labels[label] = null)
+          response.data.forEach(label => labels[label] = "")
           setFilters(initialFilters(labels));
       });
     }
-     
   }
 
   /* 
@@ -103,16 +102,13 @@ const DashboardContainer = ({
   chart display for chart set up page
   */
   const newDashboardChart = () => {
+    setFilters({});
     getAllPromMetrics();
     getPrometheusLabels();
     setChartName("");
     setChart([]);
     history.push("/dashboard/new-chart");
   }
-
-  useEffect(() => {
-    getPrometheusLabels();
-  }, []);
   
   return (
     <div>

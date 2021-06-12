@@ -64,6 +64,7 @@ const ChartSettingSchema = new Schema({
 //store all table and ChartSettings the user has created
   //on primary dashboard page, display all ChartSettings
 const displaySchema = new Schema({
+  instance: reqString,
   display: reqArray,
 });
 

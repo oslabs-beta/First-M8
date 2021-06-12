@@ -17,10 +17,11 @@ const App = () => {
   retrieves all existing charts from database to display on
   main dashboard page
   */
-  const getAllCharts = async () => {
-    await fetch("/dashboard")
+  const getAllCharts = async (instanceName) => {
+    await fetch(`/dashboard/${instanceName}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         if (data[0] !== undefined) {
           setAllCharts(data[0].display);
         }
@@ -50,12 +51,15 @@ const App = () => {
   retrieves settings data for particular connection name
   */
   const selectPrometheusInstance = async (event) => {
+    setAllCharts([]);
     await fetch(`/dashboard/connect/${event.target.value}`)
       .then(response => response.json())
       .then(response => {
         setPrometheusInstance(response);
+        console.log(response);
+        getAllCharts(response.name);
       });
-    getAllCharts();
+    
   }
   
   useEffect(() => {
