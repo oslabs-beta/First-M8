@@ -1,51 +1,6 @@
-//http_requests_total{status!~"4.."}
-
-//http_requests_total{job="apiserver", handler="/api/comments"}
-//instance_cpu_time_ns{app="lion", proc="web", rev="34d0f99", env="prod", job="cluster-manager"}
-
-//max_over_time(deriv(rate(distance_covered_total[5s])[30s:5s])[10m:])
-
-//rate(http_requests_total[5m])
-
-//http_requests_total[5m]
-//
-
-//deriv(v range-vector) calculates the per second derivative of
-//the time series in a range vector v, using linear regression
-
-//rate calculates the per second average rate of increase of the time series in the range vector.
-//also calculation extrapolates to the end of the time range, allowing for missed scrapes or
-//imperfect alignment of scrape cycles with the range's time period
-
-//future prospect; PEMDAS styled priority for different queries
-
-/* 
-In this example we're finding out the proportion of time the CPU spends in idle mode
-
-Sum the input
-|     The target metric
-|     |                       The type of the metric
-|     |                       |               "by" the CPU
-v     v                       v               V
-sum(node_cpu_seconds_total{mode = idle}) by (cpu)
-
-
-
-We aggregate the metrics by only the cpu label at the end
-to start to refinem we use the "by" operator, tells "only aggregate by these operators"
-
+/*
+time-to-seconds conversion
 */
-
-/* 
-{
-  metric: func,
-  timestart : 30s,
-  timeend: 1m,
-  time: 5m,
-}
-*/
-
-
 const timeToSeconds = {
   "1 Second": { value: 1, step: 1 },
   "10 Seconds": { value: 10, step: 1 },
@@ -59,6 +14,14 @@ const timeToSeconds = {
   "12 Hours": { value: 60 * 60 * 12, step: 172 },
 };
 
+/*
+takes data selections and translates them into PromQL queries to send back:
+currently, only handles range queries and instant queries with single metric
+selection, sum/average/min/max, and filtering
+does not yet handle complex queries with multple metrics selected, queries
+using division or multiplication, or grouping
+all parameters but labels are arrays, labels is an object
+*/
 function queryAlgo(metric, time, aggre, labels) {
   let fullQuery = "";
   if (!metric || metric.length === 0) return fullQuery;
@@ -74,12 +37,15 @@ function queryAlgo(metric, time, aggre, labels) {
     fullQuery += `&start=${timeNow - timeStart.value}&end=${timeNow}&step=${
       timeStart.step
     }`;
-  } else {
-    fullQuery += `&time=${timeNow}`;
   }
   return fullQuery;
 }
 
+
+/*
+helper function to help build out the aggregation portion
+of the query
+*/
 function aggregationParser(aggre) {
   const aggreObj = { count: 0, valid: false };
   let aggreStr = "";
@@ -100,6 +66,11 @@ function aggregationParser(aggre) {
   aggreObj.query = aggreStr;
   return aggreObj;
 }
+
+/*
+helper function to help build out the metric portion
+of the query
+*/
 function metricParser(metric, aggreBool) {
   let metricStr = "";
   if (!aggreBool) metricStr += "query=";
@@ -107,6 +78,10 @@ function metricParser(metric, aggreBool) {
   return metricStr;
 }
 
+/*
+helper function to help build out the label portion
+of the query
+*/
 function labelParser(labels) {
   let labelStr = "";
   if (labels !== null && labels !== undefined) {
@@ -121,18 +96,6 @@ function labelParser(labels) {
   if (labelStr !== "") labelStr = "{" + labelStr + "}";
   return labelStr;
 }
-
-
-/* 
-4 parameters
-1. array of metric ex. http_total
-2. array per timerange  [1hr] - 12 hours, 6 hours, 3 hours, 1 hour, 30 minutes, 15 minutes, 5 minutes, 1 minute, 10 seconds, 1 second
-3. array of aggregations(functions) ex. sum, multiply
-//default timerange to 6hrs
-// if not there - null
-4. object - filters/prometheus labels 
-
-*/
 
 module.exports = queryAlgo;
 

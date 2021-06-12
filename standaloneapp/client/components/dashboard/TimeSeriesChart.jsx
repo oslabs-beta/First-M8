@@ -23,17 +23,11 @@ const TimeSeriesChart = ({
     const time = columns.timeRangeSelected.list;
 
     query = queryAlgo(metric, time, aggregation, filters);
-
-    if (time.length === 0) {
-      query = "query?" + query;
-    } else {
-      query = "query_range?" + query;
-    }
     
     const chartLines = [];
     const dataSeries = [];
     if (prometheusInstance !== undefined) {
-      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}`)
       .then((response) => response.json())
       .then(response => {   
         response.data.result.forEach(metric => {

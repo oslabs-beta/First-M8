@@ -35,6 +35,7 @@ const ChartSetup = ({
   items have been dragged and dropped
   */
   const onDragEnd = ({ source, destination }) => {
+    setNotification("");
     if (destination === undefined || destination === null) return;
 
     if (source.droppableId === destination.droppableId && destination.index === source.index) return;
@@ -108,10 +109,10 @@ const ChartSetup = ({
   if edit chart, update chart name, data selector columns, and filters in database, updates chart
   to display on chart setup page and main dashboard page
   */
-  const saveChartSetup = async () => {
+  const saveChartSetup = async (event) => {
 
     if (id === "new-chart") {
-      if (columns.metricsSelected.list.length !== 0) {
+      if (columns.metricsSelected.list.length !== 0 & chartName !== "") {
         let chartAlreadyExists;
         await fetch(`/dashboard/chart/${chartName}`)
           .then(response => response.json())
@@ -120,19 +121,15 @@ const ChartSetup = ({
           });
 
         if (!chartAlreadyExists) {
-          await fetch(`/dashboard/newChart/${chartName}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ columns: columns, filters: updatedFilters })
-          })
-            .then(response => response.json())
-            .then(response => console.log(response, "adding new chart successful"))
-            .catch(error => console.log(error, "adding new chart failed"));
-          
           let newChart;
-          if (columns.timeRangeSelected.list.length !== 0) {
+          const aggregation = columns.aggregationSelected.list;
+          const metric = columns.metricsSelected.list;
+          const time = columns.timeRangeSelected.list;
+          if (
+            time.length !== 0 &&
+            !aggregation.includes("Divide") &&
+            !aggregation.includes("Multiply")
+          ) {
             newChart = [
               <TimeSeriesChart
                 format="time-series"
@@ -144,7 +141,12 @@ const ChartSetup = ({
                 setPrometheusInstance={setPrometheusInstance}
               />
             ];
-          } else if (columns.aggregationSelected.list[0] === "Divide") {
+          } else if (
+            time.length === 0 &&
+            aggregation.length === 1 &&
+            aggregation[0] === "Divide" &&
+            metric.length === 2
+          ) {
             newChart = [
               <DonutChart
                 format="donut" 
@@ -156,26 +158,59 @@ const ChartSetup = ({
                 setPrometheusInstance={setPrometheusInstance}
               />
             ]
+          } else if (
+            time.length === 0 &&
+            aggregation.length >= 0 &&
+            metric.length === 1
+          ) {
+            newChart = [
+              <div>Single-number panels are in development. We appreciate your patience in the meantime.</div>
+            ]
+          } else {
+            newChart = [
+              <div>Data visualization and PromQL translation not yet available. Please try something else.</div>
+            ];
           }
-          const updatedAllCharts = allCharts.slice();
-          updatedAllCharts.push(newChart);
-          
-          setChart(newChart);
-          setAllCharts(updatedAllCharts);
 
-          await fetch(`/dashboard/allCharts/${prometheusInstance.name}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ display: updatedAllCharts })
-          })
-            .then(response => response.json())
-            .then(response => console.log(response, "update all charts successful"))
-            .catch(error => console.log(error, "updating all charts failed"))
+          setChart(newChart);
+
+          if (newChart[0].type !== "div") {
+            const updatedAllCharts = allCharts.slice();
+            updatedAllCharts.push(newChart);
+            
+            setAllCharts(updatedAllCharts);
+
+            await fetch(`/dashboard/newChart/${chartName}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ columns: columns, filters: updatedFilters })
+            })
+              .then(response => response.json())
+              .then(response => console.log(response, "adding new chart successful"))
+              .catch(error => console.log(error, "adding new chart failed"));
+
+            await fetch(`/dashboard/allCharts/${prometheusInstance.name}`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ display: updatedAllCharts })
+            })
+              .then(response => response.json())
+              .then(response => console.log(response, "update all charts successful"))
+              .catch(error => console.log(error, "updating all charts failed"))
+          }
         } else {
           setNotification("Chart already exists. Please enter another name.");
         }     
+      } else if (columns.metricsSelected.list.length === 0 && chartName === "") {
+        setNotification("Please enter a chart name and select a metric.");
+      } else if (columns.metricsSelected.list.length === 0) {
+        setNotification("Please select a metric.")
+      } else if (chartName === "") {
+        setNotification("Please enter a chart name.")
       }
     } else if (id === "edit-chart") {
       // placeholder for logic to construct PromQL queries
@@ -218,7 +253,7 @@ const ChartSetup = ({
         .then(response => response.json())
         .then(response => console.log(response, "editing chart successful"))
         .catch(error => console.log(error, "editing chart failed"))
-    }  
+    } 
   }
   
   return (

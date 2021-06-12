@@ -20,24 +20,31 @@ const ChartsContainer = ({
 
   const chartsToDisplay = [];
   allCharts.forEach(individualChart => {
-    chartsToDisplay.push(
-      <IndividualChartContainer
-        format={individualChart[0].props.format}
-        id={id}
-        allCharts={allCharts}
-        setAllCharts={setAllCharts}
-        columns={individualChart[0].props.columns}
-        setColumns={setColumns}
-        chartName={individualChart[0].props.id}
-        setChartName={setChartName}
-        chart={individualChart}
-        setChart={setChart}
-        filters={individualChart[0].props.filters}
-        setFilters={setFilters}
-        prometheusInstance={prometheusInstance}
-        setPrometheusInstance={setPrometheusInstance}
-      />);
+    console.log(individualChart)
+    if (individualChart !== null) {
+      chartsToDisplay.push(
+        <IndividualChartContainer
+          format={individualChart[0].props.format}
+          id={id}
+          allCharts={allCharts}
+          setAllCharts={setAllCharts}
+          columns={individualChart[0].props.columns}
+          setColumns={setColumns}
+          chartName={individualChart[0].props.id}
+          setChartName={setChartName}
+          chart={individualChart}
+          setChart={setChart}
+          filters={individualChart[0].props.filters}
+          setFilters={setFilters}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />
+      );
+    }
+    
   });
+
+  
 
   return (
     <div className="charts-container">

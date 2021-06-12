@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Label, Tooltip } from "recharts";
-import queryAlgorithms from "./queryAlgorithms";
 
 const DonutChart = ({
   format,
@@ -19,19 +18,11 @@ const DonutChart = ({
     const metric = columns.metricsSelected.list;
     const time = columns.timeRangeSelected.list;
 
-    if (aggregation.length === 0 && time.length !== 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.rangeQuery(metric, time);
-    } else if (aggregation.length === 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQuery(metric);
-    } else if (aggregation.length > 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
-    }
+    query = `query=${metric[0]}/${metric[1]}`
+    
     
     if (prometheusInstance !== undefined) {
-      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query?${query}`)
       .then((response) => response.json())
       .then(response => {    
         const percentageUsed = parseFloat(response.data.result[0].value[1])
