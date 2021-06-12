@@ -10,9 +10,7 @@
 //http_requests_total[5m]
 //
 
-
-
-//deriv(v range-vector) calculates the per second derivative of 
+//deriv(v range-vector) calculates the per second derivative of
 //the time series in a range vector v, using linear regression
 
 //rate calculates the per second average rate of increase of the time series in the range vector.
@@ -46,85 +44,110 @@ to start to refinem we use the "by" operator, tells "only aggregate by these ope
   time: 5m,
 }
 */
-const queryAlgorithms = {};
 
-queryAlgorithms.minuteToMilliseconds = function () {
-  return 1000 * 60;
-}
 
-queryAlgorithms.hourToMilliseconds = function () {
-  return queryAlgorithms.minuteToMilliseconds() * 60;
-}
+const timeToSeconds = {
+  "1 Second": { value: 1, step: 1 },
+  "10 Seconds": { value: 10, step: 1 },
+  "1 Minute": { value: 60, step: 1 },
+  "5 Minutes": { value: 60 * 5, step: 1 },
+  "15 Minutes": { value: 15 * 60, step: 3 },
+  "30 Minutes": { value: 30 * 60, step: 7 },
+  "1 Hour": { value: 60 * 60, step: 14 },
+  "3 Hours": { value: 60 * 60 * 3, step: 42 },
+  "6 Hours": { value: 60 * 60 * 6, step: 86 },
+  "12 Hours": { value: 60 * 60 * 12, step: 172 },
+};
 
-queryAlgorithms.simpleAlgo = function (...args){
-  let output = 'query=';
-  for(const arg of args){
-    if(output !== 'query='){
-      output += '&'
-    }
-    output += arg;
-  }
-  return output; // ?query=http_seconds&time=34s
-}
-
-queryAlgorithms.rangeQuery = function (metric, time) {
-  let query = 'query_range?query='
-  const timeNow = Date.now() / 1000;
+function queryAlgo(metric, time, aggre, labels) {
+  let fullQuery = "";
+  if (!metric || metric.length === 0) return fullQuery;
+  const aggreQuery = aggregationParser(aggre);
+  const metricQuery = metricParser(metric, aggreQuery.valid);
+  const labelQuery = labelParser(labels);
+  fullQuery = aggreQuery.query + metricQuery + labelQuery;
+  fullQuery += ")".repeat(aggreQuery.count);
   let timeStart;
-  const hourInMilliseconds = queryAlgorithms.hourToMilliseconds();
-  const minuteInMilliseconds = queryAlgorithms.minuteToMilliseconds();
-  if (time[0] === "12 Hours") {
-    timeStart = (Date.now() - (12 * hourInMilliseconds)) / 1000;
-  } else if (time[0] === "6 Hours") {
-    timeStart = (Date.now() - (6 * hourInMilliseconds)) / 1000;
-  } else if (time[0] === "3 Hours") {
-    timeStart = (Date.now() - (3 * hourInMilliseconds)) / 1000;
-  } else if (time[0] === "1 Hour") {
-    timeStart = (Date.now() - (1 * hourInMilliseconds)) / 1000;
-  } else if (time[0] === "30 Minutes") {
-    timeStart = (Date.now() - (30 * minuteInMilliseconds)) / 1000;
-  } else if (time[0] === "15 Minutes") {
-    timeStart = (Date.now() - (15 * minuteInMilliseconds)) / 1000;
-  } else if (time[0] === "5 Minutes") {
-    timeStart = (Date.now() - (5 * minuteInMilliseconds)) / 1000;
-  } else if (time[0] === "1 Minute") {
-    timeStart = (Date.now() - (1 * minuteInMilliseconds)) / 1000;
-  } else if (time[0] === "10 Seconds") {
-    timeStart = (Date.now() - (10 * 1000)) / 1000;
-  } else if (time[0] === "1 Second") {
-    timeStart = (Date.now() - 1000) / 1000;
+  if (time !== null && time !== undefined && time.length > 0) {
+    timeStart = timeToSeconds[time[0]];
+  } else {
+    timeStart = timeToSeconds["6 Hours"];
   }
-  query += `${metric[0]}&start=${timeStart}&end=${timeNow}&step=1`;
-  return query;
+  const timeNow = Date.now() / 1000;
+  fullQuery += `&start=${timeNow - timeStart.value}&end=${timeNow}&step=${
+    timeStart.step
+  }`;
+  return fullQuery;
 }
 
-queryAlgorithms.instantQuery = function (metric) {
-  return `query?query=${metric[0]}`;
+function aggregationParser(aggre) {
+  const aggreObj = { count: 0, valid: false };
+  let aggreStr = "";
+  if (
+    aggre !== null &&
+    aggre !== undefined &&
+    Array.isArray(aggre) &&
+    aggre.length > 0
+  ) {
+    aggreStr += "query=";
+    aggreObj.valid = true;
+    for (let i = 0; i < aggre.length; i++) {
+      // if (i !== 0) aggreStr += "(";
+      aggreObj.count += 1;
+      aggreStr += aggre[i].toLowerCase() + "(";
+    }
+  }
+  aggreObj.query = aggreStr;
+  return aggreObj;
+}
+function metricParser(metric, aggreBool) {
+  let metricStr = "";
+  if (!aggreBool) metricStr += "query=";
+  metricStr += metric[0];
+  return metricStr;
 }
 
-queryAlgorithms.instantQueryWithAggregation = function (metric, aggregation) {
-  let output = 'query?query=';
-  if (aggregation[0] === "Sum") {
-    output += `sum(${metric[0]})`;
-  } else if (aggregation[0] === "Average") {
-    output += `avg(${metric[0]})`;
-  } else if (aggregation[0] === "Multiply") {
-    metric.forEach((individualMetric, index) => {
-      if (index === metric.length - 1) {
-        output += `${individualMetric}`
-      } else {
-        output += `${individualMetric}*`
+function labelParser(labels) {
+  let labelStr = "";
+  if (labels !== null && labels !== undefined) {
+    const keyArr = Object.keys(labels);
+    for (let i = 0; i < keyArr.length; i++) {
+      if (labels[keyArr[i]] !== null) {
+        if (i !== 0) labelStr += ",+";
+        labelStr += `${keyArr[i]}="${labels[keyArr[i]]}"`;
       }
-    });
-  } else if (aggregation[0] === "Divide") {
-    output += `${metric[0]}/${metric[1]}`
+    }
   }
-  return output;
+  if (labelStr !== "") labelStr = "{" + labelStr + "}";
+  return labelStr;
 }
 
+// function simpleAlgo (...args){
+//   let output = 'query=';
+//   for(const arg of args){
+//     if(output !== 'query='){
+//       output += '&'
+//     }
+//     output += arg;
+//   }
+//   output += `&time=${Date.now()/1000}`
+//   return output; // ?query=http_seconds&time=34s
+// }
+// dashboard---------
+// const  query= queryAlgo.simpleAlgo({http_request})
+// fetch(`localhost:9090/api/v1/query?${query}`).then(updatecolumns)
 
 
+/* 
+4 parameters
+1. array of metric ex. http_total
+2. array per timerange  [1hr] - 12 hours, 6 hours, 3 hours, 1 hour, 30 minutes, 15 minutes, 5 minutes, 1 minute, 10 seconds, 1 second
+3. array of aggregations(functions) ex. sum, multiply
+//default timerange to 6hrs
+// if not there - null
+4. object - filters/prometheus labels 
 
+*/
 
-// console.log(queryAlgo.simpleAlgo("http_seconds"));
-export default queryAlgorithms;
+module.exports = queryAlgo;
+
