@@ -8,7 +8,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const PORT = 3000;
+const PORT = 3005;
 
 
 const promClient = require('prom-client');
@@ -24,7 +24,7 @@ app.use(promMetrics);
 app.use(express.json());
 // app.use('/web', webRouter);
 app.use(express.static(path.resolve(__dirname, "../client")));
-app.use(metricsMiddleware);
+// app.use(metricsMiddleware);
 
 
 // app.use('/build', express.static(path.join(__dirname, '../build')));

@@ -68,15 +68,15 @@ function queryAlgo(metric, time, aggre, labels) {
   fullQuery = aggreQuery.query + metricQuery + labelQuery;
   fullQuery += ")".repeat(aggreQuery.count);
   let timeStart;
+  const timeNow = Date.now() / 1000;
   if (time !== null && time !== undefined && time.length > 0) {
     timeStart = timeToSeconds[time[0]];
+    fullQuery += `&start=${timeNow - timeStart.value}&end=${timeNow}&step=${
+      timeStart.step
+    }`;
   } else {
-    timeStart = timeToSeconds["6 Hours"];
+    fullQuery += `&time=${timeNow}`;
   }
-  const timeNow = Date.now() / 1000;
-  fullQuery += `&start=${timeNow - timeStart.value}&end=${timeNow}&step=${
-    timeStart.step
-  }`;
   return fullQuery;
 }
 
