@@ -5,6 +5,7 @@ import queryAlgorithms from "./queryAlgorithms";
 
 
 const TimeSeriesChart = ({
+  format,
   type,
   id,
   columns,

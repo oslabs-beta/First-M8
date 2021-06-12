@@ -94,7 +94,6 @@ const DashboardContainer = ({
           setFilters(initialFilters(labels));
       });
     }
-     
   }
 
   /* 
@@ -103,16 +102,13 @@ const DashboardContainer = ({
   chart display for chart set up page
   */
   const newDashboardChart = () => {
+    setFilters({});
     getAllPromMetrics();
     getPrometheusLabels();
     setChartName("");
     setChart([]);
     history.push("/dashboard/new-chart");
   }
-
-  useEffect(() => {
-    getPrometheusLabels();
-  }, []);
   
   return (
     <div>

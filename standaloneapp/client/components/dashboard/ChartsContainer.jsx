@@ -22,6 +22,7 @@ const ChartsContainer = ({
   allCharts.forEach(individualChart => {
     chartsToDisplay.push(
       <IndividualChartContainer
+        format={individualChart[0].props.format}
         id={id}
         allCharts={allCharts}
         setAllCharts={setAllCharts}

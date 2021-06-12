@@ -3,6 +3,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Label, Tooltip } from "rechar
 import queryAlgorithms from "./queryAlgorithms";
 
 const DonutChart = ({
+  format,
   type,
   id,
   columns,
@@ -28,8 +29,6 @@ const DonutChart = ({
       // placeholder for logic to construct PromQL queries
       query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
     }
-
-    console.log("donut", query);
     
     if (prometheusInstance !== undefined) {
       await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
@@ -48,17 +47,14 @@ const DonutChart = ({
 
   useEffect(() => {
     getData();
-    // if (type === "saved-chart") {
-    //   const interval = setInterval(() => {
-    //     console.log('refetching');
-    //     getData()
-    //   }, 60000);
-    //   return () => clearInterval(interval);
-    // }
+    if (type === "saved-chart") {
+      const interval = setInterval(() => {
+        console.log('refetching');
+        getData()
+      }, 60000);
+      return () => clearInterval(interval);
+    }
   }, []);
-
-  console.log("pie chart", columns);
-  console.log("data", data);
 
   return (
     <ResponsiveContainer width="95%" height={500}>

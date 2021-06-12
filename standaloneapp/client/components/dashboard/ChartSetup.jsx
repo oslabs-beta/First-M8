@@ -134,6 +134,7 @@ const ChartSetup = ({
           if (columns.timeRangeSelected.list.length !== 0) {
             newChart = [
               <TimeSeriesChart
+                format="time-series"
                 type={id}
                 id={chartName}
                 columns={columns}
@@ -143,7 +144,8 @@ const ChartSetup = ({
             ];
           } else if (columns.aggregationSelected.list[0] === "Divide") {
             newChart = [
-              <DonutChart 
+              <DonutChart
+                format="donut" 
                 type={id}
                 id={chartName}
                 columns={columns}
@@ -177,6 +179,7 @@ const ChartSetup = ({
       // const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
       // console.log("before set", chart);
       const updatedChart = <TimeSeriesChart
+          format="time-series"
           type={id}
           id={chartName}
           columns={columns}
