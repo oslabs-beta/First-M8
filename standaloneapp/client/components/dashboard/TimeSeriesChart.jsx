@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from "recharts";
 import moment from "moment";
-import queryAlgorithms from "./queryAlgorithms";
+import queryAlgo from "./queryAlgorithms";
 
 
 const TimeSeriesChart = ({
@@ -9,10 +9,11 @@ const TimeSeriesChart = ({
   type,
   id,
   columns,
+  filters,
   prometheusInstance,
   setPrometheusInstance
 }) => {
-  // placeholder for logic to send PromQL query to DB
+  
   const [chartSeries, setChartSeries] = useState(() => []);
 
   const getData = async () => {
@@ -21,15 +22,12 @@ const TimeSeriesChart = ({
     const metric = columns.metricsSelected.list;
     const time = columns.timeRangeSelected.list;
 
-    if (aggregation.length === 0 && time.length !== 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.rangeQuery(metric, time);
-    } else if (aggregation.length === 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQuery(metric);
-    } else if (aggregation.length > 0 && time.length === 0) {
-      // placeholder for logic to construct PromQL queries
-      query = queryAlgorithms.instantQueryWithAggregation(metric, aggregation);
+    query = queryAlgo(metric, time, aggregation, filters);
+
+    if (time.length === 0) {
+      query = "query?" + query;
+    } else {
+      query = "query_range?" + query;
     }
     
     const chartLines = [];
@@ -37,7 +35,7 @@ const TimeSeriesChart = ({
     if (prometheusInstance !== undefined) {
       await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/${query}`)
       .then((response) => response.json())
-      .then(response => {    
+      .then(response => {   
         response.data.result.forEach(metric => {
           const series = metric.values.map((dataPoint) => {
             return ({

@@ -41,7 +41,8 @@ const IndividualChartContainer = ({
             format={format}
             type={id}
             id={chartName}
-            columns={chart[0].props.columns}
+            columns={response.columns}
+            filters={response.filters}
             prometheusInstance={prometheusInstance}
             setPrometheusInstance={setPrometheusInstance}
           />)
@@ -50,7 +51,8 @@ const IndividualChartContainer = ({
             format={format}
             type={id}
             id={chartName}
-            columns={chart[0].props.columns}
+            columns={response.columns}
+            filters={response.filters}
             prometheusInstance={prometheusInstance}
             setPrometheusInstance={setPrometheusInstance}
           />)
@@ -81,6 +83,7 @@ const IndividualChartContainer = ({
       type={id}
       id={chartName}
       columns={chart[0].props.columns}
+      filters={chart[0].props.filters}
       prometheusInstance={prometheusInstance}
       setPrometheusInstance={setPrometheusInstance}
     />)
@@ -90,6 +93,7 @@ const IndividualChartContainer = ({
       type={id}
       id={chartName}
       columns={chart[0].props.columns}
+      filters={chart[0].props.filters}
       prometheusInstance={prometheusInstance}
       setPrometheusInstance={setPrometheusInstance}
     />)

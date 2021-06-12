@@ -112,8 +112,8 @@ function labelParser(labels) {
   if (labels !== null && labels !== undefined) {
     const keyArr = Object.keys(labels);
     for (let i = 0; i < keyArr.length; i++) {
-      if (labels[keyArr[i]] !== null) {
-        if (i !== 0) labelStr += ",+";
+      if (labels[keyArr[i]] !== "") {
+        if (labelStr !== "") labelStr += ",";
         labelStr += `${keyArr[i]}="${labels[keyArr[i]]}"`;
       }
     }
@@ -121,21 +121,6 @@ function labelParser(labels) {
   if (labelStr !== "") labelStr = "{" + labelStr + "}";
   return labelStr;
 }
-
-// function simpleAlgo (...args){
-//   let output = 'query=';
-//   for(const arg of args){
-//     if(output !== 'query='){
-//       output += '&'
-//     }
-//     output += arg;
-//   }
-//   output += `&time=${Date.now()/1000}`
-//   return output; // ?query=http_seconds&time=34s
-// }
-// dashboard---------
-// const  query= queryAlgo.simpleAlgo({http_request})
-// fetch(`localhost:9090/api/v1/query?${query}`).then(updatecolumns)
 
 
 /* 

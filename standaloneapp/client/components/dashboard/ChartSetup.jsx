@@ -97,6 +97,7 @@ const ChartSetup = ({
   */
   const changeFilter = (event) => {
     updatedFilters[event.target.id] = event.target.value;
+    setFilters(updatedFilters);
   }
   
   /*
@@ -138,6 +139,7 @@ const ChartSetup = ({
                 type={id}
                 id={chartName}
                 columns={columns}
+                filters={filters}
                 prometheusInstance={prometheusInstance}
                 setPrometheusInstance={setPrometheusInstance}
               />
@@ -149,6 +151,7 @@ const ChartSetup = ({
                 type={id}
                 id={chartName}
                 columns={columns}
+                filters={filters}
                 prometheusInstance={prometheusInstance}
                 setPrometheusInstance={setPrometheusInstance}
               />
@@ -183,6 +186,7 @@ const ChartSetup = ({
           type={id}
           id={chartName}
           columns={columns}
+          filters={filters}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
         />;
@@ -217,8 +221,6 @@ const ChartSetup = ({
     }  
   }
   
-  console.log("chart setup", chart);
-
   return (
       <div className="chart-setup">
         <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName}></input>
