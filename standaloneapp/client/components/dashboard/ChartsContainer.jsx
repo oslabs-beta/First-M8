@@ -3,6 +3,7 @@ import IndividualChartContainer from "./IndividualChartContainer";
 
 
 const ChartsContainer = ({
+  id,
   allCharts,
   setAllCharts,
   columns,
@@ -10,12 +11,18 @@ const ChartsContainer = ({
   chartName,
   setChartName,
   chart,
-  setChart
+  setChart,
+  filters,
+  setFilters,
+  prometheusInstance,
+  setPrometheusInstance
 }) => {
+
   const chartsToDisplay = [];
   allCharts.forEach(individualChart => {
     chartsToDisplay.push(
       <IndividualChartContainer
+        id={id}
         allCharts={allCharts}
         setAllCharts={setAllCharts}
         columns={columns}
@@ -24,6 +31,10 @@ const ChartsContainer = ({
         setChartName={setChartName}
         chart={individualChart}
         setChart={setChart}
+        filters={filters}
+        setFilters={setFilters}
+        prometheusInstance={prometheusInstance}
+        setPrometheusInstance={setPrometheusInstance}
       />);
   });
 
@@ -32,6 +43,7 @@ const ChartsContainer = ({
       {chartsToDisplay}
     </div>
   )
+  
 }
 
 export default ChartsContainer;

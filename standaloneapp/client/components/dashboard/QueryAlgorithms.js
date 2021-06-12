@@ -45,6 +45,7 @@ to start to refinem we use the "by" operator, tells "only aggregate by these ope
 }
 */
 
+
 const timeToSeconds = {
   "1 Second": { value: 1, step: 1 },
   "10 Seconds": { value: 10, step: 1 },
@@ -105,6 +106,7 @@ function metricParser(metric, aggreBool) {
   metricStr += metric[0];
   return metricStr;
 }
+
 function labelParser(labels) {
   let labelStr = "";
   if (labels !== null && labels !== undefined) {
@@ -135,6 +137,7 @@ function labelParser(labels) {
 // const  query= queryAlgo.simpleAlgo({http_request})
 // fetch(`localhost:9090/api/v1/query?${query}`).then(updatecolumns)
 
+
 /* 
 4 parameters
 1. array of metric ex. http_total
@@ -147,3 +150,4 @@ function labelParser(labels) {
 */
 
 module.exports = queryAlgo;
+
