@@ -213,9 +213,6 @@ const ChartSetup = ({
         setNotification("Please enter a chart name.")
       }
     } else if (id === "edit-chart") {
-      // placeholder for logic to construct PromQL queries
-      // const query = queryAlgorithms.simpleAlgo(columns.metricsSelected.list[0])
-      // console.log("before set", chart);
       const updatedChart = <TimeSeriesChart
           format="time-series"
           type={id}

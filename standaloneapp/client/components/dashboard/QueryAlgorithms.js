@@ -41,7 +41,6 @@ function queryAlgo(metric, time, aggre, labels) {
   return fullQuery;
 }
 
-
 /*
 helper function to help build out the aggregation portion
 of the query
