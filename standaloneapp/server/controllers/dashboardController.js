@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 const { ChartSetting, Data } = require('../models/webModel');
 const { Display } = require('../models/webModel');
 
@@ -108,7 +110,7 @@ dashboardController.deleteChartSetting = (req, res, next) => {
 dashboardController.deleteSingleDisplay = (req, res, next) => {
   const allDisplay = res.locals.data[0].display;
   const updatedDisplays = allDisplay.slice();
-  for (let index = 0; index < allDisplay.length; index++) {
+  for (let index = 0; index < allDisplay.length; index += 1) {
     const currentDisplay = allDisplay[index];
     if (currentDisplay[0].props.id === req.params.name) {
       updatedDisplays.splice(index, 1);
@@ -150,7 +152,7 @@ dashboardController.updateSingleDisplay = (req, res, next) => {
     result[0].display.forEach((chart) => {
       updatedDisplays.push(chart);
     });
-    for (let index = 0; index < updatedDisplays.length; index++) {
+    for (let index = 0; index < updatedDisplays.length; index += 1) {
       const currentDisplay = updatedDisplays[index];
       if (currentDisplay[0].props.id === req.params.name) {
         updatedDisplays.splice(index, 1, req.body.updatedChart);

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /*
 time-to-seconds conversion
 */
@@ -56,7 +57,7 @@ function aggregationParser(aggre) {
   ) {
     aggreStr += 'query=';
     aggreObj.valid = true;
-    for (let i = 0; i < aggre.length; i++) {
+    for (let i = 0; i < aggre.length; i += 1) {
       // if (i !== 0) aggreStr += "(";
       aggreObj.count += 1;
       aggreStr += `${aggre[i].toLowerCase()}(`;
@@ -85,7 +86,7 @@ function labelParser(labels) {
   let labelStr = '';
   if (labels !== null && labels !== undefined) {
     const keyArr = Object.keys(labels);
-    for (let i = 0; i < keyArr.length; i++) {
+    for (let i = 0; i < keyArr.length; i += 1) {
       if (labels[keyArr[i]] !== '') {
         if (labelStr !== '') labelStr += ',';
         labelStr += `${keyArr[i]}="${labels[keyArr[i]]}"`;

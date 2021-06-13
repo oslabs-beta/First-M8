@@ -13,14 +13,21 @@
   },
   "plugins": ["react"],
   "rules": {
-    // "arrow-parens": "off",
-    // "consistent-return": "off",
-    // "func-names": "off",
-    // "no-console": "off",
-    // "radix": "off",
-    // "react/button-has-type": "off",
-    // "react/destructuring-assignment": "off",
-    // "react/jsx-filename-extension": "off",
-    "react/prop-types": "off"
+    "radix": "off",
+    "react/jsx-filename-extension": "off",
+    "react/prop-types": "off",
+    "react/jsx-wrap-multilines": "off",
+    "no-return-assign": "off",
+    "react/no-array-index-key": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "import/no-extraneous-dependencies": "off",
+    "consistent-return": "off",
+    "arrow-body-style": "off",
+    "react/jsx-indent": "off",
+    "no-console": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-use-before-define": "off"
   }
 }

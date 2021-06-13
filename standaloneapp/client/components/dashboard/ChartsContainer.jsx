@@ -1,26 +1,19 @@
-import React, { useEffect } from "react";
-import IndividualChartContainer from "./IndividualChartContainer";
-
+import React from 'react';
+import IndividualChartContainer from './IndividualChartContainer';
 
 const ChartsContainer = ({
   id,
   allCharts,
   setAllCharts,
-  columns,
   setColumns,
-  chartName,
   setChartName,
-  chart,
   setChart,
-  filters,
   setFilters,
   prometheusInstance,
-  setPrometheusInstance
+  setPrometheusInstance,
 }) => {
-
   const chartsToDisplay = [];
-  allCharts.forEach(individualChart => {
-    console.log(individualChart)
+  allCharts.forEach((individualChart) => {
     if (individualChart !== null) {
       chartsToDisplay.push(
         <IndividualChartContainer
@@ -38,20 +31,16 @@ const ChartsContainer = ({
           setFilters={setFilters}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
-        />
+        />,
       );
     }
-    
   });
-
-  
 
   return (
     <div className="charts-container">
       {chartsToDisplay}
     </div>
-  )
-  
-}
+  );
+};
 
 export default ChartsContainer;

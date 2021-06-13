@@ -1,6 +1,6 @@
-import React from "react";
-import { Droppable } from "react-beautiful-dnd";
-import OperatorOrMetric from "./OperatorOrMetric";
+import React from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import OperatorOrMetric from './OperatorOrMetric';
 
 const OptionsOrSelectedColumn = ({ columnName, columnTitle, listOfOperatorsOrMetrics }) => {
   return (
@@ -15,10 +15,10 @@ const OptionsOrSelectedColumn = ({ columnName, columnTitle, listOfOperatorsOrMet
           {provided.placeholder}
         </div>
       )}
-    </Droppable>
+      </Droppable>
     </div>
-    
-  )
-}
+
+  );
+};
 
 export default OptionsOrSelectedColumn;

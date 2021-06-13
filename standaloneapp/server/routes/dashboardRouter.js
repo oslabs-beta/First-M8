@@ -1,6 +1,5 @@
 const express = require('express');
 const dashboardController = require('../controllers/dashboardController');
-const { ChartSetting } = require('../models/webModel');
 
 const router = express.Router();
 

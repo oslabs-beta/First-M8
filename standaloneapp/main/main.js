@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron');
+// eslint-disable-next-line no-unused-expressions
 process.env.NODE_ENV === 'development' ? null : require('../server/server');
-const path = require('path');
 
 function createWindow() {
   const win = new BrowserWindow({
