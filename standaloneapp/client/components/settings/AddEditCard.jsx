@@ -3,8 +3,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { nameHelper, ipHelper, portHelper } from './settingsHelper';
 
 const AddEditCard = ({ settingsArr, setSettingsArr }) => {
-  let { name } = useParams();
-  let history = useHistory();
+  const { name } = useParams();
+  const history = useHistory();
   const [thisSetting, setThisSetting] = useState(() => {
     if (name !== 'new') {
       for (const el of settingsArr) {
