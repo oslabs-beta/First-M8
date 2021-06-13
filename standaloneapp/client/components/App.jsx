@@ -30,7 +30,7 @@ const App = () => {
 
   /*
   retrieves all existing Prometheus connections from database
-  to display on to list in drop down at top of app
+  to list in drop down at top of app
   */
   const getAllPrometheusInstances = async () => {
     const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
@@ -48,7 +48,9 @@ const App = () => {
 
   /*
   handles change on Prometheus connection selector drop down:
-  retrieves settings data for particular connection name
+  retrieves settings data for particular connection name and
+  invokes funciton to get all charts passing in the particular
+  connection naem
   */
   const selectPrometheusInstance = async (event) => {
     setAllCharts([]);
@@ -82,6 +84,8 @@ const App = () => {
           setAllCharts={setAllCharts}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
+          prometheusConnections={prometheusConnections}
+          setPrometheusConnections={setPrometheusConnections}
         />
       </Router>
     </div>

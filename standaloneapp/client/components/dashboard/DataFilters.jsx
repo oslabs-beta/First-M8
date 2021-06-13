@@ -8,6 +8,9 @@ const DataFilters = ({
   prometheusInstance,
   setPrometheusInstance,
 }) => {
+  /*
+  displays drop down for each Prometheus label on chart setup page
+  */
   const labels = [];
   Object.keys(filters).forEach((label) => {
     if (label !== '__name__') {

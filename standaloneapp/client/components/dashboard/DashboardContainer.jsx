@@ -48,18 +48,13 @@ const DashboardContainer = ({
   });
 
   /*
-  helper function to initialize state of filters for chart setup page
-  */
-  const initialFilters = (object) => object;
-
-  /*
   initializes state of data selector columns, chart name,
-  chart display, filters, and Prometheus instance for chart setup page
+  chart display, and filters for chart setup page
   */
   const [columns, setColumns] = useState(() => initialColumns([]));
   const [chartName, setChartName] = useState(() => '');
   const [chart, setChart] = useState(() => []);
-  const [filters, setFilters] = useState(() => initialFilters({}));
+  const [filters, setFilters] = useState(() => {});
 
   /*
   retrieves all metrics being tracked by Prometheus that are of gauge
@@ -90,15 +85,16 @@ const DashboardContainer = ({
         .then((response) => response.json())
         .then((response) => {
           response.data.forEach((label) => labels[label] = '');
-          setFilters(initialFilters(labels));
+          setFilters(labels);
         });
     }
   };
 
   /*
   handles click on new dashboard chart button:
-  retrieves metrics from Prometheus, resets chart name, and resets
-  chart display for chart set up page
+  resets filters, retrieves metrics from Prometheus, retrieves labels from Prometheus
+  resets chart name, resets chart display for chart set up page, and routes to chart
+  setup page
   */
   const newDashboardChart = () => {
     setFilters({});

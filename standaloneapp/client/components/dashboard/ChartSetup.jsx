@@ -91,8 +91,8 @@ const ChartSetup = ({
   const updatedFilters = { ...filters };
   /*
   handles change on filter drop downs:
-  updated particular property in updated filters object with
-  new selection
+  updates particular property in updated filters object with
+  new selection, sets filters to updated filters
   */
   const changeFilter = (event) => {
     updatedFilters[event.target.id] = event.target.value;
@@ -104,8 +104,13 @@ const ChartSetup = ({
   if new chart, checks if chart name already exists in database and notifies if so
   and if not, adds chart name, data selector columns, and filters to database, adds new chart
   to display on chart setup page and main dashboard page
+
   if edit chart, update chart name, data selector columns, and filters in database, updates chart
   to display on chart setup page and main dashboard page
+
+  chart type displayed dependent upon aggregation selected, data selected, and time selected
+  have notifications set up if aggregation selected, data selected, and/or time selected is not
+  currently being handled by application
   */
   const saveChartSetup = async () => {
     if (id === 'new-chart') {

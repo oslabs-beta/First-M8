@@ -1,4 +1,4 @@
-const queryAlgo = require('../../client/components/dashboard/QueryAlgorithms');
+import queryAlgo from '../../client/components/dashboard/promQLQueryAlgorithms';
 
 const timeToSeconds = {
   oneSecond: 1,
@@ -22,7 +22,7 @@ describe('simple queries test', () => {
   const myQuery = ['prometheus_http_requests_total'];
   it('should carry out one metric default time', () => {
     expect(queryAlgo(myQuery)).toEqual(
-      `query=prometheus_http_requests_total&time=${timeNow}`,
+      'query=prometheus_http_requests_total',
     );
   });
   const myTime = ['30 Minutes'];
@@ -56,14 +56,14 @@ describe('query algos with aggregations', () => {
     myTime = null;
     myAggre = ['Sum'];
     expect(queryAlgo(myQuery, myTime, myAggre)).toEqual(
-      `query=sum(prometheus_http_requests_total)&time=${timeNow}`,
+      'query=sum(prometheus_http_requests_total)',
     );
   });
   it('handles multiple aggregations', () => {
     myTime = null;
     myAggre = ['Max', 'Sum'];
     expect(queryAlgo(myQuery, myTime, myAggre)).toEqual(
-      `query=max(sum(prometheus_http_requests_total))&time=${timeNow}`,
+      'query=max(sum(prometheus_http_requests_total))',
     );
   });
   it('handles aggregations with time argument', () => {
@@ -97,7 +97,7 @@ describe('query algos with labels', () => {
     myAggre = null;
     myLabels = { job: 'apiserver' };
     expect(queryAlgo(myQuery, myTime, myAggre, myLabels)).toEqual(
-      `query=prometheus_http_requests_total{job="apiserver"}&time=${timeNow}`,
+      'query=prometheus_http_requests_total{job="apiserver"}',
     );
   });
   it('handles multiple labels', () => {
@@ -105,13 +105,13 @@ describe('query algos with labels', () => {
     myAggre = null;
     myLabels = { job: 'apiserver', handler: '/api/comments' };
     expect(queryAlgo(myQuery, myTime, myAggre, myLabels)).toEqual(
-      `query=prometheus_http_requests_total{job="apiserver",+handler="/api/comments"}&time=${timeNow}`,
+      'query=prometheus_http_requests_total{job="apiserver",handler="/api/comments"}',
     );
   });
   it('handles labels with time argument', () => {
     myTime = ['5 Minutes'];
     myAggre = null;
-    myLabels = { job: 'apiserver', hello: null };
+    myLabels = { job: 'apiserver', hello: '' };
     expect(queryAlgo(myQuery, myTime, myAggre, myLabels)).toEqual(
       `query=prometheus_http_requests_total{job="apiserver"}&start=${
         timeNow - timeToSeconds.fiveMinutes
@@ -119,7 +119,7 @@ describe('query algos with labels', () => {
     );
     myLabels = { job: 'apiserver', handler: '/api/comments' };
     expect(queryAlgo(myQuery, myTime, myAggre, myLabels)).toEqual(
-      `query=prometheus_http_requests_total{job="apiserver",+handler="/api/comments"}&start=${
+      `query=prometheus_http_requests_total{job="apiserver",handler="/api/comments"}&start=${
         timeNow - timeToSeconds.fiveMinutes
       }&end=${timeNow}&step=1`,
     );

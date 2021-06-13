@@ -9,6 +9,7 @@ const MainRoutes = ({
   setAllCharts,
   prometheusInstance,
   setPrometheusInstance,
+  setPrometheusConnections,
 }) => {
   /*
   initializes state of all settings to display on settings page
@@ -45,6 +46,7 @@ const MainRoutes = ({
         <SettingsContainer
           settingsArr={settingsArr}
           setSettingsArr={setSettingsArr}
+          setPrometheusConnections={setPrometheusConnections}
         />
       </Route>
       <Route exact path="/history" component={HistoryContainer} />

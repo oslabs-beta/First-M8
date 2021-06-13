@@ -7,9 +7,16 @@ const DonutChart = ({
   columns,
   prometheusInstance,
 }) => {
+  /*
+  initializes state of data and label for donut chart
+  */
   const [data, setData] = useState(() => []);
   const [labelForDonut, setLabelForDonut] = useState(() => '');
 
+  /*
+  retrieves data from Prometheus based on data selector columns
+  to be represented as a donut chart
+  */
   const getData = async () => {
     const metric = columns.metricsSelected.list;
 
@@ -30,6 +37,10 @@ const DonutChart = ({
     }
   };
 
+  /*
+  sets up a recurring fetch request to Prometheus every minute
+  to update donut chart with latest data
+  */
   useEffect(() => {
     getData();
     if (type === 'saved-chart') {

@@ -20,6 +20,9 @@ const IndividualChartContainer = ({
   handles click on edit button:
   retrieves chart name, data selector columns, and filters for
   particular chart from database to display on chart set up page
+
+  chart type displayed on chart set up page depenent on
+  format property passed down from main charts container
   */
   const editChart = async () => {
     await fetch(`/dashboard/editChart/${chartName}`)
@@ -76,6 +79,12 @@ const IndividualChartContainer = ({
       });
   };
 
+  /*
+  displays individual chart on main dashboard page
+
+  individual chart displayed on main dashboard page dependent
+  on format property passed down from main charts container
+  */
   const chartToDisplay = [];
   if (format === 'time-series') {
     chartToDisplay.push(
