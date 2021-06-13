@@ -1,10 +1,7 @@
 import React from 'react';
-import jest from 'jest';
-import { MemoryRouter } from 'react-router';
-import { useHistory } from 'react-router-dom';
-import { configure, shallow, mount } from 'enzyme';
+import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import toJson from 'enzyme-to-json';
+import 'regenerator-runtime';
 
 import AddEditCard from '../../client/components/settings/AddEditCard';
 import SettingsCard from '../../client/components/settings/SettingsCard';
@@ -12,15 +9,16 @@ import SettingsContainer from '../../client/components/settings/SettingsContaine
 
 configure({ adapter: new Adapter() });
 
-// jest.mock('First-M8/standaloneapp');
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'), // use actual for all non-hook parts
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({
-    name: 'main 1',
+    name: 'Test',
   }),
-  useRouteMatch: () => ({ url: '/settings' }),
+  useRouteMatch: () => ({
+    path: '/settings',
+    url: '/settings',
+  }),
 }));
-
 
 describe('React tests for settings components', () => {
   describe('SettingsCard', () => {
@@ -44,7 +42,6 @@ describe('React tests for settings components', () => {
   });
 
   describe('SettingsContainer', () => {
-    
     let wrapper;
     const settingsArr = [
       {
@@ -59,20 +56,22 @@ describe('React tests for settings components', () => {
       },
     ];
     beforeAll(() => {
-      wrapper = shallow(<SettingsContainer settingsArr={settingsArr} match={{params: {id: 1}, isExact: true, path: "../../client/components/settings/", url: "/settings", location: "/settings"}}/>);
+      wrapper = shallow(<SettingsContainer settingsArr={settingsArr} />);
     });
-    
-    it('Renders a <div> tag containing a Switch component', () => {
-      expect(wrapper.type()).toEqual('div');
-      //expect(wrapper.childAt(0).type()).toEqual('Switch');
-    })
-    
-    it('Should display all elements in settingsArr as SettingsCard component', () => {
 
-    })
+    it('Renders a <div> tag containing AddEditCard component and a <div> for the SettingsCard component', () => {
+      expect(wrapper.type()).toEqual('div');
+      expect(wrapper.find('AddEditCard').prop('settingsArr')).toEqual(settingsArr);
+      expect(wrapper.find('.settings-container').type()).toEqual('div');
+    });
+
+    it('Should display all elements in settingsArr as SettingsCard component', () => {
+      expect(Array.isArray(settingsArr)).toEqual(true);
+      expect(wrapper.find('SettingsCard').length).toEqual(settingsArr.length);
+    });
   });
 
-  xdescribe('AddEditCard', () => {
+  describe('AddEditCard', () => {
     let wrapper;
     const settingsArr = [
       {
@@ -80,26 +79,51 @@ describe('React tests for settings components', () => {
         ipAddress: 'local:host',
         port: 9090,
       },
-      {
-        name: 'Test2',
-        ipAddress: 'local:host',
-        port: 3000,
-      },
     ];
 
     beforeAll(() => {
-      wrapper = mount(
-        <MemoryRouter initialEntries={['/addEditCard']}>
-          <AddEditCard settingsArr={settingsArr} />
-        </MemoryRouter>
-      );
+      wrapper = shallow(<AddEditCard settingsArr={settingsArr} />);
     });
 
-    it('Renders a <div> tag containing a Switch component', () => {
+    it('Renders a <div> tag containing a form', () => {
       expect(wrapper.type()).toEqual('div');
-      //expect(wrapper.childAt(0).type()).toEqual('Switch');
-    })
+      expect(wrapper.childAt(0).type()).toEqual('form');
+    });
 
-  })
+    it('Should have input fields where the current values are equal to the name, ipAddress, and port in SettingsArr', () => {
+      const inputFields = wrapper.find('input');
+      const textToCheckFor = [settingsArr[0].name, settingsArr[0].ipAddress, settingsArr[0].port];
+      inputFields.forEach((node, index) => {
+        expect(node.prop('value')).toEqual(textToCheckFor[index]);
+      });
+    });
+
+    it('Takes new input and replaces relevant information', () => {
+      const eventObjName = { target: { id: 'name', value: 'newname' } };
+      const eventObjIp = { target: { id: 'ipaddress', value: 'host:local' } };
+      const eventObjPort = { target: { id: 'port', value: 3040 } };
+      wrapper.find('#name').simulate('change', eventObjName);
+      wrapper.find('#ipaddress').simulate('change', eventObjIp);
+      wrapper.find('#port').simulate('change', eventObjPort);
+      wrapper.update();
+
+      expect(wrapper.find('#name').prop('value')).toEqual('newname');
+      expect(wrapper.find('#ipaddress').prop('value')).toEqual('host:local');
+      expect(wrapper.find('#port').prop('value')).toEqual(3040);
+    });
+
+    xit('Should call the onSubmit function when submit button is clicked', () => {
+      const button = wrapper.find('#submit');
+      const mockEvent = { preventDefault: jest.fn() };
+      button.simulate('submit', mockEvent);
+      expect(mockEvent.preventDefault).toHaveBeenCalled();
+    });
+
+    xit('Should remove the specific settings object from settingsArr upon click of delete button', () => {
+      const button = wrapper.find('#delete');
+      const mockDeleteFunction = jest.fn();
+      button.simulate('click', mockDeleteFunction);
+      expect(mockDeleteFunction).toHaveBeenCalled();
+    });
+  });
 });
-

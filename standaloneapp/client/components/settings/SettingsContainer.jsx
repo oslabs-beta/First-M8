@@ -4,7 +4,7 @@ import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
 import SettingsCard from './SettingsCard';
 import AddEditCard from './AddEditCard';
 
-const SettingsContainer = ({ settingsArr, setSettingsArr }) => {
+const SettingsContainer = ({ settingsArr, setSettingsArr, setPrometheusConnections }) => {
   const { path, url } = useRouteMatch();
 
   const cardArray = settingsArr.map((setting) => {
@@ -23,6 +23,7 @@ const SettingsContainer = ({ settingsArr, setSettingsArr }) => {
           <AddEditCard
             settingsArr={settingsArr}
             setSettingsArr={setSettingsArr}
+            setPrometheusConnections={setPrometheusConnections}
           />
         </Route>
         <Route exact path={`${path}/`}>
@@ -31,7 +32,7 @@ const SettingsContainer = ({ settingsArr, setSettingsArr }) => {
             {cardArray}
             <div id="newcards">
               <Link to={`${url}/new`}>
-                <div id="newcard"></div>
+                <div id="newcard" />
                 {/* <img src="../assets/first-m8-logo.png"></img> */}
               </Link>
             </div>

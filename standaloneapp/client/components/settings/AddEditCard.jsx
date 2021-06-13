@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { nameHelper, ipHelper, portHelper } from './settingsHelper';
 
-const AddEditCard = ({ settingsArr, setSettingsArr }) => {
+const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) => {
   const { name } = useParams();
   const history = useHistory();
   const [thisSetting, setThisSetting] = useState(() => {
@@ -33,6 +33,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
       return;
     } else {
       if (name === 'new') {
+        const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
         await fetch('/settings/new', {
           method: 'POST',
           headers: {
@@ -42,10 +43,17 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
         })
           .then((res) => res.json())
           .then((result) => {
+            result.settings.forEach((connection) => {
+              connectionNames.push(
+                <option value={connection.name}>{connection.name}</option>,
+              );
+            });
+            setPrometheusConnections(connectionNames);
             setSettingsArr(result.settings);
           })
           .catch((e) => console.log(e));
       } else {
+        const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
         await fetch(`/settings/${name}`, {
           method: 'PUT',
           headers: {
@@ -56,6 +64,12 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
           .then((res) => res.json())
           .then((result) => {
             // const newArray = settingsArr.filter((el) => el.name !== name);
+            result.settings.forEach((connection) => {
+              connectionNames.push(
+                <option value={connection.name}>{connection.name}</option>,
+              );
+            });
+            setPrometheusConnections(connectionNames);
             setSettingsArr(result.settings);
           })
           .catch((e) => console.log(e));
@@ -79,6 +93,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
   }
 
   function handleDelete(e) {
+    const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
     fetch(`/settings/${name}/delete`, {
       method: 'DELETE',
       headers: {
@@ -88,6 +103,13 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
     })
       .then((res) => res.json())
       .then((result) => {
+        console.log("addedit", result.settings);
+        result.settings.forEach((connection) => {
+          connectionNames.push(
+            <option value={connection.name}>{connection.name}</option>,
+          );
+        });
+        setPrometheusConnections(connectionNames);
         setSettingsArr(result.settings);
         history.push('/settings');
       })
@@ -96,7 +118,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
 
   return (
     <div>
-      <form onSubmit={(e) => handleSumbit(e)}>
+      <form id="settings-form" onSubmit={(e) => handleSumbit(e)}>
         <label htmlFor="name">Name </label>
         <input
           type="text"
@@ -124,9 +146,9 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
           value={thisSetting.port}
           onChange={(e) => handleChange(e)}
         ></input>
-        <button type="submit">Submit</button>
+        <button id="submit" type="submit">Submit</button>
       </form>
-      <button onClick={(e) => handleDelete(e)}>Delete</button>
+      <button id="delete" onClick={(e) => handleDelete(e)}>Delete</button>
       {errMsgNew ? (
         <p>Please make sure the name for the server is not 'new'</p>
       ) : null}

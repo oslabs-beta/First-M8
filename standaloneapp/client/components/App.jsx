@@ -82,6 +82,8 @@ const App = () => {
           setAllCharts={setAllCharts}
           prometheusInstance={prometheusInstance}
           setPrometheusInstance={setPrometheusInstance}
+          prometheusConnections={prometheusConnections}
+          setPrometheusConnections={setPrometheusConnections}
         />
       </Router>
     </div>
