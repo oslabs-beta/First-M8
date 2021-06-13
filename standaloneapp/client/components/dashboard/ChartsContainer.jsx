@@ -12,6 +12,9 @@ const ChartsContainer = ({
   prometheusInstance,
   setPrometheusInstance,
 }) => {
+  /*
+  displays charts on main dashboard page
+  */
   const chartsToDisplay = [];
   allCharts.forEach((individualChart) => {
     if (individualChart !== null) {

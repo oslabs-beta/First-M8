@@ -1,6 +1,7 @@
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import fetchMock from 'jest-fetch-mock';
 import 'regenerator-runtime';
 
 import AddEditCard from '../../client/components/settings/AddEditCard';
@@ -113,13 +114,12 @@ describe('React tests for settings components', () => {
     });
 
     xit('Should call the onSubmit function when submit button is clicked', () => {
-      const button = wrapper.find('#submit');
       const mockEvent = { preventDefault: jest.fn() };
-      button.simulate('submit', mockEvent);
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
+      wrapper.find('#settings-form').simulate('submit', mockEvent);
+      expect(mockEvent.preventDefault).toBeCalledTimes(1);
     });
 
-    xit('Should remove the specific settings object from settingsArr upon click of delete button', () => {
+    xit('Should call the onClick function when delete button is clicked', () => {
       const button = wrapper.find('#delete');
       const mockDeleteFunction = jest.fn();
       button.simulate('click', mockDeleteFunction);

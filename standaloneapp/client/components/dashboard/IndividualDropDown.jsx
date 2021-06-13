@@ -7,7 +7,14 @@ const IndividualDropDown = ({
   onChange,
   prometheusInstance,
 }) => {
+  /*
+  initializes options for a single label dropdown
+  */
   const [options, setOptions] = useState(() => []);
+
+  /*
+  retrieves options from Prometheus for a particular label
+  */
   const getOptions = async () => {
     const optionTags = [<option value="" />];
     if (prometheusInstance !== undefined) {

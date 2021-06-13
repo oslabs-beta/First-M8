@@ -10,8 +10,15 @@ const TimeSeriesChart = ({
   filters,
   prometheusInstance,
 }) => {
+  /*
+  initializes state of data series for time series chart
+  */
   const [chartSeries, setChartSeries] = useState(() => []);
 
+  /*
+  retrieves data from Prometheus based on data selector columns
+  to be represented as a time series chart
+  */
   const getData = async () => {
     const aggregation = columns.aggregationSelected.list;
     const metrics = columns.metricsSelected.list;
@@ -44,6 +51,10 @@ const TimeSeriesChart = ({
     }
   };
 
+  /*
+  sets up a recurring fetch request to Prometheus every minute
+  to update time series chart with latest data
+  */
   useEffect(() => {
     getData();
     if (type === 'saved-chart') {
