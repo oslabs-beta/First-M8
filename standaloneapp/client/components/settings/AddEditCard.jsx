@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { nameHelper, ipHelper, portHelper } from "./settingsHelper";
+import React, { useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { nameHelper, ipHelper, portHelper } from './settingsHelper';
 
 const AddEditCard = ({ settingsArr, setSettingsArr }) => {
   let { name } = useParams();
   let history = useHistory();
   const [thisSetting, setThisSetting] = useState(() => {
-    if (name !== "new") {
+    if (name !== 'new') {
       for (const el of settingsArr) {
         if (el.name === name) return el;
       }
     }
     return {
-      name: "",
-      ipAddress: "",
+      name: '',
+      ipAddress: '',
       port: 3000,
     };
   });
@@ -32,11 +32,11 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
       if (portErr) setErrMsgPort(true);
       return;
     } else {
-      if (name === "new") {
-        await fetch("/settings/new", {
-          method: "POST",
+      if (name === 'new') {
+        await fetch('/settings/new', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(thisSetting),
         })
@@ -47,9 +47,9 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
           .catch((e) => console.log(e));
       } else {
         await fetch(`/settings/${name}`, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(thisSetting),
         })
@@ -60,18 +60,18 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
           })
           .catch((e) => console.log(e));
       }
-      history.push("/settings");
+      history.push('/settings');
       return;
     }
   }
 
   function handleChange(e) {
     let updatedCluster = { ...thisSetting };
-    if (e.target.id === "name") {
+    if (e.target.id === 'name') {
       updatedCluster = { ...updatedCluster, name: e.target.value };
-    } else if (e.target.id === "ipaddress") {
+    } else if (e.target.id === 'ipaddress') {
       updatedCluster = { ...updatedCluster, ipAddress: e.target.value };
-    } else if (e.target.id === "port") {
+    } else if (e.target.id === 'port') {
       updatedCluster = { ...updatedCluster, port: e.target.value };
     }
     setThisSetting(updatedCluster);
@@ -80,16 +80,16 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
 
   function handleDelete(e) {
     fetch(`/settings/${name}/delete`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(thisSetting),
     })
       .then((res) => res.json())
       .then((result) => {
         setSettingsArr(result.settings);
-        history.push("/settings");
+        history.push('/settings');
       })
       .catch((e) => console.log(e));
   }

@@ -1,6 +1,4 @@
 import React from 'react';
-import { Router, Switch, Route } from 'react-router-dom';
-import ChartSetup from './ChartSetup';
 import TimeSeriesChart from './TimeSeriesChart';
 import DonutChart from './DonutChart';
 import history from './dashboardHistory';
@@ -8,15 +6,12 @@ import history from './dashboardHistory';
 const IndividualChartContainer = ({
   format,
   id,
-  allCharts,
   setAllCharts,
-  columns,
   setColumns,
   chartName,
   setChartName,
   chart,
   setChart,
-  filters,
   setFilters,
   prometheusInstance,
   setPrometheusInstance,
@@ -112,13 +107,7 @@ const IndividualChartContainer = ({
     <div className="individual-chart-container">
       <div>{chartName}</div>
       {chartToDisplay}
-      <button id="edit-chart" onClick={editChart}>
-        Edit
-      </button>
-      {' '}
-      <button id="delete-chart" onClick={deleteChart}>
-        Delete
-      </button>
+      <button type="button" id="edit-chart" onClick={editChart}>Edit</button> <button type="button" id="delete-chart" onClick={deleteChart}>Delete</button>
     </div>
   );
 };

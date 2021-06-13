@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
-import SettingsCard from "./SettingsCard";
-import AddEditCard from "./AddEditCard";
+import React from 'react';
+// eslint-disable-next-line object-curly-newline
+import { Switch, Route, Link, useRouteMatch } from 'react-router-dom';
+import SettingsCard from './SettingsCard';
+import AddEditCard from './AddEditCard';
 
 const SettingsContainer = ({ settingsArr, setSettingsArr }) => {
   const { path, url } = useRouteMatch();

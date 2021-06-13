@@ -1,8 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const SettingsCard = ({ setting }) => {
-
   return (
     <div id={setting.name} className="settings-card">
       <Link to={`/settings/${setting.name}`}>
