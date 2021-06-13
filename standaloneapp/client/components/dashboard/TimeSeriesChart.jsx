@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // eslint-disable-next-line object-curly-newline
 import { CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts';
 import moment from 'moment';
-import queryAlgo from './QueryAlgorithms';
+import queryAlgo from './promQLQueryAlgorithms';
 
 const TimeSeriesChart = ({
   type,
