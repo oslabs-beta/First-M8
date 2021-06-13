@@ -4,6 +4,7 @@ const path = require("path");
 const PORT = 3001;
 const webRouter = require("./routes/webRouter");
 const dashboardRouter = require("./routes/dashboardRouter");
+const historyRouter = require("./routes/historyRouter");
 
 app.use(express.json());
 
@@ -11,6 +12,7 @@ app.use(express.json());
 //instead of web, make one settings, dashboard, history
 app.use("/settings", webRouter);
 app.use("/dashboard", dashboardRouter);
+app.use("/history", historyRouter);
 //app.use('/history', historyRouter);
 
 //next to work on

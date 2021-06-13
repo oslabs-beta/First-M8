@@ -4,7 +4,7 @@ import OptionsOrSelectedColumn from "./OptionsOrSelectedColumn";
 import TimeSeriesChart from "./TimeSeriesChart";
 import DataFilters from "./DataFilters";
 import history from "./dashboardHistory";
-import queryAlgorithms from './queryAlgorithms';
+import queryAlgorithms from './QueryAlgorithms';
 
 const ChartSetup = ({
   id,

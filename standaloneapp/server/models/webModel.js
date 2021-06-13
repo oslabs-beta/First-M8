@@ -33,7 +33,7 @@ const reqArray = {
 
 const reqObject = {
   type: Object,
-  require: true
+  required: true
 }
 
 const inputSchema = new Schema({
@@ -71,9 +71,10 @@ const displaySchema = new Schema({
 //History schema
 //store all history related data
 const historySchema = new Schema({
-  name: reqString,
+  //query name
+  promInstance: reqString,
 
-  promqlHis: reqArray,
+  promqlHis: reqObject,
 
 });
 

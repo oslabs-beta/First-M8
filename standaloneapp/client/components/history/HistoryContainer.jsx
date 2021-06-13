@@ -2,18 +2,19 @@ import React from "react";
 import {useState, useEffect} from "react";
 import HistoryDetail from './HistoryDetail'
 
-const details = [
-  {type: 'custom', promQL: 'HTTP_REQUEST_TOTAL', time: 12321436712123},
-  {type: 'dnd', promQL: 'sum(HTTP_REQUEST_TOTAL)'},
-];
+// const details = [
+//   {type: 'custom', promQL: 'HTTP_REQUEST_TOTAL', history_id: 12321436712123},
+//   {type: 'dnd', promQL: 'sum(HTTP_REQUEST_TOTAL)', history_id : 1298903248},
+// ];
 
 const HistoryContainer = () => {
   const [promQLHistory, setPromQLHistory] = useState([])
 
   useEffect(() => {
-    fetch("/history") //go to backend and back end sends back response
+    fetch("/history/all") //go to backend and back end sends back response
     .then(response => response.json())
     .then((data) => {
+      console.log("this is history container data", data)
       setPromQLHistory(data);
     })
     .catch(err => {
@@ -21,11 +22,13 @@ const HistoryContainer = () => {
     })
   }, [])
 
-  
-  const ans = details.map((detail) => {
-    return ( <HistoryDetail key={`historydetail${detail.time}`} 
+
+  const ans = promQLHistory.map((detail) => {
+    return ( <HistoryDetail key={`historydetail${detail._id}`} 
     setPromQLHistory = {setPromQLHistory}
-    detail={detail}/>)
+    detail={detail}
+    promQLHistory = {promQLHistory}/>)
+    
   })
 
 
