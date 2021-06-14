@@ -69,16 +69,16 @@ const App = () => {
 
   return (
     <div className="app">
-      <label>Prometheus Instance: </label>
-      <select onChange={selectPrometheusInstance}>
-        {prometheusConnections}
-      </select>
       <Router>
         <nav>
-          <Link to="/">Dashboard</Link>
-          <Link to="/settings">Settings</Link>
-          <Link to="/history">History</Link>
+          <Link to="/" className="nav-links">Dashboard</Link>
+          <Link to="/settings" className="nav-links">Settings</Link>
+          <Link to="/history" className="nav-links">History</Link>
         </nav>
+        <label>Prometheus Instance: </label>
+        <select onChange={selectPrometheusInstance}>
+        {prometheusConnections}
+        </select>
         <MainRoutes
           allCharts={allCharts}
           setAllCharts={setAllCharts}
