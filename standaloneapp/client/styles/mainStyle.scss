@@ -1,0 +1,22 @@
+body {
+  background-color: rgb(24, 35, 73);
+}
+
+nav {
+  max-width: 300px;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-links {
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.nav-links:visited {
+  text-decoration: none;
+}

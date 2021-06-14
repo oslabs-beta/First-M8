@@ -7,8 +7,15 @@ const SingleNumberDisplay = ({
   filters,
   prometheusInstance,
 }) => {
+  /*
+  initializes state of data single number display
+  */
   const [data, setData] = useState(() => 0);
 
+  /*
+  retrieves data from Prometheus based on data selector columns
+  to be represented as a single number
+  */
   const getData = async () => {
     const aggregation = columns.aggregationSelected.list;
     const metrics = columns.metricsSelected.list;
@@ -27,6 +34,10 @@ const SingleNumberDisplay = ({
     }
   };
 
+  /*
+  sets up a recurring fetch request to Prometheus every minute
+  to update donut chart with latest data
+  */
   useEffect(() => {
     getData();
     if (type === 'saved-chart') {
