@@ -18,9 +18,9 @@ const DonutChart = ({
   to be represented as a donut chart
   */
   const getData = async () => {
-    const metric = columns.metricsSelected.list;
+    const metrics = columns.metricsSelected.list;
 
-    const query = `query=${metric[0]}/${metric[1]}`;
+    const query = `query=${metrics[0]}/${metrics[1]}`;
 
     if (prometheusInstance !== undefined) {
       await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query?${query}`)

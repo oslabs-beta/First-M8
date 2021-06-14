@@ -1,6 +1,7 @@
 import React from 'react';
 import TimeSeriesChart from './TimeSeriesChart';
 import DonutChart from './DonutChart';
+import SingleNumberDisplay from './SingleNumberDisplay';
 import history from './dashboardHistory';
 
 const IndividualChartContainer = ({
@@ -57,6 +58,18 @@ const IndividualChartContainer = ({
               setPrometheusInstance={setPrometheusInstance}
             />,
           );
+        } else if (format === 'single-number') {
+          chartToEdit.push(
+            <SingleNumberDisplay
+              format={format}
+              type={id}
+              id={chartName}
+              columns={response.columns}
+              filters={response.filters}
+              prometheusInstance={prometheusInstance}
+              setPrometheusInstance={setPrometheusInstance}
+            />,
+          );
         }
         setChart(chartToEdit);
       });
@@ -101,6 +114,18 @@ const IndividualChartContainer = ({
   } else if (format === 'donut') {
     chartToDisplay.push(
       <DonutChart
+        format={format}
+        type={id}
+        id={chartName}
+        columns={chart[0].props.columns}
+        filters={chart[0].props.filters}
+        prometheusInstance={prometheusInstance}
+        setPrometheusInstance={setPrometheusInstance}
+      />,
+    );
+  } else if (format === 'single-number') {
+    chartToDisplay.push(
+      <SingleNumberDisplay
         format={format}
         type={id}
         id={chartName}

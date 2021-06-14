@@ -3,6 +3,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import OptionsOrSelectedColumn from './OptionsOrSelectedColumn';
 import TimeSeriesChart from './TimeSeriesChart';
 import DonutChart from './DonutChart';
+import SingleNumberDisplay from './SingleNumberDisplay';
 import DataFilters from './DataFilters';
 import history from './dashboardHistory';
 
@@ -166,10 +167,15 @@ const ChartSetup = ({
             && metric.length === 1
           ) {
             newChart = [
-              <div>
-                Single-number panels are in development.
-                We appreciate your patience in the meantime.
-              </div>,
+              <SingleNumberDisplay
+                format="single-number"
+                type={id}
+                id={chartName}
+                columns={columns}
+                filters={filters}
+                prometheusInstance={prometheusInstance}
+                setPrometheusInstance={setPrometheusInstance}
+              />,
             ];
           } else {
             newChart = [
@@ -221,15 +227,38 @@ const ChartSetup = ({
         setNotification('Please enter a chart name.');
       }
     } else if (id === 'edit-chart') {
-      const updatedChart = <TimeSeriesChart
-        format="time-series"
-        type={id}
-        id={chartName}
-        columns={columns}
-        filters={filters}
-        prometheusInstance={prometheusInstance}
-        setPrometheusInstance={setPrometheusInstance}
-      />;
+      let updatedChart;
+      if (chart[0].props.format === 'time-series') {
+        updatedChart = <TimeSeriesChart
+          format="time-series"
+          type={id}
+          id={chartName}
+          columns={columns}
+          filters={filters}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />;
+      } else if (chart[0].props.format === 'donut') {
+        updatedChart = <DonutChart
+          format="donut"
+          type={id}
+          id={chartName}
+          columns={columns}
+          filters={filters}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />;
+      } else if (chart[0].props.format === 'single-number') {
+        updatedChart = <SingleNumberDisplay
+          format="single-number"
+          type={id}
+          id={chartName}
+          columns={columns}
+          filters={filters}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />;
+      }
 
       setChart(updatedChart);
 
