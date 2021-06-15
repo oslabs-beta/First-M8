@@ -117,38 +117,50 @@ const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) 
   }
 
   return (
-    <div>
-      <form id="settings-form" onSubmit={(e) => handleSumbit(e)}>
-        <label htmlFor="name">Name </label>
-        <input
-          type="text"
-          id="name"
-          placeholder="K8s Cluster 1"
-          required
-          value={thisSetting.name}
-          onChange={(e) => handleChange(e)}
-        ></input>
-        <label htmlFor="ipaddress">IP Address </label>
-        <input
-          type="text"
-          id="ipaddress"
-          placeholder="192.168.0.1"
-          required
-          value={thisSetting.ipAddress}
-          onChange={(e) => handleChange(e)}
-        ></input>
-        <label htmlFor="port">Port </label>
-        <input
-          type="text"
-          id="port"
-          placeholder="3000"
-          required
-          value={thisSetting.port}
-          onChange={(e) => handleChange(e)}
-        ></input>
-        <button id="submit" type="submit">Submit</button>
+    <div className="add-edit-card">
+      <h2>Add/Edit Prometheus Instance</h2>
+      <form className="settings-form" onSubmit={(e) => handleSumbit(e)}>
+        <div>
+          <label className="settings-label" htmlFor="name">Name </label>
+          <input
+            className="settings-input"
+            type="text"
+            id="name"
+            placeholder="Instance Name"
+            required
+            value={thisSetting.name}
+            onChange={(e) => handleChange(e)}
+          ></input>
+        </div>
+        <div>
+          <label className="settings-label" htmlFor="ipaddress">IP Address </label>
+          <input
+            className="settings-input"
+            type="text"
+            id="ipaddress"
+            placeholder="192.168.0.1"
+            required
+            value={thisSetting.ipAddress}
+            onChange={(e) => handleChange(e)}
+          ></input>
+        </div>
+        <div>
+          <label className="settings-label" htmlFor="port">Port </label>
+          <input
+            className="settings-input"
+            type="text"
+            id="port"
+            placeholder="3000"
+            required
+            value={thisSetting.port}
+            onChange={(e) => handleChange(e)}
+          ></input>
+        </div>
+        <div>
+          <button className="form-buttons" id="submit" type="submit">Submit</button>
+          <button className="form-buttons" id="delete" onClick={(e) => handleDelete(e)}>Delete</button>
+        </div>
       </form>
-      <button id="delete" onClick={(e) => handleDelete(e)}>Delete</button>
       {errMsgNew ? (
         <p>Please make sure the name for the server is not 'new'</p>
       ) : null}
