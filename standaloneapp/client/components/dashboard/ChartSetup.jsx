@@ -291,30 +291,35 @@ const ChartSetup = ({
   };
 
   return (
-    <div className="chart-setup">
-      <label>Chart Name: </label> <input type="text" value={chartName} onChange={changeChartName} />
-      <div>{alreadyExistsNotification}</div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="chart-setup-columns">
-          {Object.values(columns).map((column, index) => (
-            <OptionsOrSelectedColumn
-              key={`column${index}`}
-              columnName={column.name}
-              columnTitle={column.title}
-              listOfOperatorsOrMetrics={column.list}
-            />
-          ))}
+    <div>
+      <h2>Add/Edit Dashboard Chart</h2>
+      <div className="chart-setup">
+        <div className="enter-chart-name">
+          <label className="chart-name-label">Chart Name: </label> <input className="chart-name-input" type="text" value={chartName} onChange={changeChartName} />
         </div>
-      </DragDropContext>
-      <DataFilters
-        filters={filters}
-        setFilters={setFilters}
-        onChange={changeFilter}
-        prometheusInstance={prometheusInstance}
-        setPrometheusInstance={setPrometheusInstance}
-      />
-      <button type="button" id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button type="button" id="close-chart-setup" onClick={() => history.push('/')}>Close</button>
-      {chart}
+        <div className="notification">{alreadyExistsNotification}</div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="chart-setup-columns">
+            {Object.values(columns).map((column, index) => (
+              <OptionsOrSelectedColumn
+                key={`column${index}`}
+                columnName={column.name}
+                columnTitle={column.title}
+                listOfOperatorsOrMetrics={column.list}
+              />
+            ))}
+          </div>
+        </DragDropContext>
+        <DataFilters
+          filters={filters}
+          setFilters={setFilters}
+          onChange={changeFilter}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />
+        <button type="button" id="save-chart-setup" onClick={saveChartSetup}>Save</button> <button type="button" id="close-chart-setup" onClick={() => history.push('/')}>Close</button>
+        {chart}
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import OperatorOrMetric from './OperatorOrMetric';
 const OptionsOrSelectedColumn = ({ columnName, columnTitle, listOfOperatorsOrMetrics }) => {
   return (
     <div className="chart-setup-individual-column">
-      {columnTitle}
+      <div className="column-title">{columnTitle}</div>
       <Droppable droppableId={columnName}>
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef} id="droppable-area">
