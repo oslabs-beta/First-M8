@@ -1,69 +1,91 @@
-import React, { useState, useEffect } from "react";
-import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from "recharts";
-import moment from "moment";
-
+import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line object-curly-newline
+import { CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart, Line } from 'recharts';
+import moment from 'moment';
+import queryAlgo from './promQLQueryAlgorithms';
 
 const TimeSeriesChart = ({
-  id,
-  query
+  type,
+  columns,
+  filters,
+  prometheusInstance,
 }) => {
-  // placeholder for logic to send PromQL query to DB
-  const [chartData, setChartData] = useState(() => [])
-  
-  const getData = async (query) => {
-    const timeNow = Date.now() / 1000
-    const timeRange = (Date.now() - 300000) / 1000;
-    
-    let newChartData;
-    await fetch(`http://localhost:9090/api/v1/query_range?${query}&start=${timeRange}&end=${timeNow}&step=1`)
-    .then((response) => response.json())
-    .then(response => {
-      // console.log('result', result);
+  /*
+  initializes state of data series for time series chart
+  */
+  const [chartSeries, setChartSeries] = useState(() => []);
 
-      const dataFiltered = response.data.result.filter((dataPoint) => (dataPoint.metric.code === '200'
-        && dataPoint.metric.handler === "/api/v1/metadata"
-        && dataPoint.metric.instance === "localhost:9090"
-        && dataPoint.metric.job === "prometheus"
-      ));
-      // console.log('datafiltered', dataFiltered[0])
-      newChartData = dataFiltered[0].values.map((dataPoint) => {
-        return ({
-          value: parseInt(dataPoint[1]),
-          time: dataPoint[0]
-        })
-      })
-      // console.log("new chart data", newChartData)
-      setChartData(newChartData);
-    })
-  }
+  /*
+  retrieves data from Prometheus based on data selector columns
+  to be represented as a time series chart
+  */
+  const getData = async () => {
+    const aggregation = columns.aggregationSelected.list;
+    const metrics = columns.metricsSelected.list;
+    const time = columns.timeRangeSelected.list;
 
+    const query = queryAlgo(metrics, time, aggregation, filters);
+
+    const chartLines = [];
+    const dataSeries = [];
+    if (prometheusInstance !== undefined) {
+      await fetch(`http://${prometheusInstance.ipAddress}:${prometheusInstance.port}/api/v1/query_range?${query}`)
+        .then((response) => response.json())
+        .then((response) => {
+          response.data.result.forEach((metric) => {
+            const series = metric.values.map((dataPoint) => {
+              return ({
+                value: parseInt(dataPoint[1]),
+                time: dataPoint[0],
+              });
+            });
+            dataSeries.push(series);
+          });
+          dataSeries.forEach((series) => {
+            chartLines.push(
+            <Line data={series} dataKey="value" dot={false} type="natural" />,
+            );
+          });
+          setChartSeries(chartLines);
+        });
+    }
+  };
+
+  /*
+  sets up a recurring fetch request to Prometheus every minute
+  to update time series chart with latest data
+  */
   useEffect(() => {
-    getData(query);
+    getData();
+    if (type === 'saved-chart') {
+      const interval = setInterval(() => {
+        console.log('refetching');
+        getData();
+      }, 60000);
+      return () => clearInterval(interval);
+    }
   }, []);
 
-  // console.log("chartData", chartData);
   return (
     <ResponsiveContainer width="95%" height={500}>
-      <ScatterChart>
+      <LineChart>
         <XAxis
           dataKey="time"
-          domain={["auto", "auto"]}
+          domain={['dataMin', 'dataMax']}
           name="Time"
-          tickFormatter={(unixTime) => moment(unixTime).format("HH:mm:ss")}
+          tickFormatter={(time) => moment.unix(time).format('h:mm:ss A')}
+          scale="time"
           type="number"
         />
         <YAxis dataKey="value" name="Value" />
-
-        <Scatter
-          data={chartData}
-          line={{ stroke: "#eee" }}
-          lineJointType="monotoneX"
-          lineType="joint"
-          name="Values"
+        <CartesianGrid />
+        <Tooltip
+          labelFormatter={(time) => moment(Date(time)).format('h:mm:ss A')}
         />
-      </ScatterChart>
+        {chartSeries}
+      </LineChart>
     </ResponsiveContainer>
-  )
-}
+  );
+};
 
 export default TimeSeriesChart;

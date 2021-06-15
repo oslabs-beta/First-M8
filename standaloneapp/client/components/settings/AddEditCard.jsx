@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { nameHelper, ipHelper, portHelper } from "./settingsHelper";
+import React, { useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { nameHelper, ipHelper, portHelper } from './settingsHelper';
 
-const AddEditCard = ({ settingsArr, setSettingsArr }) => {
-  let { name } = useParams();
-  let history = useHistory();
+const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) => {
+  const { name } = useParams();
+  const history = useHistory();
   const [thisSetting, setThisSetting] = useState(() => {
-    if (name !== "new") {
+    if (name !== 'new') {
       for (const el of settingsArr) {
         if (el.name === name) return el;
       }
     }
     return {
-      name: "",
-      ipAddress: "",
+      name: '',
+      ipAddress: '',
       port: 3000,
     };
   });
@@ -32,46 +32,60 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
       if (portErr) setErrMsgPort(true);
       return;
     } else {
-      if (name === "new") {
-        await fetch("/settings/new", {
-          method: "POST",
+      if (name === 'new') {
+        const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
+        await fetch('/settings/new', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(thisSetting),
         })
           .then((res) => res.json())
           .then((result) => {
+            result.settings.forEach((connection) => {
+              connectionNames.push(
+                <option value={connection.name}>{connection.name}</option>,
+              );
+            });
+            setPrometheusConnections(connectionNames);
             setSettingsArr(result.settings);
           })
           .catch((e) => console.log(e));
       } else {
+        const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
         await fetch(`/settings/${name}`, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(thisSetting),
         })
           .then((res) => res.json())
           .then((result) => {
             // const newArray = settingsArr.filter((el) => el.name !== name);
+            result.settings.forEach((connection) => {
+              connectionNames.push(
+                <option value={connection.name}>{connection.name}</option>,
+              );
+            });
+            setPrometheusConnections(connectionNames);
             setSettingsArr(result.settings);
           })
           .catch((e) => console.log(e));
       }
-      history.push("/settings");
+      history.push('/settings');
       return;
     }
   }
 
   function handleChange(e) {
     let updatedCluster = { ...thisSetting };
-    if (e.target.id === "name") {
+    if (e.target.id === 'name') {
       updatedCluster = { ...updatedCluster, name: e.target.value };
-    } else if (e.target.id === "ipaddress") {
+    } else if (e.target.id === 'ipaddress') {
       updatedCluster = { ...updatedCluster, ipAddress: e.target.value };
-    } else if (e.target.id === "port") {
+    } else if (e.target.id === 'port') {
       updatedCluster = { ...updatedCluster, port: e.target.value };
     }
     setThisSetting(updatedCluster);
@@ -79,24 +93,32 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
   }
 
   function handleDelete(e) {
+    const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
     fetch(`/settings/${name}/delete`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(thisSetting),
     })
       .then((res) => res.json())
       .then((result) => {
+        console.log("addedit", result.settings);
+        result.settings.forEach((connection) => {
+          connectionNames.push(
+            <option value={connection.name}>{connection.name}</option>,
+          );
+        });
+        setPrometheusConnections(connectionNames);
         setSettingsArr(result.settings);
-        history.push("/settings");
+        history.push('/settings');
       })
       .catch((e) => console.log(e));
   }
 
   return (
     <div>
-      <form onSubmit={(e) => handleSumbit(e)}>
+      <form id="settings-form" onSubmit={(e) => handleSumbit(e)}>
         <label htmlFor="name">Name </label>
         <input
           type="text"
@@ -124,9 +146,9 @@ const AddEditCard = ({ settingsArr, setSettingsArr }) => {
           value={thisSetting.port}
           onChange={(e) => handleChange(e)}
         ></input>
-        <button type="submit">Submit</button>
+        <button id="submit" type="submit">Submit</button>
       </form>
-      <button onClick={(e) => handleDelete(e)}>Delete</button>
+      <button id="delete" onClick={(e) => handleDelete(e)}>Delete</button>
       {errMsgNew ? (
         <p>Please make sure the name for the server is not 'new'</p>
       ) : null}

@@ -1,61 +1,57 @@
-import React, { useState, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
-import DashboardContainer from "./dashboard/DashboardContainer";
-import SettingsContainer from "./settings/SettingsContainer.jsx";
-import HistoryContainer from "./history/HistoryContainer";
+import React, { useState, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import DashboardContainer from './dashboard/DashboardContainer';
+import SettingsContainer from './settings/SettingsContainer';
+import HistoryContainer from './history/HistoryContainer';
 
-const MainRoutes = () => {
-
-  /* 
-  initializes state of all charts to display on main dashboard page
+const MainRoutes = ({
+  allCharts,
+  setAllCharts,
+  prometheusInstance,
+  setPrometheusInstance,
+  setPrometheusConnections,
+}) => {
+  /*
+  initializes state of all settings to display on settings page
   */
-  const [allCharts, setAllCharts] = useState(() => []);
   const [settingsArr, setSettingsArr] = useState(() => []);
 
   /*
-  retrieves all existing charts from database to display on
-  main dashboard page
+  retrieves all existing settings from database to display on
+  settings page
   */
-  const getAllCharts = async () => {
-    await fetch("/dashboard")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data[0] !== undefined) {
-          console.log("display data", data[0].display);
-          setAllCharts(data[0].display);
-        }
-      });
-  };
-
-  //initial fetch of settings in the database
   const getSettings = async () => {
-    await fetch("/settings/all")
+    await fetch('/settings/all')
       .then((resp) => resp.json())
       .then((result) => {
         setSettingsArr(result.settings);
-      }).catch(e => console.log(e));
+      }).catch((e) => console.log(e));
   };
 
   useEffect(() => {
-    getAllCharts();
     getSettings();
   }, []);
 
   return (
     <Switch>
       <Route exact path="/">
-        <DashboardContainer allCharts={allCharts} setAllCharts={setAllCharts} />
+        <DashboardContainer
+          allCharts={allCharts}
+          setAllCharts={setAllCharts}
+          prometheusInstance={prometheusInstance}
+          setPrometheusInstance={setPrometheusInstance}
+        />
       </Route>
       <Route path="/settings">
         <SettingsContainer
           settingsArr={settingsArr}
           setSettingsArr={setSettingsArr}
+          setPrometheusConnections={setPrometheusConnections}
         />
       </Route>
-      <Route exact path="/history" component={HistoryContainer}></Route>
+      <Route exact path="/history" component={HistoryContainer} />
     </Switch>
   );
 };
-
 
 export default MainRoutes;

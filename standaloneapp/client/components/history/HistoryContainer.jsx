@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const HistoryContainer = () => {
   return <div>History Container</div>;
