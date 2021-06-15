@@ -50,8 +50,8 @@ const SingleNumberDisplay = ({
   }, []);
 
   return (
-    <div>
-      <span>{data}</span>
+    <div className="single-number-display">
+      <span className="single-number-data">{data.toLocaleString()}</span>
     </div>
   );
 };
