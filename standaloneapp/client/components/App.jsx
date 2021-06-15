@@ -33,7 +33,7 @@ const App = () => {
   to list in drop down at top of app
   */
   const getAllPrometheusInstances = async () => {
-    const connectionNames = [<option value="select prometheus instance">Select Prometheus Instance</option>];
+    const connectionNames = [<option value="select prometheus instance">Prometheus Instances</option>];
     await fetch('/dashboard/connect/all')
       .then((response) => response.json())
       .then((response) => {
@@ -72,13 +72,12 @@ const App = () => {
       <Router>
         <nav>
           <Link to="/" className="nav-links">Dashboard</Link>
+          <select className="prometheus-selector" onChange={selectPrometheusInstance}>
+            {prometheusConnections}
+          </select>
           <Link to="/settings" className="nav-links">Settings</Link>
           <Link to="/history" className="nav-links">History</Link>
         </nav>
-        <label>Prometheus Instance: </label>
-        <select onChange={selectPrometheusInstance}>
-        {prometheusConnections}
-        </select>
         <MainRoutes
           allCharts={allCharts}
           setAllCharts={setAllCharts}

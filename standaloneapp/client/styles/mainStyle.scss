@@ -1,22 +1,43 @@
+@import 'variables.scss';
+
 body {
-  background-color: rgb(24, 35, 73);
+  background-color: $mainBlack;
 }
 
 nav {
-  max-width: 300px;
-  margin: 10px;
+  width: 500px;
+  margin: 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .nav-links {
   text-decoration: none;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
-  color: whitesmoke;
+  font-size: 17px;
+  color: $darkerGray
 }
 
 .nav-links:visited {
   text-decoration: none;
+}
+
+.nav-links:hover {
+  color: $mainGray
+}
+
+.prometheus-selector {
+  background: $mainBlack;
+  border: 0px;
+  outline: 0px;
+  color: $darkerGray;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.prometheus-selector:hover {
+  color: $mainGray
 }

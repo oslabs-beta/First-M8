@@ -27,13 +27,12 @@ const SettingsContainer = ({ settingsArr, setSettingsArr, setPrometheusConnectio
           />
         </Route>
         <Route exact path={`${path}/`}>
-          <h3>Settings</h3>
+          <h2>Settings</h2>
           <div className="settings-container">
             {cardArray}
             <div id="newcards">
-              <Link to={`${url}/new`}>
-                <div id="newcard" />
-                {/* <img src="../assets/first-m8-logo.png"></img> */}
+              <Link className="add-card-link" to={`${url}/new`}>
+                <div id="newcard">+</div>
               </Link>
             </div>
           </div>
