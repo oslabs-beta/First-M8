@@ -43,8 +43,8 @@ const IndividualDropDown = ({
 
   return (
     <div className="individual-drop-down">
-      <label>{label}</label>
-      <select id={label} onChange={onChange}>
+      <label className="drop-down-label">{label}</label>
+      <select className="drop-down" id={label} onChange={onChange}>
         {options}
       </select>
     </div>

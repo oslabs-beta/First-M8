@@ -1,23 +1,83 @@
+@import 'variables.scss';
+
+#new-dashboard-chart {
+  margin-left: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  width: 200px;
+  border: none;
+  border-radius: 2px;
+  height: 30px;
+  color: white;
+  background-color: $mainGreen
+}
+
+#new-dashboard-chart:hover {
+  background-color: $darkerGreen;
+}
+
+.chart-setup {
+  margin: 20px;
+}
+
+.enter-chart-name {
+  margin-bottom: 20px;
+}
+
+.chart-name-label {
+  font-family: Arial, Helvetica, sans-serif;
+  color: $darkerGray;
+}
+
+.chart-name-input {
+  outline: none;
+  height: 30px;
+  border: 1pt $darkestGray solid;
+  background-color: $darkestGray;
+  color: $mainGray
+}
+
+.chart-name-input:focus {
+  outline: none;
+  background-color: $mainBlack;
+  color: $mainGray;
+}
+
+.notification {
+  font-family: Arial, Helvetica, sans-serif;
+  color: $mainRed
+}
+
 .chart-setup-columns {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border: 1pt solid black;
-  padding: 5px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .chart-setup-individual-column {
-  border: 1pt solid black;
+  border: 0.25pt $darkestGray solid;
   padding: 5px;
-  min-width: 300px;
-  
+  min-width: 250px;
 }
 
 #droppable-area {
-  width: 300px;
+  min-width: 250px;
   height: 300px;
-  border: 1pt solid black;
+  border: 0.25pt $darkestGray solid;
   overflow: auto;
+  padding: 5px;
+  margin: 5px;
+}
+
+.column-title {
+  font-family: Arial, Helvetica, sans-serif;
+  color: $darkerGray;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.operator-or-metric {
+  font-family: Arial, Helvetica, sans-serif;
+  color: $darkerGray;
 }
 
 .data-filters {
@@ -31,5 +91,52 @@
 .individual-drop-down {
   display: flex;
   flex-direction: column;
-  margin: 5px;
+  margin: 10px;
+}
+
+.drop-down-label {
+  font-family: Arial, Helvetica, sans-serif;
+  color: $darkerGray;
+  font-weight: bold;
+}
+
+.drop-down {
+  background: $mainBlack;
+  border: 0.25pt $darkestGray solid;
+  outline: 0px;
+  color: $darkerGray;
+}
+
+#save-chart-setup {
+  margin-right: 15px;
+  margin-top: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 2px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  background-color: $mainBlue;
+}
+
+#save-chart-setup:hover {
+  background-color: $darkerBlue;
+}
+
+#close-chart-setup {
+  margin-right: 15px;
+  margin-top: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 2px;
+  width: 100px;
+  height: 30px;
+  background-color: $darkerGray;
+  color: white;
+}
+
+#close-chart-setup:hover {
+  background-color: $darkestGray;
 }
