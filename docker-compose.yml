@@ -1,0 +1,18 @@
+version: '3'
+services:
+  prometheus:
+    build:
+      dockerfile: Dockerfile
+      context: ./prometheus
+    ports:
+      - '9090:9090'
+  landingpage:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./landing-page
+    volumes:
+      - ./landing-page:/app
+      - /app/node_modules
+    ports:
+      - '3000:3005'
