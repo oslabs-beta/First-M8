@@ -38,11 +38,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/firstm8landingpage:latest
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-
-    environment: production
     
       - name: Build and push prometheus
         id: docker_build
@@ -56,6 +51,7 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
+    environment: production
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v17
         with:
