@@ -120,7 +120,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) 
     <div className="add-edit-card">
       <h2>Add/Edit Prometheus Instance</h2>
       <form className="settings-form" onSubmit={(e) => handleSumbit(e)}>
-        <div>
+        <div className="individual-entry">
           <label className="settings-label" htmlFor="name">Name: </label>
           <input
             className="settings-input"
@@ -132,7 +132,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) 
             onChange={(e) => handleChange(e)}
           ></input>
         </div>
-        <div>
+        <div className="individual-entry">
           <label className="settings-label" htmlFor="ipaddress">IP Address: </label>
           <input
             className="settings-input"
@@ -144,7 +144,7 @@ const AddEditCard = ({ settingsArr, setSettingsArr, setPrometheusConnections }) 
             onChange={(e) => handleChange(e)}
           ></input>
         </div>
-        <div>
+        <div className="individual-entry">
           <label className="settings-label" htmlFor="port">Port: </label>
           <input
             className="settings-input"

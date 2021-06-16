@@ -43,7 +43,7 @@ const TimeSeriesChart = ({
           });
           dataSeries.forEach((series) => {
             chartLines.push(
-            <Line data={series} dataKey="value" dot={false} type="natural" stroke="#005AAA" strokeWidth={3}/>,
+            <Line data={series} dataKey="value" dot={false} type="natural" stroke="#005AAA" strokeWidth={3} />,
             );
           });
           setChartSeries(chartLines);
