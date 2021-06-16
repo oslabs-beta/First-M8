@@ -1,6 +1,5 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -48,37 +47,13 @@ module.exports = {
       template: './client/index.html',
     }),
     new MiniCssExtractPlugin(),
-    new ImageMinimizerPlugin({
-      minimizerOptions: {
-        // Lossless optimization with custom option
-        // Feel free to experiment with options for better result for you
-        plugins: [
-          ['gifsicle', { interlaced: true }],
-          ['jpegtran', { progressive: true }],
-          ['optipng', { optimizationLevel: 5 }],
-          [
-            'svgo',
-            {
-              plugins: [
-                {
-                  removeViewBox: false,
-                },
-              ],
-            },
-          ],
-        ],
-      },
-    }),
   ],
   devtool: 'eval-source-map',
   devServer: {
-    // contentBase: path.join(__dirname, '/client'),
-    // compress: true,
-    // port: 8080,
     publicPath: '/build',
     proxy: {
-      '/api/**': 'http:/localhost:3000',
-      '/': 'http://localhost:3000',
+      '/api/**': 'http://localhost:3005',
+      '/': 'http://localhost:3005',
     },
     port: 8080,
     hot: true,

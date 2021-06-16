@@ -1,5 +1,5 @@
-import React from 'react'
-import GithubCat from '../GithubCat.svg'
+import React from 'react';
+import GithubCat from '../GithubCat.svg';
 
 //main home page item. the first thing everyone sees
 const Home = () => {
