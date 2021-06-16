@@ -63,11 +63,20 @@ h2 {
 
 .settings-form {
   margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 25px;
   min-width: 200px;
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+.individual-entry {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  width: 250px;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -77,6 +86,7 @@ h2 {
 }
 
 .settings-input {
+  align-self: flex-end;
   outline: none;
   height: 30px;
   border: 1pt $darkestGray solid;

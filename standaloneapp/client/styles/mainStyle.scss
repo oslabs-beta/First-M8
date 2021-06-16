@@ -4,6 +4,17 @@ body {
   background-color: $mainBlack;
 }
 
+.nav-and-logos {
+  min-width: 1000px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.logos {
+  align-self: center;
+}
+
 nav {
   width: 500px;
   margin: 20px;
@@ -36,6 +47,10 @@ nav {
   color: $darkerGray;
   font-weight: bold;
   font-size: 17px;
+}
+
+#history {
+  margin-left: 20px;
 }
 
 .prometheus-selector:hover {

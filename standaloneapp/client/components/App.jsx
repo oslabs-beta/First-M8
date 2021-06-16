@@ -70,14 +70,19 @@ const App = () => {
   return (
     <div className="app">
       <Router>
-        <nav>
-          <Link to="/" className="nav-links">Dashboard</Link>
-          <select className="prometheus-selector" onChange={selectPrometheusInstance}>
-            {prometheusConnections}
-          </select>
-          <Link to="/settings" className="nav-links">Settings</Link>
-          <Link to="/history" className="nav-links">History</Link>
-        </nav>
+        <div className="nav-and-logos">
+          <nav>
+            <Link to="/" className="nav-links">Dashboard</Link>
+            <select className="prometheus-selector" onChange={selectPrometheusInstance}>
+              {prometheusConnections}
+            </select>
+            <Link to="/settings" className="nav-links">Settings</Link>
+            <Link to="/history" className="nav-links">History</Link>
+          </nav>
+          <div className="logos">
+            <img src="./assets/first-m8-logo-only.png" alt="First M8 logo" height={100} width={100} />
+          </div>
+        </div>
         <MainRoutes
           allCharts={allCharts}
           setAllCharts={setAllCharts}

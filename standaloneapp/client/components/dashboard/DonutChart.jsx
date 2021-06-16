@@ -58,23 +58,23 @@ const DonutChart = ({
         <Pie
           data={data}
           dataKey="value"
-          innerRadius={60}
-          outerRadius={80}
+          innerRadius={125}
+          outerRadius={200}
+          stroke="none"
         >
           {data.map((dataPoints, index) => {
             if (index === 1) {
-              return <Cell fill="#f3f6f9" />;
+              return <Cell fill="#D7D7D7" />;
             }
-            return <Cell fill="green" />;
+            return <Cell fill="#005AAA" />;
           })}
         <Label
           value={labelForDonut}
           position="center"
-          fill="grey"
+          fill="gray"
           style={{
-            fontSize: '32px',
-            fontWeight: 'bold',
-            fontFamily: 'Roboto',
+            fontSize: '60px',
+            fontFamily: 'Arial, Helvetica, sans-serif',
           }}
         />
         </Pie>

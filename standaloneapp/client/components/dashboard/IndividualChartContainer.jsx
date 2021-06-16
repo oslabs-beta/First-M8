@@ -139,9 +139,11 @@ const IndividualChartContainer = ({
 
   return (
     <div className="individual-chart-container">
-      <div>{chartName}</div>
+      <div className="chart-name">{chartName}</div>
       {chartToDisplay}
-      <button type="button" id="edit-chart" onClick={editChart}>Edit</button> <button type="button" id="delete-chart" onClick={deleteChart}>Delete</button>
+      <div className="edit-delete-buttons">
+       <button type="button" id="edit-chart" onClick={editChart}>Edit</button> <button type="button" id="delete-chart" onClick={deleteChart}>Delete</button>
+      </div>
     </div>
   );
 };
