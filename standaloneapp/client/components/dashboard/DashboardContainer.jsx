@@ -18,7 +18,7 @@ const DashboardContainer = ({
     aggregationOptions: {
       name: 'aggregationOptions',
       title: 'Aggregation Options',
-      list: ['Sum', 'Avg', 'Multiply', 'Divide', 'Min', 'Max'],
+      list: ['Sum', 'Avg', 'Multiply', 'Divide', 'Min', 'Max', 'Rate'],
     },
     aggregationSelected: {
       name: 'aggregationSelected',

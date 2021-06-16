@@ -179,7 +179,7 @@ const ChartSetup = ({
             ];
           } else {
             newChart = [
-              <div>
+              <div className="notification">
                 Data visualization and PromQL translation not yet available.
                 Please try something else.
               </div>,
