@@ -51,7 +51,6 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-    environment: production
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v17
         with:
