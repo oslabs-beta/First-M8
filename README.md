@@ -32,10 +32,15 @@ First M8 can be set up by bundling the electron app and running it as a native d
 ```
 npm install
 npm run build
+npm run package-mac-arm //for arm-64 Mac OS
+//OR
+npm run package-mac-intel //for intel-based Macs
+//OR 
+npm run package-win-64 // for windows computers
 npm start
 
 ```
-In your FIRST-M8 folder, navigate to the release-builds folder and double-click on FirstM8.app/exe (executable).
+3. In your First-M8 folder, navigate to the release-builds folder and double-click on FirstM8.app/exe (executable).
 
 ## Quick-Start <a id="example"></a>
 
@@ -43,7 +48,7 @@ When you have opened the First M8 application:
 
 1. Select _"Settings"_.
 
-2. Input _Name, IP, and Port_ for your Prometheus instance.
+2. Input _Name, IP address, and Port_ for your Prometheus instance.
 
 3. Select the created setting from the _pull-down menu_.
 
