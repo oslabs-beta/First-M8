@@ -1,4 +1,5 @@
-<img src="../First-M8/build/5bf60e15d76211f7b0d6.png">
+<!-- <img src="../First-M8/build/5bf60e15d76211f7b0d6.png"> -->
+<img src="./client/assets/first-m8-logo.png">
 
 ![license](https://img.shields.io/github/license/oslabs-beta/First-M8?color=%2357d3af) ![version](https://img.shields.io/badge/version-Alpha1.0-orange) ![lastcommit](https://img.shields.io/github/last-commit/oslabs-beta/First-M8?color=%2357d3af) ![gitcontribute](https://img.shields.io/github/contributors/oslabs-beta/First-M8) ![gitstars​](https://img.shields.io/github/stars/oslabs-beta/First-M8?style=social) ![gitforks](https://img.shields.io/github/forks/oslabs-beta/First-M8?style=social)
 
