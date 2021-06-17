@@ -9,8 +9,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
-    publicPath: '../build/',
+    publicPath: './build/',
   },
+  target: 'electron-main',
   module: {
     rules: [
       {
