@@ -31,13 +31,18 @@ First M8 can be set up by bundling the electron app and running it as a native d
 
 ```
 npm install
+
 npm run build
+
 npm run package-mac-arm //for arm-64 Mac OS
+
 //OR
+
 npm run package-mac-intel //for intel-based Macs
+
 //OR 
+
 npm run package-win-64 // for windows computers
-npm start
 
 ```
 3. In your First-M8 folder, navigate to the release-builds folder and double-click on FirstM8.app/exe (executable).
