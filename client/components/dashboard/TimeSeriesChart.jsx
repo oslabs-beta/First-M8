@@ -43,7 +43,7 @@ const TimeSeriesChart = ({
           });
           dataSeries.forEach((series) => {
             chartLines.push(
-            <Line data={series} dataKey="value" dot={false} type="natural" />,
+            <Line data={series} dataKey="value" dot={false} type="natural" stroke="#005AAA" strokeWidth={3} />,
             );
           });
           setChartSeries(chartLines);
@@ -76,8 +76,18 @@ const TimeSeriesChart = ({
           tickFormatter={(time) => moment.unix(time).format('h:mm:ss A')}
           scale="time"
           type="number"
+          style={{
+            fontFamily: 'Arial, Helvetica, sans-serif',
+          }}
         />
-        <YAxis dataKey="value" name="Value" />
+        <YAxis
+          dataKey="value"
+          name="Value"
+          tickFormatter={(value) => (value / 1000).toLocaleString()}
+          style={{
+            fontFamily: 'Arial, Helvetica, sans-serif',
+          }}
+        />
         <CartesianGrid />
         <Tooltip
           labelFormatter={(time) => moment(Date(time)).format('h:mm:ss A')}
