@@ -1,11 +1,12 @@
 const { app, BrowserWindow } = require('electron');
 // eslint-disable-next-line no-unused-expressions
-process.env.NODE_ENV === 'development' ? null : require('../server/server');
+require('../server/server');
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    title: 'First M8',
   });
 
   win.loadURL('http://localhost:3001');

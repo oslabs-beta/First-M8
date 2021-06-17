@@ -1,14 +1,16 @@
 @import "_nav";
+@import "_team";
 
 body {
   margin: 0;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Montserrat', sans-serif;
   width: 100vw;
   height: 100vh;
-  background-image: url(../FirstM8Logo.svg);
+  // background-image: url(../FirstM8Logo.svg);
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: lightseagreen;
+  background-color: rgb(3, 74, 141);
+
 }
 
 .App {
@@ -28,4 +30,13 @@ body {
 .aboutdiv {
   margin: 5%;
   height: 45vh;
+}
+
+a {
+  text-decoration: none;
+  color: cornsilk;
+}
+
+a:hover {
+  text-shadow: 5px 5px 5px black;
 }
