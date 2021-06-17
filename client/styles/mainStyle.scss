@@ -1,0 +1,58 @@
+@import 'variables.scss';
+
+body {
+  background-color: $mainBlack;
+}
+
+.nav-and-logos {
+  min-width: 1000px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.logos {
+  align-self: center;
+}
+
+nav {
+  width: 500px;
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-links {
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 17px;
+  color: $darkerGray
+}
+
+.nav-links:visited {
+  text-decoration: none;
+}
+
+.nav-links:hover {
+  color: $mainGray
+}
+
+.prometheus-selector {
+  background: $mainBlack;
+  border: 0px;
+  outline: 0px;
+  color: $darkerGray;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+#history {
+  margin-left: 20px;
+}
+
+.prometheus-selector:hover {
+  color: $mainGray
+}
