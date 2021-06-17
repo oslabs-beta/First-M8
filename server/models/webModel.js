@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const Data =  require('../schemas/data-schema')
 
 // make secure soon
 // port 27017

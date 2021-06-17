@@ -3,10 +3,8 @@ const { Data } = require('../models/webModel');
 const webController = {};
 
 webController.getAll = (req, res, next) => {
-  // possibly come back to
   Data.find({}, (err, data) => {
     if (err) {
-      // status: 500, log, message
       return next({ status: 500, log: 'There was an error', message: err.message });
     }
     res.locals.settings = data;

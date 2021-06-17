@@ -32,10 +32,8 @@ dashboardController.findAndComfirm = (req, res, next) => {
 gets display for a particular Prometheus instance
 */
 dashboardController.getAllDisplay = (req, res, next) => {
-  // possibly come back to
   Display.find({ instance: req.params.instance }, (err, data) => {
     if (err) {
-      // status: 500, log, message
       return next({ status: 500, log: 'There was an error', message: err.message });
     }
     res.locals.data = data;
@@ -48,7 +46,6 @@ updates display for a particular Prometheus instance if one exists
 if not, creates a new document for the Prometheus instance
 */
 dashboardController.updateAllDisplay = async (req, res, next) => {
-  // PUT request to update all charts
   if (req.body.display && Array.isArray(req.body.display)) {
     await Display.findOneAndUpdate(
       { instance: req.params.instance },

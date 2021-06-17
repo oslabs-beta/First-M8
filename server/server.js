@@ -14,9 +14,8 @@ app.use('/dashboard', dashboardRouter);
 
 app.use(express.static(path.resolve(__dirname, '../client')));
 
-// if (process.env.NODE_ENV === 'production') {
 app.use('/build', express.static(path.join(__dirname, '../build')));
-// }
+
 app.get('*', (req, res) => {
   res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'));
 });
